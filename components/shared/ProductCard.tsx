@@ -45,9 +45,23 @@ export const ProductCard = ({ item }: ProductCardProps) => {
         <span className="text-[9px] font-sans uppercase tracking-[0.2em] font-black text-primary mb-2 block">
           {item.category}
         </span>
-        <h3 className="text-2xl font-serif italic text-stone-900 mb-4 group-hover:text-primary transition-colors">
+        <h3 className="text-2xl font-serif italic text-stone-900 mb-2 group-hover:text-primary transition-colors">
           {item.name}
         </h3>
+        {item.description && (
+          <p className="text-stone-400 font-sans text-xs leading-relaxed mb-3 line-clamp-2">
+            {item.description}
+          </p>
+        )}
+        <div className="flex items-center gap-4 mb-4 text-stone-400 font-sans text-[10px] uppercase tracking-widest font-bold">
+          <span>{item.weight} / un.</span>
+          {item.boxWeight && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-stone-200" />
+              <span>{item.boxWeight} / cx.</span>
+            </>
+          )}
+        </div>
         <Link
           href={`/produtos/${item.id}`}
           className="inline-flex items-center gap-4 text-stone-400 font-sans uppercase tracking-widest text-[9px] font-black group-hover:text-stone-900 transition-colors"

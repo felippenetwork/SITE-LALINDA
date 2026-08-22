@@ -2,13 +2,22 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, MessageSquare, Settings, ExternalLink, LogOut, Menu } from "lucide-react";
+import {
+  LayoutDashboard,
+  Layers,
+  MessageSquare,
+  Settings,
+  ExternalLink,
+  LogOut,
+  Menu,
+} from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { label: "Produtos", href: "/admin/produtos", icon: LayoutDashboard },
+  { label: "Linhas", href: "/admin/linhas", icon: Layers },
   { label: "Leads", href: "/admin/leads", icon: MessageSquare },
 ];
 

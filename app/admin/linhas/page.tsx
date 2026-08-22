@@ -3,8 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductsAction, saveProduct, deleteProduct } from "@/lib/actions/products";
-import { getProductLinesAction } from "@/lib/actions/product-lines";
+import {
+  getProductLinesAction,
+  saveProductLine,
+  deleteProductLine,
+} from "@/lib/actions/product-lines";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -15,7 +18,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -25,51 +27,46 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
-import { ProductForm } from "@/components/forms/ProductForm";
-import type { BreadItem } from "@/lib/data/products";
-import type { ProductFormValues } from "@/lib/validation/product";
+import { ProductLineForm } from "@/components/forms/ProductLineForm";
+import type { ProductLine } from "@/lib/data/product-lines";
+import type { ProductLineValues } from "@/lib/validation/product-line";
 
-export default function AdminProdutosPage() {
+export default function AdminLinhasPage() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<BreadItem | null>(null);
+  const [editingLine, setEditingLine] = useState<ProductLine | null>(null);
 
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProductsAction,
-  });
-
-  const { data: lines = [] } = useQuery({
+  const { data: lines = [], isLoading } = useQuery({
     queryKey: ["product-lines"],
     queryFn: getProductLinesAction,
   });
 
-  const saveProductMutation = useMutation({
-    mutationFn: saveProduct,
+  const saveLineMutation = useMutation({
+    mutationFn: saveProductLine,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success(editingItem ? "Produto atualizado" : "Novo produto adicionado");
+      queryClient.invalidateQueries({ queryKey: ["product-lines"] });
+      toast.success(editingLine ? "Linha atualizada" : "Nova linha adicionada");
       setIsDialogOpen(false);
-      setEditingItem(null);
+      setEditingLine(null);
     },
     onError: (error: Error) => {
       toast.error("Erro ao salvar: " + error.message);
     },
   });
 
-  const deleteProductMutation = useMutation({
-    mutationFn: deleteProduct,
+  const deleteLineMutation = useMutation({
+    mutationFn: deleteProductLine,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Produto removido com sucesso");
+      queryClient.invalidateQueries({ queryKey: ["product-lines"] });
+      toast.success("Linha removida com sucesso");
     },
     onError: (error: Error) => {
       toast.error("Erro ao excluir: " + error.message);
     },
   });
 
-  const handleSave = (data: ProductFormValues) => {
-    saveProductMutation.mutate({ ...data, id: editingItem?.id });
+  const handleSave = (data: ProductLineValues) => {
+    saveLineMutation.mutate({ ...data, id: editingLine?.id });
   };
 
   if (isLoading) {
@@ -85,19 +82,19 @@ export default function AdminProdutosPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start gap-8 mb-12 lg:mb-16">
         <div>
           <h2 className="text-3xl md:text-4xl font-serif italic text-stone-900 mb-2">
-            Produtos Cadastrados
+            Linhas de Produtos
           </h2>
           <p className="text-stone-400 font-sans text-xs md:text-sm tracking-wide">
-            Gestão do catálogo artesanal La Linda
+            Gestão das linhas do catálogo La Linda
           </p>
         </div>
 
         <Dialog
-          open={isDialogOpen || !!editingItem}
+          open={isDialogOpen || !!editingLine}
           onOpenChange={(open) => {
             if (!open) {
               setIsDialogOpen(false);
-              setEditingItem(null);
+              setEditingLine(null);
             }
           }}
         >
@@ -106,20 +103,19 @@ export default function AdminProdutosPage() {
               onClick={() => setIsDialogOpen(true)}
               className="w-full sm:w-auto bg-primary hover:scale-105 transition-transform text-white font-black px-8 py-6 rounded-full text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20 h-auto"
             >
-              <Plus size={16} className="mr-2" /> Novo Produto
+              <Plus size={16} className="mr-2" /> Nova Linha
             </Button>
           </DialogTrigger>
           <DialogContent className="w-[95vw] sm:max-w-[500px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-3xl font-serif italic">
-                {editingItem ? "Editar Produto" : "Novo Produto"}
+                {editingLine ? "Editar Linha" : "Nova Linha"}
               </DialogTitle>
             </DialogHeader>
-            <ProductForm
-              editingItem={editingItem}
-              lines={lines}
+            <ProductLineForm
+              editingLine={editingLine}
               onSubmit={handleSave}
-              isPending={saveProductMutation.isPending}
+              isPending={saveLineMutation.isPending}
             />
           </DialogContent>
         </Dialog>
@@ -128,7 +124,7 @@ export default function AdminProdutosPage() {
       <Card className="rounded-[1.5rem] md:rounded-[2.5rem] border-stone-100 shadow-sm overflow-hidden">
         <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 md:p-8">
           <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
-            Coleção Atual — {products.length} Itens
+            {lines.length} Linhas Cadastradas
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
@@ -139,16 +135,10 @@ export default function AdminProdutosPage() {
                   Visual
                 </TableHead>
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                  Produto
+                  Nome
                 </TableHead>
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                  Categoria
-                </TableHead>
-                <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                  Peso/Caixa
-                </TableHead>
-                <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                  Status
+                  Slug
                 </TableHead>
                 <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
                   Ações
@@ -156,51 +146,27 @@ export default function AdminProdutosPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((item) => (
+              {lines.map((line) => (
                 <TableRow
-                  key={item.id}
+                  key={line.id}
                   className="border-stone-50 hover:bg-stone-50/50 transition-colors group"
                 >
                   <TableCell className="pl-4 md:pl-8 py-4">
-                    <div className="relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl overflow-hidden border border-stone-100 group-hover:scale-110 transition-transform">
-                      <Image
-                        src={item.image}
-                        alt=""
-                        fill
-                        sizes="56px"
-                        className="object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all"
-                      />
+                    <div className="relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl overflow-hidden border border-stone-100 bg-stone-100 group-hover:scale-110 transition-transform">
+                      {line.image && (
+                        <Image src={line.image} alt="" fill sizes="56px" className="object-cover" />
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="font-serif italic text-lg text-stone-900">
-                    {item.name}
+                    {line.name}
                   </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="text-[9px] uppercase tracking-widest font-black border-stone-200 text-stone-400 rounded-full px-3"
-                    >
-                      {item.category}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-sans text-sm text-stone-500">
-                    {item.weight} / <span className="text-stone-300">{item.boxWeight || "-"}</span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${item.available ? "bg-green-500" : "bg-stone-300"}`}
-                      ></div>
-                      <span className="text-[10px] uppercase tracking-widest font-black text-stone-400">
-                        {item.available ? "Ativo" : "Pausado"}
-                      </span>
-                    </div>
-                  </TableCell>
+                  <TableCell className="font-mono text-xs text-stone-400">{line.slug}</TableCell>
                   <TableCell className="text-right pr-8 space-x-1">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => setEditingItem(item)}
+                      onClick={() => setEditingLine(line)}
                       className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-lg hover:text-primary transition-all"
                     >
                       <Pencil size={16} />
@@ -208,15 +174,15 @@ export default function AdminProdutosPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      disabled={deleteProductMutation.isPending}
+                      disabled={deleteLineMutation.isPending}
                       onClick={() => {
-                        if (confirm("Deseja realmente excluir este produto?")) {
-                          deleteProductMutation.mutate(item.id);
+                        if (confirm(`Deseja realmente excluir a linha "${line.name}"?`)) {
+                          deleteLineMutation.mutate(line.id);
                         }
                       }}
                       className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all"
                     >
-                      {deleteProductMutation.isPending ? (
+                      {deleteLineMutation.isPending ? (
                         <Loader2 className="animate-spin" size={16} />
                       ) : (
                         <Trash2 size={16} />

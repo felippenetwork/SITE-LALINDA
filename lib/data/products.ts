@@ -7,12 +7,15 @@ export interface BreadItem {
   weight: string;
   boxWeight?: string | null;
   image: string;
+  categoryId: string;
   category: string;
   description?: string | null;
   available: boolean;
 }
 
-type ProductRow = Database["public"]["Tables"]["products"]["Row"];
+type ProductRow = Database["public"]["Tables"]["products"]["Row"] & {
+  product_lines: { name: string } | null;
+};
 
 function mapProduct(row: ProductRow): BreadItem {
   return {
@@ -21,7 +24,8 @@ function mapProduct(row: ProductRow): BreadItem {
     weight: row.weight,
     boxWeight: row.box_weight,
     image: row.image_url,
-    category: row.category,
+    categoryId: row.category_id,
+    category: row.product_lines?.name ?? "",
     description: row.description,
     available: row.available ?? true,
   };
@@ -32,7 +36,18 @@ function mapProduct(row: ProductRow): BreadItem {
 export async function getProducts(): Promise<BreadItem[]> {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select("*")
+    .select("*, product_lines(name)")
+    .order("created_at", { ascending: true });
+
+  if (error) throw error;
+  return (data ?? []).map(mapProduct);
+}
+
+export async function getProductsByLineId(lineId: string): Promise<BreadItem[]> {
+  const { data, error } = await supabaseAdmin
+    .from("products")
+    .select("*, product_lines(name)")
+    .eq("category_id", lineId)
     .order("created_at", { ascending: true });
 
   if (error) throw error;
@@ -42,7 +57,7 @@ export async function getProducts(): Promise<BreadItem[]> {
 export async function getProductById(id: string): Promise<BreadItem | null> {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select("*")
+    .select("*, product_lines(name)")
     .eq("id", id)
     .maybeSingle();
 

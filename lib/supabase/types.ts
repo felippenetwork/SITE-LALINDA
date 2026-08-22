@@ -68,11 +68,44 @@ export type Database = {
         };
         Relationships: [];
       };
+      product_lines: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          image_url: string | null;
+          name: string;
+          slug: string;
+          sort_order: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          image_url?: string | null;
+          name: string;
+          slug: string;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          image_url?: string | null;
+          name?: string;
+          slug?: string;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       products: {
         Row: {
           available: boolean | null;
           box_weight: string | null;
-          category: Database["public"]["Enums"]["product_category"];
+          category_id: string;
           created_at: string | null;
           description: string | null;
           id: string;
@@ -84,7 +117,7 @@ export type Database = {
         Insert: {
           available?: boolean | null;
           box_weight?: string | null;
-          category: Database["public"]["Enums"]["product_category"];
+          category_id: string;
           created_at?: string | null;
           description?: string | null;
           id?: string;
@@ -96,7 +129,7 @@ export type Database = {
         Update: {
           available?: boolean | null;
           box_weight?: string | null;
-          category?: Database["public"]["Enums"]["product_category"];
+          category_id?: string;
           created_at?: string | null;
           description?: string | null;
           id?: string;
@@ -105,7 +138,15 @@ export type Database = {
           updated_at?: string | null;
           weight?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "product_lines";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       timeline_events: {
         Row: {
@@ -167,8 +208,6 @@ export type Database = {
     };
     Enums: {
       app_role: "admin" | "moderator" | "user";
-      product_category:
-        "Tradicionais" | "Linha Extra" | "Linha Premium" | "Confeitaria" | "Salgados";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -291,7 +330,6 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      product_category: ["Tradicionais", "Linha Extra", "Linha Premium", "Confeitaria", "Salgados"],
     },
   },
 } as const;

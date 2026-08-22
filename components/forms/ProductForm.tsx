@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import type { BreadItem } from "@/lib/data/products";
+import type { ProductLine } from "@/lib/data/product-lines";
 import {
   productSchema,
   type ProductFormInput,
@@ -17,11 +18,12 @@ import {
 
 interface ProductFormProps {
   editingItem: BreadItem | null;
+  lines: ProductLine[];
   onSubmit: (data: ProductFormValues) => void;
   isPending: boolean;
 }
 
-export const ProductForm = ({ editingItem, onSubmit, isPending }: ProductFormProps) => {
+export const ProductForm = ({ editingItem, lines, onSubmit, isPending }: ProductFormProps) => {
   const {
     register,
     handleSubmit,
@@ -31,7 +33,7 @@ export const ProductForm = ({ editingItem, onSubmit, isPending }: ProductFormPro
     defaultValues: {
       id: editingItem?.id,
       name: editingItem?.name ?? "",
-      category: (editingItem?.category as ProductFormValues["category"]) ?? "Tradicionais",
+      categoryId: editingItem?.categoryId ?? lines[0]?.id ?? "",
       weight: editingItem?.weight ?? "",
       boxWeight: editingItem?.boxWeight ?? "",
       image_url: editingItem?.image ?? "",
@@ -60,21 +62,21 @@ export const ProductForm = ({ editingItem, onSubmit, isPending }: ProductFormPro
       <div className="grid grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label
-            htmlFor="category"
+            htmlFor="categoryId"
             className="text-[10px] uppercase tracking-widest font-black text-stone-400"
           >
-            Categoria
+            Linha
           </Label>
           <select
-            id="category"
-            {...register("category")}
+            id="categoryId"
+            {...register("categoryId")}
             className="w-full bg-stone-50 border border-stone-100 rounded-xl px-4 h-12 text-sm focus:ring-2 focus:ring-primary outline-none"
           >
-            <option value="Tradicionais">Tradicionais</option>
-            <option value="Linha Extra">Linha Extra</option>
-            <option value="Linha Premium">Linha Premium</option>
-            <option value="Confeitaria">Confeitaria</option>
-            <option value="Salgados">Salgados</option>
+            {lines.map((line) => (
+              <option key={line.id} value={line.id}>
+                {line.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="space-y-2">

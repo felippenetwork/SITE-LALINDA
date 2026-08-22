@@ -2,18 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { getProducts } from "@/lib/data/products";
-import { productSchema } from "@/lib/validation/product";
+import { getProductLines } from "@/lib/data/product-lines";
+import { productLineSchema } from "@/lib/validation/product-line";
 
 // Thin RPC wrapper so the admin dashboard (a Client Component, kept on
 // TanStack Query for cache/invalidation) can call the server-only read.
-export async function getProductsAction() {
-  return getProducts();
+export async function getProductLinesAction() {
+  return getProductLines();
 }
 
 // Defense in depth: RLS already allows any `authenticated` user to write
-// products, so this explicit `has_role` check is the real gate — mirrors
-// the pre-migration server-function behavior exactly.
+// product_lines, so this explicit `has_role` check is the real gate.
 async function requireAdmin() {
   const supabase = await createClient();
 
@@ -32,40 +31,33 @@ async function requireAdmin() {
 }
 
 function revalidateProductPages() {
-  revalidatePath("/admin/produtos");
   revalidatePath("/produtos", "layout");
   revalidatePath("/");
 }
 
-export async function saveProduct(input: unknown) {
-  const data = productSchema.parse(input);
+export async function saveProductLine(input: unknown) {
+  const data = productLineSchema.parse(input);
   const supabase = await requireAdmin();
 
   if (data.id) {
     const { error } = await supabase
-      .from("products")
+      .from("product_lines")
       .update({
         name: data.name,
-        weight: data.weight,
-        box_weight: data.boxWeight ?? null,
-        image_url: data.image_url,
-        category_id: data.categoryId,
+        slug: data.slug,
         description: data.description ?? null,
-        available: data.available,
+        image_url: data.image_url ?? null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.id);
     if (error) throw error;
   } else {
-    const { error } = await supabase.from("products").insert([
+    const { error } = await supabase.from("product_lines").insert([
       {
         name: data.name,
-        weight: data.weight,
-        box_weight: data.boxWeight ?? null,
-        image_url: data.image_url,
-        category_id: data.categoryId,
-        available: data.available,
+        slug: data.slug,
         description: data.description ?? null,
+        image_url: data.image_url ?? null,
       },
     ]);
     if (error) throw error;
@@ -75,11 +67,16 @@ export async function saveProduct(input: unknown) {
   return { success: true };
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProductLine(id: string) {
   const supabase = await requireAdmin();
 
-  const { error } = await supabase.from("products").delete().eq("id", id);
-  if (error) throw error;
+  const { error } = await supabase.from("product_lines").delete().eq("id", id);
+  if (error) {
+    if (error.code === "23503") {
+      throw new Error("Não é possível excluir: existem produtos cadastrados nesta linha.");
+    }
+    throw error;
+  }
 
   revalidateProductPages();
   return { success: true };

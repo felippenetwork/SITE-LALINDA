@@ -6,7 +6,7 @@ export const productSchema = z.object({
   weight: z.string().min(1, "Informe o peso unitário"),
   boxWeight: z.string().optional().nullable(),
   image_url: z.string().url("Informe uma URL de imagem válida"),
-  category: z.enum(["Tradicionais", "Linha Extra", "Linha Premium", "Confeitaria", "Salgados"]),
+  categoryId: z.string().min(1, "Selecione uma linha"),
   description: z.string().optional().nullable(),
   available: z.boolean().default(true),
 });

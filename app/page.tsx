@@ -30,7 +30,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
-      <Navbar variant="transparent" />
+      <Navbar activeItem="Início" />
       <HeroCarousel />
       <ProductLinesBar />
       <EssenceSection featuredProducts={featuredProducts} />

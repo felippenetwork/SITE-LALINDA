@@ -18,7 +18,6 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
     { label: "Início", path: "/" },
     { label: "Produtos", path: "/produtos" },
     { label: "A Lalinda", path: "/a-lalinda" },
-    { label: "Dashboard", path: "/admin" },
   ];
 
   return (

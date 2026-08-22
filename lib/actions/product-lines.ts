@@ -46,7 +46,7 @@ export async function saveProductLine(input: unknown) {
         name: data.name,
         slug: data.slug,
         description: data.description ?? null,
-        image_url: data.image_url ?? null,
+        image_url: data.image_url || null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.id);
@@ -57,7 +57,7 @@ export async function saveProductLine(input: unknown) {
         name: data.name,
         slug: data.slug,
         description: data.description ?? null,
-        image_url: data.image_url ?? null,
+        image_url: data.image_url || null,
       },
     ]);
     if (error) throw error;

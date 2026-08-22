@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
+import { ImageUploadField } from "@/components/shared/ImageUploadField";
 import type { BreadItem } from "@/lib/data/products";
 import type { ProductLine } from "@/lib/data/product-lines";
 import {
@@ -27,6 +28,8 @@ export const ProductForm = ({ editingItem, lines, onSubmit, isPending }: Product
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<ProductFormInput, unknown, ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -96,38 +99,27 @@ export const ProductForm = ({ editingItem, lines, onSubmit, isPending }: Product
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <Label
-            htmlFor="boxWeight"
-            className="text-[10px] uppercase tracking-widest font-black text-stone-400"
-          >
-            Peso Caixa
-          </Label>
-          <Input
-            id="boxWeight"
-            {...register("boxWeight")}
-            placeholder="ex: 5kg"
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label
-            htmlFor="image_url"
-            className="text-[10px] uppercase tracking-widest font-black text-stone-400"
-          >
-            URL Imagem
-          </Label>
-          <Input
-            id="image_url"
-            {...register("image_url")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
-          />
-          {errors.image_url && (
-            <p className="text-[10px] text-rose-500">{errors.image_url.message}</p>
-          )}
-        </div>
+      <div className="space-y-2">
+        <Label
+          htmlFor="boxWeight"
+          className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+        >
+          Peso Caixa
+        </Label>
+        <Input
+          id="boxWeight"
+          {...register("boxWeight")}
+          placeholder="ex: 5kg"
+          className="rounded-xl border-stone-100 bg-stone-50 h-12"
+        />
       </div>
+
+      <ImageUploadField
+        label="Foto do Produto"
+        value={watch("image_url")}
+        onChange={(url) => setValue("image_url", url, { shouldValidate: true })}
+      />
+      {errors.image_url && <p className="text-[10px] text-rose-500">{errors.image_url.message}</p>}
 
       <div className="space-y-2">
         <Label

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
+import { ImageUploadField } from "@/components/shared/ImageUploadField";
 import type { ProductLine } from "@/lib/data/product-lines";
 import { productLineSchema, type ProductLineValues } from "@/lib/validation/product-line";
 
@@ -31,6 +32,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
   const {
     register,
     handleSubmit,
+    watch,
     setValue,
     formState: { errors },
   } = useForm<ProductLineValues>({
@@ -81,22 +83,12 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
         {errors.slug && <p className="text-[10px] text-rose-500">{errors.slug.message}</p>}
       </div>
 
-      <div className="space-y-2">
-        <Label
-          htmlFor="image_url"
-          className="text-[10px] uppercase tracking-widest font-black text-stone-400"
-        >
-          URL Imagem
-        </Label>
-        <Input
-          id="image_url"
-          {...register("image_url")}
-          className="rounded-xl border-stone-100 bg-stone-50 h-12"
-        />
-        {errors.image_url && (
-          <p className="text-[10px] text-rose-500">{errors.image_url.message}</p>
-        )}
-      </div>
+      <ImageUploadField
+        label="Foto da Linha"
+        value={watch("image_url")}
+        onChange={(url) => setValue("image_url", url, { shouldValidate: true })}
+      />
+      {errors.image_url && <p className="text-[10px] text-rose-500">{errors.image_url.message}</p>}
 
       <div className="space-y-2">
         <Label

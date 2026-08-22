@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProductCard } from "@/components/shared/ProductCard";
+import { ProductLinesShowcase } from "@/components/sections/ProductLinesShowcase";
 import type { BreadItem } from "@/lib/data/products";
 
 interface ProdutosClientProps {
@@ -16,6 +17,12 @@ interface ProdutosClientProps {
 export function ProdutosClient({ products }: ProdutosClientProps) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const catalogRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectLine = (category: string) => {
+    setActiveCategory(category);
+    catalogRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(products.map((item) => item.category)));
@@ -61,45 +68,53 @@ export function ProdutosClient({ products }: ProdutosClientProps) {
           </div>
         </div>
 
-        <div className="mb-12 overflow-x-auto pb-4">
-          <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-            <TabsList className="bg-transparent gap-4 h-auto flex-nowrap">
-              {categories.map((cat) => (
-                <TabsTrigger
-                  key={cat}
-                  value={cat}
-                  className="capitalize px-8 py-3 rounded-full border border-stone-200 font-sans text-[10px] uppercase tracking-widest font-black data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:border-primary transition-all shadow-sm"
-                >
-                  {cat === "all" ? "Todas as Linhas" : cat}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
+        <ProductLinesShowcase onSelectLine={handleSelectLine} />
 
-        {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-            {filteredItems.map((item) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
+        <div ref={catalogRef} className="scroll-mt-28 md:scroll-mt-40">
+          <h3 className="text-2xl md:text-3xl font-serif italic text-foreground mb-8">
+            Catálogo Completo
+          </h3>
+
+          <div className="mb-12 overflow-x-auto pb-4">
+            <Tabs value={activeCategory} onValueChange={setActiveCategory}>
+              <TabsList className="bg-transparent gap-4 h-auto flex-nowrap">
+                {categories.map((cat) => (
+                  <TabsTrigger
+                    key={cat}
+                    value={cat}
+                    className="capitalize px-8 py-3 rounded-full border border-stone-200 font-sans text-[10px] uppercase tracking-widest font-black data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:border-primary transition-all shadow-sm"
+                  >
+                    {cat === "all" ? "Todas as Linhas" : cat}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
-        ) : (
-          <div className="text-center py-40 bg-white rounded-[4rem] border border-stone-100 shadow-xl shadow-stone-200/20">
-            <span className="text-6xl mb-6 block">🥖</span>
-            <p className="text-stone-400 font-serif italic text-2xl">
-              Não encontramos pães para sua busca.
-            </p>
-            <button
-              onClick={() => {
-                setSearch("");
-                setActiveCategory("all");
-              }}
-              className="mt-8 text-primary font-sans text-[10px] uppercase tracking-widest font-black underline underline-offset-8"
-            >
-              Ver Catálogo Completo
-            </button>
-          </div>
-        )}
+
+          {filteredItems.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+              {filteredItems.map((item) => (
+                <ProductCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-40 bg-white rounded-[4rem] border border-stone-100 shadow-xl shadow-stone-200/20">
+              <span className="text-6xl mb-6 block">🥖</span>
+              <p className="text-stone-400 font-serif italic text-2xl">
+                Não encontramos pães para sua busca.
+              </p>
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setActiveCategory("all");
+                }}
+                className="mt-8 text-primary font-sans text-[10px] uppercase tracking-widest font-black underline underline-offset-8"
+              >
+                Ver Catálogo Completo
+              </button>
+            </div>
+          )}
+        </div>
       </main>
 
       <Footer variant="dark" />

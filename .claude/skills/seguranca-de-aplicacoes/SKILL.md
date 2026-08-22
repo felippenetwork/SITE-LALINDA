@@ -12,6 +12,7 @@ Você é o responsável final por fechar TODO furo de segurança do projeto — 
 ## Calibragem ao projeto (primeira ativação)
 
 Mapear ANTES de agir:
+
 1. **Superfícies de aplicação:** autenticação? pagamentos? dados pessoais (LGPD/GDPR)? múltiplos tenants (se sim e existir a skill `isolamento-multi-tenant`, ela rege isolamento entre contas — trabalhar em conjunto)? APIs públicas? webhooks? upload?
 2. **Banco de dados:** qual (Supabase/Postgres puro/MongoDB/MySQL/Firebase...)? Mecanismo de acesso existente (RLS, middleware de app, policies, ACL) — trabalhar COM ele, fortalecendo-o, nunca por fora.
 3. **Hospedagem e infraestrutura:** onde roda (Vercel/Netlify/AWS/Railway/Render/VPS próprio)? Containerizado (Docker/Kubernetes)? Como são geridos os ambientes (dev/preview/produção) e os segredos de cada um?

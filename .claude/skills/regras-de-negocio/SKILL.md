@@ -125,7 +125,7 @@ Registrar aqui cada decisão de borda conforme surgir (pagamento parcial? duplic
 
 ### Cadastro de cliente — endereço obrigatório
 
-- **Campos obrigatórios (bloqueiam salvar):** endereço, número, bairro. **Cidade e Estado NÃO bloqueiam** — são preenchidos automaticamente via busca de CEP (ViaCEP, `src/lib/cep.ts`) no blur do campo CEP, em ambos os formulários (`pedidos/novo` e dialog "Editar cadastro"); os campos continuam editáveis manualmente se a busca falhar ou o CEP não vier. CEP em si fica opcional (nem todo cliente informa). *(Atualizado em 2026-07-23: regra original pedia Estado e depois Cidade obrigatórios também; o dono do projeto pediu para trocar ambos por preenchimento automático via CEP.)*
+- **Campos obrigatórios (bloqueiam salvar):** endereço, número, bairro. **Cidade e Estado NÃO bloqueiam** — são preenchidos automaticamente via busca de CEP (ViaCEP, `src/lib/cep.ts`) no blur do campo CEP, em ambos os formulários (`pedidos/novo` e dialog "Editar cadastro"); os campos continuam editáveis manualmente se a busca falhar ou o CEP não vier. CEP em si fica opcional (nem todo cliente informa). _(Atualizado em 2026-07-23: regra original pedia Estado e depois Cidade obrigatórios também; o dono do projeto pediu para trocar ambos por preenchimento automático via CEP.)_
 - **Onde a regra vale:** em qualquer caminho que grava/atualiza cadastro de cliente — criação automática via import de romaneio PDF (`/api/pedidos/save`) e edição manual (dialog "Editar cadastro" em `clientes/[id]`, via `PATCH /api/clientes/[id]`). Em ambos os casos o salvamento é BLOQUEADO (não silenciosamente ignorado) se algum desses campos estiver vazio.
 - **Sincronização a cada pedido:** todo pedido importado (cliente novo ou já existente) carrega o endereço extraído do romaneio ("espelho"). Esse endereço sempre atualiza o cadastro do cliente na tabela `clientes` — não só quando o cliente é novo. Isso já era o comportamento em `/api/pedidos/save` para clientes existentes (atualiza se o campo veio preenchido); a mudança é exigir que venha completo.
 - **Custo de IA:** endereço já faz parte do MESMO retorno da extração Claude do romaneio (`extract-romaneio.ts`) — validar/sincronizar contra o cadastro não dispara nenhuma chamada de IA adicional. Zero custo extra de IA.
@@ -146,7 +146,7 @@ Registrar aqui cada decisão de borda conforme surgir (pagamento parcial? duplic
 
 ### Cadastro de cliente — fonte do nome: 2 campos separados (Nome/Destino + Razão Social)
 
-*(Regra de 2026-07-27 revertida em 2026-07-31 — ver "Mudança de regra" abaixo. Esta é a versão vigente.)*
+_(Regra de 2026-07-27 revertida em 2026-07-31 — ver "Mudança de regra" abaixo. Esta é a versão vigente.)_
 
 - **Dois campos, os dois no mesmo cadastro:**
   - `razao_social` — campo PRINCIPAL, volta a ser extraído do rótulo **"Destino:"** do romaneio (fallback: "Razão Social Cliente:" se o documento não tiver "Destino:" explícito). É o nome/apelido pelo qual o time reconhece e busca o cliente no dia a dia — usado como título do cadastro em toda a UI (card, cabeçalho do perfil, listas).
@@ -215,7 +215,7 @@ Auditoria (`sincronizacao-e-integridade`) encontrou pontos do sistema que não s
 
 ### Bot WhatsApp (Rifas) — comando #conta
 
-*(Atualizado em 2026-08-20: gatilho ampliado — ver "Mudança de regra" abaixo. Esta é a versão vigente.)*
+_(Atualizado em 2026-08-20: gatilho ampliado — ver "Mudança de regra" abaixo. Esta é a versão vigente.)_
 
 - **Gatilho:** qualquer um (admin ou participante comum) manda `#conta`, tanto dentro do grupo de rifa quanto no privado do próprio número do bot. No grupo, checado ANTES do bloco `isAdmin && texto.startsWith('#')` que intercepta os demais comandos (`#lista`/`#status`/`#faltam`/`#remover`, só pra admin) — senão o admin digitando `#conta` cairia no fallback "não entendi" desses. No privado, checado antes de toda a fila de confirmações sim/não do dono (`handleMensagemPrivada`), já que é um comando explícito, não uma resposta a pergunta pendente.
 - **Identificação:** telefone do remetente (mesma extração já usada em `handlePedido`: `senderPn`/`fromMe`) buscado em `participants` filtrado por `group_id` do grupo onde a mensagem chegou (nunca busca global — telefone é único só por grupo desde a migration 040).
@@ -257,7 +257,6 @@ Auditoria (`sincronizacao-e-integridade`) encontrou pontos do sistema que não s
 - **Duas formas de uso** (padrão copiado do projeto irmão "ZapGrupos", já em produção lá): `#hidetag texto aqui` manda esse texto; `#hidetag` sozinho, respondendo/citando uma mensagem, replica o texto da mensagem citada. Sem texto E sem citação → recusa com aviso, nunca manda vazio.
 - **Fonte dos telefones:** cache local (`group_member_cache`, mesmo do `{{mencao}}`) — **nunca** chama `/group/list` ao vivo, diferente do ZapGrupos (que lista participantes na hora via `listGroups`) — decisão deliberada de NÃO copiar essa parte: grupos deste projeto já têm 800+ membros de verdade e esse endpoint é conhecido por travar 40s+ (mesmo motivo documentado pro `{{mencao}}`). Cache vazio = manda sem marcar ninguém.
 - **Apaga a mensagem do comando** (pra todos, `deleteMessage`) sempre, best-effort — não trava o comando se falhar. Não apaga a mensagem CITADA (quando usada como fonte do texto): o webhook só recebe o texto dela, não o id necessário pra apagar.
-
 
 Regra já documentada que MUDA (não uma lacuna nova sendo preenchida pela primeira vez) exige responder, antes de implementar:
 

@@ -10,12 +10,14 @@ Add a professional administration dashboard at `/admin` for managing the catalog
 ## Proposed Changes
 
 ### Routing & Navigation
+
 - Create `src/routes/admin.tsx` for the admin dashboard.
 - Create `src/routes/catalog.tsx` for the full product menu.
 - Update `src/routes/index.tsx` to link to the new `/catalog` route in the header and hero sections.
 - Update `src/routes/__root.tsx` if global navigation needs adjustments (though header is currently local to index).
 
 ### Admin Dashboard (`/admin`)
+
 - **Dashboard Overview**: Summary of catalog items and recent activity.
 - **Catalog Management**: CRUD (Create, Read, Update, Delete) interface for bread products.
 - **Bakery Info**: Edit bakery name, slogan, and contact information.
@@ -23,6 +25,7 @@ Add a professional administration dashboard at `/admin` for managing the catalog
 - **Professional UI**: Clean, sidebar-driven layout with status indicators.
 
 ### Catalog Menu (`/catalog`)
+
 - **Category Filter**: Easy navigation between Traditional, Sourdough, and Confectionery.
 - **Search Functionality**: Quick search for specific products.
 - **Detailed Cards**: High-quality images, weights, and descriptions for every product.

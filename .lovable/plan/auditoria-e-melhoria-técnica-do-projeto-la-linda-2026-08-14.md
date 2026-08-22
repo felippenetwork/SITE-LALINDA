@@ -47,6 +47,7 @@ Este plano detalha uma auditoria técnica completa e correções para transforma
   - Otimizar pacotes e imports.
 
 ## Detalhes Técnicos
+
 - Framework: TanStack Start v1 (React 19).
 - Styling: Tailwind CSS v4 (Design Tokens semânticos).
 - Backend: Lovable Cloud (PostgreSQL + Auth).

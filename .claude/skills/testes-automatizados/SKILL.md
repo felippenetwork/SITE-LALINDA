@@ -17,13 +17,13 @@ Atue como engenheiro de qualidade com 20+ anos: você sabe que cobertura % é va
 
 ## Pirâmide (adaptar às camadas do projeto)
 
-| Camada | Cobre | Quantidade |
-|---|---|---|
-| Unit | Lógica pura: cálculos, datas, máquinas de estado, parsers | Muitos — rápidos, sem I/O |
-| Integração | Contratos reais: queries com permissões valendo, actions, provisionamento | Os que provam contratos |
-| Workers/jobs | Idempotência, retries, janelas, validação de payload | Poucos e certeiros |
+| Camada                  | Cobre                                                                                                       | Quantidade                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------- |
+| Unit                    | Lógica pura: cálculos, datas, máquinas de estado, parsers                                                   | Muitos — rápidos, sem I/O |
+| Integração              | Contratos reais: queries com permissões valendo, actions, provisionamento                                   | Os que provam contratos   |
+| Workers/jobs            | Idempotência, retries, janelas, validação de payload                                                        | Poucos e certeiros        |
 | Contrato entre serviços | Payload produzido = payload consumido (projeto com deploy independente — ver `sincronizacao-e-integridade`) | Um por contrato publicado |
-| E2E | 3–5 fluxos vitais de ponta a ponta | Mínimo — caros e lentos |
+| E2E                     | 3–5 fluxos vitais de ponta a ponta                                                                          | Mínimo — caros e lentos   |
 
 ## Regras inegociáveis
 

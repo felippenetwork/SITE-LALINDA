@@ -77,7 +77,7 @@ export const HeroCarousel = () => {
                       y: selectedIndex === i ? 0 : 20,
                     }}
                     transition={{ delay: 0.2 }}
-                    className="inline-block text-primary-light font-sans uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 md:mb-6"
+                    className="inline-block text-primary-light font-sans uppercase tracking-[0.3em] text-[11px] md:text-sm font-bold mb-4 md:mb-6"
                   >
                     {s.subtitle}
                   </motion.span>

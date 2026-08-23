@@ -65,7 +65,7 @@ export default async function AboutPage() {
             />
           </div>
           <div className="relative z-10 max-w-5xl">
-            <span className="text-primary font-serif italic text-2xl md:text-4xl mb-6 block">
+            <span className="text-primary-light font-serif italic text-2xl md:text-4xl mb-6 block">
               Nossa Herança
             </span>
             <h2 className="text-6xl md:text-[10rem] lg:text-[12rem] font-serif italic text-white leading-[0.8] mb-8 tracking-tighter">

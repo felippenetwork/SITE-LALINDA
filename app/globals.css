@@ -20,6 +20,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -51,6 +52,9 @@
 
   --primary: oklch(0.6 0.12 30); /* #A65D4A - Muted Terracotta */
   --primary-foreground: oklch(0.99 0.005 60);
+  --primary-light: oklch(
+    0.72 0.1 32
+  ); /* #DC8D7D - lighter tint, readable on dark photo backgrounds */
 
   --secondary: oklch(0.96 0.015 60); /* #F5F1EE - Oatmeal */
   --secondary-foreground: oklch(0.2 0.02 40);
@@ -76,6 +80,7 @@
   --card-foreground: oklch(0.95 0.01 60);
   --primary: oklch(0.7 0.1 35);
   --primary-foreground: oklch(0.15 0.01 40);
+  --primary-light: oklch(0.78 0.09 35);
   --border: oklch(0.25 0.01 40);
 }
 

@@ -34,7 +34,7 @@ export const HeritageSection = () => {
             className="lg:w-1/2 order-1 lg:order-2 space-y-8 md:space-y-12"
           >
             <div className="space-y-6">
-              <span className="text-primary font-serif italic text-xl md:text-3xl block">
+              <span className="text-primary-light font-serif italic text-xl md:text-3xl block">
                 Nossa Herança
               </span>
               <h2 className="text-5xl md:text-[8rem] font-serif italic leading-[0.85] tracking-tighter">

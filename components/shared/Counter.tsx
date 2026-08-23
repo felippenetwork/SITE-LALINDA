@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface CounterProps {
@@ -9,27 +9,31 @@ interface CounterProps {
   suffix?: string;
 }
 
+const DURATION_MS = 1500;
+
 export const Counter = ({ value, label, suffix = "" }: CounterProps) => {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
+  const frameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    if (inView) {
-      let start = 0;
-      const duration = 2000;
-      const stepTime = Math.abs(Math.floor(duration / value));
-      const timer = setInterval(() => {
-        start += 1;
-        if (start >= value) {
-          setCount(value);
-          clearInterval(timer);
-        } else {
-          setCount(start);
-        }
-      }, stepTime);
-      return () => clearInterval(timer);
-    }
-    return undefined;
+    if (!inView) return undefined;
+
+    const start = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / DURATION_MS, 1);
+      // Ease-out: fast start, settles into the final value smoothly.
+      const eased = 1 - (1 - progress) ** 3;
+      setCount(Math.round(eased * value));
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(tick);
+      }
+    };
+    frameRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (frameRef.current !== undefined) cancelAnimationFrame(frameRef.current);
+    };
   }, [inView, value]);
 
   return (

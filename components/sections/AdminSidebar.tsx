@@ -37,7 +37,7 @@ export const AdminSidebar = () => {
       <aside className="hidden lg:flex w-72 bg-stone-950 text-white flex-col p-8 fixed h-full border-r border-stone-800">
         <div className="mb-12">
           <h1 className="text-2xl font-serif italic text-white leading-none">La Linda</h1>
-          <span className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-primary mt-2 block">
+          <span className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-primary-light mt-2 block">
             Dashboard
           </span>
         </div>
@@ -93,7 +93,7 @@ export const AdminSidebar = () => {
             side="right"
             className="bg-stone-950 border-stone-800 text-white p-8 flex flex-col"
           >
-            <span className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-primary mb-8 block">
+            <span className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-primary-light mb-8 block">
               Dashboard
             </span>
             <nav className="flex-1 space-y-2">

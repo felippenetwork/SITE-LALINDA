@@ -39,7 +39,7 @@ export default async function ProdutosPage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-transparent" />
           <div className="relative z-10 max-w-7xl mx-auto w-full">
-            <span className="text-primary font-serif italic text-lg md:text-xl mb-3 md:mb-4 block">
+            <span className="text-primary-light font-serif italic text-lg md:text-xl mb-3 md:mb-4 block">
               A Coleção La Linda
             </span>
             <h2 className="text-5xl md:text-8xl font-serif italic leading-[0.9] text-white mb-6 md:mb-8">

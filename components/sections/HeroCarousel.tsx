@@ -2,6 +2,7 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -50,14 +51,21 @@ export const HeroCarousel = () => {
         <div className="flex h-full">
           {slides.map((s, i) => (
             <div key={i} className="flex-[0_0_100%] relative h-full overflow-hidden">
-              <motion.img
+              <motion.div
                 initial={{ scale: 1.1 }}
                 animate={{ scale: selectedIndex === i ? 1 : 1.1 }}
                 transition={{ duration: 10, ease: "linear" }}
-                src={s.img}
-                alt={s.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-60"
-              />
+                className="absolute inset-0"
+              >
+                <Image
+                  src={s.img}
+                  alt={s.title}
+                  fill
+                  sizes="100vw"
+                  priority={i === 0}
+                  className="object-cover opacity-60"
+                />
+              </motion.div>
               <div className="absolute inset-0 flex items-center px-6 md:px-24">
                 <div className="max-w-4xl">
                   <motion.span
@@ -67,7 +75,7 @@ export const HeroCarousel = () => {
                       y: selectedIndex === i ? 0 : 20,
                     }}
                     transition={{ delay: 0.2 }}
-                    className="inline-block text-primary font-sans uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 md:mb-6"
+                    className="inline-block text-primary-light font-sans uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 md:mb-6"
                   >
                     {s.subtitle}
                   </motion.span>

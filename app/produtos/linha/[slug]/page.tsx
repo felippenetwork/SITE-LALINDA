@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: LinePageProps): Promise<Metad
   const { slug } = await params;
   const line = await getProductLineBySlug(slug);
 
-  if (!line) {
+  if (!line || !line.available) {
     return { title: "Linha não encontrada | La Linda Pães Especiais" };
   }
 
@@ -36,7 +36,7 @@ export default async function ProductLinePage({ params }: LinePageProps) {
   const { slug } = await params;
   const line = await getProductLineBySlug(slug);
 
-  if (!line) {
+  if (!line || !line.available) {
     notFound();
   }
 

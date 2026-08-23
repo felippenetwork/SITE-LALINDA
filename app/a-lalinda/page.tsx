@@ -42,10 +42,11 @@ const PILLARS = [
 ];
 
 export default async function AboutPage() {
-  const [timelineEvents, productLines] = await Promise.all([
+  const [timelineEvents, allProductLines] = await Promise.all([
     getTimelineEvents(),
     getProductLines(),
   ]);
+  const productLines = allProductLines.filter((line) => line.available);
 
   return (
     <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">

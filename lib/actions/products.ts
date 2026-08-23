@@ -75,6 +75,19 @@ export async function saveProduct(input: unknown) {
   return { success: true };
 }
 
+export async function toggleProductAvailability(id: string, available: boolean) {
+  const supabase = await requireAdmin();
+
+  const { error } = await supabase
+    .from("products")
+    .update({ available, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw error;
+
+  revalidateProductPages();
+  return { success: true };
+}
+
 export async function deleteProduct(id: string) {
   const supabase = await requireAdmin();
 

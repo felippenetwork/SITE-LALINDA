@@ -3,7 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductsAction, saveProduct, deleteProduct } from "@/lib/actions/products";
+import {
+  getProductsAction,
+  saveProduct,
+  deleteProduct,
+  toggleProductAvailability,
+} from "@/lib/actions/products";
 import { getProductLinesAction } from "@/lib/actions/product-lines";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,6 +70,18 @@ export default function AdminProdutosPage() {
     },
     onError: (error: Error) => {
       toast.error("Erro ao excluir: " + error.message);
+    },
+  });
+
+  const toggleAvailabilityMutation = useMutation({
+    mutationFn: ({ id, available }: { id: string; available: boolean }) =>
+      toggleProductAvailability(id, available),
+    onSuccess: (_data, { available }) => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success(available ? "Produto ativado" : "Produto pausado");
+    },
+    onError: (error: Error) => {
+      toast.error("Erro ao atualizar status: " + error.message);
     },
   });
 
@@ -187,14 +204,25 @@ export default function AdminProdutosPage() {
                     {item.weight} / <span className="text-stone-300">{item.boxWeight || "-"}</span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={toggleAvailabilityMutation.isPending}
+                      onClick={() =>
+                        toggleAvailabilityMutation.mutate({
+                          id: item.id,
+                          available: !item.available,
+                        })
+                      }
+                      className="flex items-center gap-2 group/status disabled:opacity-50"
+                      title={item.available ? "Clique para pausar" : "Clique para ativar"}
+                    >
                       <div
-                        className={`w-2 h-2 rounded-full ${item.available ? "bg-green-500" : "bg-stone-300"}`}
+                        className={`w-2 h-2 rounded-full transition-colors ${item.available ? "bg-green-500" : "bg-stone-300"}`}
                       ></div>
-                      <span className="text-[10px] uppercase tracking-widest font-black text-stone-400">
+                      <span className="text-[10px] uppercase tracking-widest font-black text-stone-400 group-hover/status:text-primary transition-colors">
                         {item.available ? "Ativo" : "Pausado"}
                       </span>
-                    </div>
+                    </button>
                   </TableCell>
                   <TableCell className="text-right pr-8 space-x-1">
                     <Button

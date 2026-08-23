@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProdutosPage() {
-  const lines = await getProductLines();
+  const lines = (await getProductLines()).filter((line) => line.available);
 
   return (
     <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">

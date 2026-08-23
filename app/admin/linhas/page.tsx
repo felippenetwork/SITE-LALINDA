@@ -7,6 +7,7 @@ import {
   getProductLinesAction,
   saveProductLine,
   deleteProductLine,
+  toggleProductLineAvailability,
 } from "@/lib/actions/product-lines";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,6 +63,18 @@ export default function AdminLinhasPage() {
     },
     onError: (error: Error) => {
       toast.error("Erro ao excluir: " + error.message);
+    },
+  });
+
+  const toggleAvailabilityMutation = useMutation({
+    mutationFn: ({ id, available }: { id: string; available: boolean }) =>
+      toggleProductLineAvailability(id, available),
+    onSuccess: (_data, { available }) => {
+      queryClient.invalidateQueries({ queryKey: ["product-lines"] });
+      toast.success(available ? "Linha ativada" : "Linha pausada");
+    },
+    onError: (error: Error) => {
+      toast.error("Erro ao atualizar status: " + error.message);
     },
   });
 
@@ -140,6 +153,9 @@ export default function AdminLinhasPage() {
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
                   Slug
                 </TableHead>
+                <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
+                  Status
+                </TableHead>
                 <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
                   Ações
                 </TableHead>
@@ -162,6 +178,27 @@ export default function AdminLinhasPage() {
                     {line.name}
                   </TableCell>
                   <TableCell className="font-mono text-xs text-stone-400">{line.slug}</TableCell>
+                  <TableCell>
+                    <button
+                      type="button"
+                      disabled={toggleAvailabilityMutation.isPending}
+                      onClick={() =>
+                        toggleAvailabilityMutation.mutate({
+                          id: line.id,
+                          available: !line.available,
+                        })
+                      }
+                      className="flex items-center gap-2 group/status disabled:opacity-50"
+                      title={line.available ? "Clique para pausar" : "Clique para ativar"}
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full transition-colors ${line.available ? "bg-green-500" : "bg-stone-300"}`}
+                      ></div>
+                      <span className="text-[10px] uppercase tracking-widest font-black text-stone-400 group-hover/status:text-primary transition-colors">
+                        {line.available ? "Ativo" : "Pausado"}
+                      </span>
+                    </button>
+                  </TableCell>
                   <TableCell className="text-right pr-8 space-x-1">
                     <Button
                       variant="ghost"

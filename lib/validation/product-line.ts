@@ -14,6 +14,7 @@ export const productLineSchema = z.object({
     .or(z.literal(""))
     .optional()
     .nullable(),
+  available: z.boolean().default(true),
 });
 
 export type ProductLineInput = z.input<typeof productLineSchema>;

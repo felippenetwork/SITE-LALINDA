@@ -47,6 +47,7 @@ export async function saveProductLine(input: unknown) {
         slug: data.slug,
         description: data.description ?? null,
         image_url: data.image_url || null,
+        available: data.available,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.id);
@@ -58,10 +59,24 @@ export async function saveProductLine(input: unknown) {
         slug: data.slug,
         description: data.description ?? null,
         image_url: data.image_url || null,
+        available: data.available,
       },
     ]);
     if (error) throw error;
   }
+
+  revalidateProductPages();
+  return { success: true };
+}
+
+export async function toggleProductLineAvailability(id: string, available: boolean) {
+  const supabase = await requireAdmin();
+
+  const { error } = await supabase
+    .from("product_lines")
+    .update({ available, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw error;
 
   revalidateProductPages();
   return { success: true };

@@ -10,7 +10,11 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { ImageUploadField } from "@/components/shared/ImageUploadField";
 import type { ProductLine } from "@/lib/data/product-lines";
-import { productLineSchema, type ProductLineValues } from "@/lib/validation/product-line";
+import {
+  productLineSchema,
+  type ProductLineInput,
+  type ProductLineValues,
+} from "@/lib/validation/product-line";
 
 interface ProductLineFormProps {
   editingLine: ProductLine | null;
@@ -35,7 +39,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
     watch,
     setValue,
     formState: { errors },
-  } = useForm<ProductLineValues>({
+  } = useForm<ProductLineInput, unknown, ProductLineValues>({
     resolver: zodResolver(productLineSchema),
     defaultValues: {
       id: editingLine?.id,
@@ -43,6 +47,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
       slug: editingLine?.slug ?? "",
       description: editingLine?.description ?? "",
       image_url: editingLine?.image ?? "",
+      available: editingLine?.available ?? true,
     },
   });
 

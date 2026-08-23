@@ -8,6 +8,7 @@ export interface ProductLine {
   description: string | null;
   image: string | null;
   sortOrder: number;
+  available: boolean;
 }
 
 type ProductLineRow = Database["public"]["Tables"]["product_lines"]["Row"];
@@ -20,6 +21,7 @@ function mapProductLine(row: ProductLineRow): ProductLine {
     description: row.description,
     image: row.image_url,
     sortOrder: row.sort_order,
+    available: row.available,
   };
 }
 

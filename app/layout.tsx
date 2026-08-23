@@ -18,9 +18,6 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   title: "La Linda | Pães Especiais",
   description: "Excelência em panificação artesanal.",
-  icons: {
-    icon: "/favicon.ico",
-  },
   openGraph: {
     title: "La Linda | Pães Especiais",
     description: "Excelência em panificação artesanal.",
@@ -28,7 +25,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@Lovable",
   },
 };
 

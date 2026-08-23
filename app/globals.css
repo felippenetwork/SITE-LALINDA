@@ -52,7 +52,7 @@
 
   --primary: oklch(0.6 0.12 30); /* #A65D4A - Muted Terracotta */
   --primary-foreground: oklch(0.99 0.005 60);
-  --primary-light: oklch(0.64 0.1 32); /* #C17565 - readable on dark photo backgrounds */
+  --primary-light: #ff3d7f; /* Strong pink - readable on dark photo backgrounds */
 
   --secondary: oklch(0.96 0.015 60); /* #F5F1EE - Oatmeal */
   --secondary-foreground: oklch(0.2 0.02 40);
@@ -78,7 +78,7 @@
   --card-foreground: oklch(0.95 0.01 60);
   --primary: oklch(0.7 0.1 35);
   --primary-foreground: oklch(0.15 0.01 40);
-  --primary-light: oklch(0.72 0.09 35);
+  --primary-light: #ff4d9e;
   --border: oklch(0.25 0.01 40);
 }
 

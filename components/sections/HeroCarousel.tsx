@@ -66,6 +66,8 @@ export const HeroCarousel = () => {
                   className="object-cover opacity-60"
                 />
               </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-r from-stone-900/85 via-stone-900/55 to-stone-900/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
               <div className="absolute inset-0 flex items-center px-6 md:px-24">
                 <div className="max-w-4xl">
                   <motion.span

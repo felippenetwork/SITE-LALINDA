@@ -22,7 +22,7 @@ const TimelineCard = ({ event }: TimelineCardProps) => {
 
   return (
     <div ref={ref} className="flex-[0_0_280px] md:flex-[0_0_400px] group">
-      <div className="text-6xl md:text-8xl font-serif italic text-stone-100 group-hover:text-primary/10 transition-colors mb-2 md:mb-4">
+      <div className="text-6xl md:text-8xl font-serif italic text-stone-400 group-hover:text-primary/40 transition-colors mb-2 md:mb-4">
         {event.year}
       </div>
       <div className="relative p-6 md:p-10 bg-white border border-stone-100 rounded-[2rem] md:rounded-[3rem] shadow-xl shadow-stone-200/20 group-hover:-translate-y-4 transition-transform duration-500">

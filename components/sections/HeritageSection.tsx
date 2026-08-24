@@ -20,7 +20,7 @@ export const HeritageSection = () => {
           <div className="w-full lg:w-1/2 order-1">
             <div
               ref={ref}
-              className="relative aspect-[4/5] w-full rounded-[2rem] md:rounded-[4rem] overflow-hidden bg-stone-800"
+              className="relative aspect-square w-full max-w-[280px] mx-auto rounded-[2rem] overflow-hidden bg-stone-800 md:max-w-none md:aspect-[4/5] md:rounded-[4rem]"
             >
               {inView && (
                 <video

@@ -10,6 +10,7 @@ import { TimelineSection } from "@/components/sections/TimelineSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { getProducts } from "@/lib/data/products";
 import { getTimelineEvents } from "@/lib/data/timeline";
+import { getProductLines } from "@/lib/data/product-lines";
 
 export const metadata: Metadata = {
   title: "La Linda | Pães Especiais Artesanais",
@@ -25,14 +26,19 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [products, timelineEvents] = await Promise.all([getProducts(), getTimelineEvents()]);
+  const [products, timelineEvents, allProductLines] = await Promise.all([
+    getProducts(),
+    getTimelineEvents(),
+    getProductLines(),
+  ]);
   const featuredProducts = products.slice(0, 3);
+  const productLines = allProductLines.filter((line) => line.available);
 
   return (
     <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="Início" />
       <HeroCarousel />
-      <ProductLinesBar />
+      <ProductLinesBar lines={productLines} />
       <EssenceSection featuredProducts={featuredProducts} />
       <StatsSection />
       <HeritageSection />

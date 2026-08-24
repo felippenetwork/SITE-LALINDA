@@ -10,7 +10,7 @@ export const HeritageSection = () => {
     <section className="py-20 md:py-40 bg-stone-900 text-white overflow-hidden">
       <div className="container mx-auto px-6 md:px-8">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 md:gap-32">
-          <div className="lg:w-1/2 order-2 lg:order-1">
+          <div className="w-full lg:w-1/2 order-2 lg:order-1">
             <div className="relative aspect-[4/5] w-full rounded-[2rem] md:rounded-[4rem] overflow-hidden group">
               <Image
                 src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200"
@@ -31,7 +31,7 @@ export const HeritageSection = () => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="lg:w-1/2 order-1 lg:order-2 space-y-8 md:space-y-12"
+            className="w-full lg:w-1/2 order-1 lg:order-2 space-y-8 md:space-y-12"
           >
             <div className="space-y-6">
               <span className="text-primary-light font-serif italic text-xl md:text-3xl block">

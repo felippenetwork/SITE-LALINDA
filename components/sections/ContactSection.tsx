@@ -14,14 +14,22 @@ export const ContactSection = () => {
               <span className="text-primary font-serif italic text-xl md:text-3xl mb-6 md:mb-10 block">
                 Vamos Conversar?
               </span>
-              <h2 className="text-5xl md:text-8xl lg:text-9xl font-serif italic text-white mb-8 md:mb-16 leading-[0.85] tracking-tighter">
+              <h2 className="text-5xl md:text-8xl lg:text-9xl font-serif italic text-white mb-6 md:mb-8 leading-[0.85] tracking-tighter">
                 Transforme <br />
                 seu PDV com <br />
                 Excelência.
               </h2>
+              <p className="text-stone-400 font-sans leading-relaxed text-sm md:text-base max-w-sm mb-10 md:mb-14">
+                Seja para revender nossos pães em sua loja, fechar uma parceria para eventos ou
+                tirar qualquer dúvida, fale com a nossa equipe pelos canais de contato ou pelo
+                formulário.
+              </p>
             </div>
 
             <div className="space-y-6 md:space-y-8">
+              <p className="text-[10px] font-sans uppercase tracking-widest text-stone-500 font-black mb-2">
+                Nossos Canais de Atendimento
+              </p>
               <div className="flex items-center gap-6 group">
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                   <Mail size={20} />
@@ -67,6 +75,12 @@ export const ContactSection = () => {
           </div>
 
           <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 bg-white/5 backdrop-blur-3xl">
+            <p className="text-[10px] font-sans uppercase tracking-widest text-stone-500 font-black mb-3">
+              Envie uma Mensagem
+            </p>
+            <h3 className="text-2xl md:text-3xl font-serif italic text-white mb-10 md:mb-14">
+              Como podemos ajudar?
+            </h3>
             <LeadForm />
           </div>
         </div>

@@ -77,7 +77,7 @@ export const ChangePasswordForm = () => {
       <div className="space-y-2">
         <Label
           htmlFor="currentPassword"
-          className="text-[10px] uppercase tracking-widest font-black text-stone-400 flex items-center gap-2"
+          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground flex items-center gap-2"
         >
           <Lock size={12} /> Senha Atual
         </Label>
@@ -96,7 +96,7 @@ export const ChangePasswordForm = () => {
         <div className="space-y-2">
           <Label
             htmlFor="newPassword"
-            className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Nova Senha
           </Label>
@@ -113,7 +113,7 @@ export const ChangePasswordForm = () => {
         <div className="space-y-2">
           <Label
             htmlFor="confirmPassword"
-            className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Confirmar Nova Senha
           </Label>
@@ -133,7 +133,7 @@ export const ChangePasswordForm = () => {
         <button
           type="button"
           onClick={() => setShowPasswords((v) => !v)}
-          className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-black text-stone-400 hover:text-foreground transition-colors"
+          className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
         >
           {showPasswords ? <EyeOff size={14} /> : <Eye size={14} />}
           {showPasswords ? "Ocultar senhas" : "Mostrar senhas"}

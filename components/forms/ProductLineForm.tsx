@@ -56,7 +56,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
       <div className="space-y-2">
         <Label
           htmlFor="name"
-          className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Nome da Linha
         </Label>
@@ -75,7 +75,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
       <div className="space-y-2">
         <Label
           htmlFor="slug"
-          className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Slug (usado na URL)
         </Label>
@@ -98,7 +98,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
       <div className="space-y-2">
         <Label
           htmlFor="description"
-          className="text-[10px] uppercase tracking-widest font-black text-stone-400"
+          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Descrição
         </Label>

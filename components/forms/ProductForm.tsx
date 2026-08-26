@@ -57,7 +57,7 @@ export const ProductForm = ({
       <div className="space-y-2">
         <Label
           htmlFor="name"
-          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+          className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Nome do Produto
         </Label>
@@ -73,7 +73,7 @@ export const ProductForm = ({
         <div className="space-y-2">
           <Label
             htmlFor="categoryId"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Linha
           </Label>
@@ -92,7 +92,7 @@ export const ProductForm = ({
         <div className="space-y-2">
           <Label
             htmlFor="weight"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Peso Unitário
           </Label>
@@ -109,7 +109,7 @@ export const ProductForm = ({
       <div className="space-y-2">
         <Label
           htmlFor="boxWeight"
-          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+          className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Peso Caixa
         </Label>
@@ -131,7 +131,7 @@ export const ProductForm = ({
       <div className="space-y-2">
         <Label
           htmlFor="description"
-          className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+          className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
         >
           Descrição
         </Label>

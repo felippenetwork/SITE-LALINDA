@@ -81,7 +81,7 @@ export function LoginForm() {
               <div className="space-y-3">
                 <Label
                   htmlFor="email"
-                  className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground flex items-center gap-2"
+                  className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground flex items-center gap-2"
                 >
                   <Mail size={12} /> E-mail
                 </Label>
@@ -100,7 +100,7 @@ export function LoginForm() {
               <div className="space-y-3">
                 <Label
                   htmlFor="password"
-                  className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground flex items-center gap-2"
+                  className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground flex items-center gap-2"
                 >
                   <Lock size={12} /> Senha
                 </Label>

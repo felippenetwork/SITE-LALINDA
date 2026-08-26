@@ -14,6 +14,12 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { ChangePasswordForm } from "@/components/forms/ChangePasswordForm";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -37,26 +43,51 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
   const initials = userEmail.slice(0, 2).toUpperCase() || "?";
   const roleLabel = isAdmin ? "Administrador" : "Operador";
 
-  const accountBlock = (
-    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 mb-4">
-      <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary text-[11px] font-black uppercase shrink-0">
-        {initials}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-sans font-semibold text-white truncate" title={userEmail}>
-          {userEmail}
-        </p>
-        <p className="text-[9px] font-sans uppercase tracking-widest text-stone-500">{roleLabel}</p>
-      </div>
-    </div>
-  );
-
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/");
     router.refresh();
   };
+
+  const accountMenu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors">
+          <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary text-[11px] font-black uppercase shrink-0">
+            {initials}
+          </div>
+          <div className="min-w-0 flex-1 text-left">
+            <p className="text-xs font-sans font-semibold text-white truncate" title={userEmail}>
+              {userEmail}
+            </p>
+            <p className="text-[9px] font-sans uppercase tracking-widest text-stone-500">
+              {roleLabel}
+            </p>
+          </div>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        side="top"
+        sideOffset={8}
+        className="w-64 bg-stone-900 border-stone-800 text-white p-2 rounded-2xl"
+      >
+        <DropdownMenuItem
+          onClick={() => setIsPasswordDialogOpen(true)}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs uppercase tracking-widest font-black text-stone-300 focus:bg-white/10 focus:text-white cursor-pointer"
+        >
+          <KeyRound size={14} /> Trocar Senha
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs uppercase tracking-widest font-black text-rose-500 focus:bg-rose-500/10 focus:text-rose-500 cursor-pointer"
+        >
+          <LogOut size={14} /> Sair
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   const passwordDialog = (
     <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
@@ -97,29 +128,14 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
           ))}
         </nav>
 
-        <div className="mt-auto pt-8 border-t border-stone-800">
-          {accountBlock}
-          <div className="space-y-4">
-            <Link
-              href="/"
-              className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-            >
-              <ExternalLink size={14} /> Site Público
-            </Link>
-            <button
-              onClick={() => setIsPasswordDialogOpen(true)}
-              className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-            >
-              <KeyRound size={14} /> Trocar Senha
-            </button>
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
-            >
-              <LogOut size={18} />
-              <span className="text-sm uppercase tracking-widest">Sair</span>
-            </button>
-          </div>
+        <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">
+          <Link
+            href="/"
+            className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+          >
+            <ExternalLink size={14} /> Site Público
+          </Link>
+          {accountMenu}
         </div>
       </aside>
 
@@ -156,31 +172,16 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
                 </SheetClose>
               ))}
             </nav>
-            <div className="mt-auto pt-8 border-t border-stone-800">
-              {accountBlock}
-              <div className="space-y-4">
-                <SheetClose asChild>
-                  <Link
-                    href="/"
-                    className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-                  >
-                    <ExternalLink size={14} /> Site Público
-                  </Link>
-                </SheetClose>
-                <button
-                  onClick={() => setIsPasswordDialogOpen(true)}
+            <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">
+              <SheetClose asChild>
+                <Link
+                  href="/"
                   className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
                 >
-                  <KeyRound size={14} /> Trocar Senha
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
-                >
-                  <LogOut size={18} />
-                  <span className="text-sm uppercase tracking-widest">Sair</span>
-                </button>
-              </div>
+                  <ExternalLink size={14} /> Site Público
+                </Link>
+              </SheetClose>
+              {accountMenu}
             </div>
           </SheetContent>
         </Sheet>

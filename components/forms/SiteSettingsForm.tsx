@@ -36,7 +36,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
         <div className="space-y-2">
           <Label
             htmlFor="contactEmail"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             E-mail de Contato
           </Label>
@@ -54,7 +54,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
         <div className="space-y-2">
           <Label
             htmlFor="contactPhone"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Telefone / WhatsApp
           </Label>
@@ -73,7 +73,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
         <div className="space-y-2">
           <Label
             htmlFor="instagramUrl"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Instagram (opcional)
           </Label>
@@ -91,7 +91,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
         <div className="space-y-2">
           <Label
             htmlFor="facebookUrl"
-            className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
           >
             Facebook (opcional)
           </Label>

@@ -117,7 +117,7 @@ export const AdminsManager = () => {
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
+                <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
                   Nível de Acesso
                 </Label>
                 <div className="grid grid-cols-2 gap-2 bg-stone-50 border border-stone-100 rounded-xl p-1">
@@ -147,7 +147,7 @@ export const AdminsManager = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="admin-email"
-                  className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
+                  className="text-xs uppercase tracking-widest font-bold text-muted-foreground"
                 >
                   E-mail
                 </Label>
@@ -164,7 +164,7 @@ export const AdminsManager = () => {
                 <div className="flex items-center justify-between">
                   <Label
                     htmlFor="admin-password"
-                    className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
+                    className="text-xs uppercase tracking-widest font-bold text-muted-foreground"
                   >
                     Senha
                   </Label>

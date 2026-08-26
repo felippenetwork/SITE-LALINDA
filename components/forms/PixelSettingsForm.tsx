@@ -40,7 +40,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
         <div className="space-y-2">
           <Label
             htmlFor="gtmId"
-            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-xs uppercase tracking-widest font-bold text-muted-foreground"
           >
             Google Tag Manager
           </Label>
@@ -56,7 +56,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
         <div className="space-y-2">
           <Label
             htmlFor="metaPixelId"
-            className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground"
+            className="text-xs uppercase tracking-widest font-bold text-muted-foreground"
           >
             Meta Pixel ID
           </Label>

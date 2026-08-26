@@ -50,7 +50,7 @@ export const ImageUploadField = ({ label, value, onChange }: ImageUploadFieldPro
 
   return (
     <div className="space-y-2">
-      <span className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
+      <span className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
         {label}
       </span>
 

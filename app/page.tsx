@@ -11,6 +11,7 @@ import { ContactSection } from "@/components/sections/ContactSection";
 import { getProducts } from "@/lib/data/products";
 import { getTimelineEvents } from "@/lib/data/timeline";
 import { getProductLines } from "@/lib/data/product-lines";
+import { getSiteSettings } from "@/lib/data/site-settings";
 
 export const metadata: Metadata = {
   title: "La Linda | Pães Especiais Artesanais",
@@ -26,10 +27,11 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [products, timelineEvents, allProductLines] = await Promise.all([
+  const [products, timelineEvents, allProductLines, siteSettings] = await Promise.all([
     getProducts(),
     getTimelineEvents(),
     getProductLines(),
+    getSiteSettings(),
   ]);
   const featuredProducts = products.slice(0, 3);
   const productLines = allProductLines.filter((line) => line.available);
@@ -43,7 +45,7 @@ export default async function HomePage() {
       <StatsSection />
       <HeritageSection />
       <TimelineSection timelineEvents={timelineEvents} />
-      <ContactSection />
+      <ContactSection settings={siteSettings} />
       <Footer variant="light" />
     </div>
   );

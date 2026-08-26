@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Loader2 } from "lucide-react";
+import { Clock, Loader2, MessageSquare } from "lucide-react";
 import type { Lead } from "@/lib/data/leads";
 
 interface LeadsTableProps {
@@ -20,8 +20,8 @@ interface LeadsTableProps {
 export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
   if (isLoading) {
     return (
-      <div className="p-20 flex items-center justify-center">
-        <Loader2 className="animate-spin text-stone-200" size={32} />
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="animate-spin text-primary" size={32} />
       </div>
     );
   }
@@ -49,9 +49,12 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
       </TableHeader>
       <TableBody>
         {leads.length === 0 ? (
-          <TableRow>
-            <TableCell colSpan={5} className="text-center py-20 text-stone-400 font-sans italic">
-              Nenhum lead recebido ainda.
+          <TableRow className="hover:bg-transparent">
+            <TableCell colSpan={5} className="py-16 px-6">
+              <div className="flex flex-col items-center justify-center text-center">
+                <MessageSquare className="text-stone-300 mb-4" size={32} />
+                <p className="text-sm text-stone-500">Nenhum lead recebido ainda.</p>
+              </div>
             </TableCell>
           </TableRow>
         ) : (

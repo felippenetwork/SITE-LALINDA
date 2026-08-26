@@ -22,8 +22,8 @@ export default function AdminLeadsPage() {
         </p>
       </div>
 
-      <Card className="rounded-[1.5rem] md:rounded-[2.5rem] border-stone-100 shadow-sm overflow-hidden">
-        <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 md:p-8">
+      <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
+        <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
           <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
             Oportunidades — {leads.length} Leads
           </CardTitle>

@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -93,12 +94,20 @@ export const AdminsManager = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-end mb-6">
+    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
+      <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+          Usuários do Painel
+        </CardTitle>
+
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:scale-105 transition-transform text-white font-black px-8 py-6 rounded-full text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20 h-auto">
-              <Plus size={16} className="mr-2" /> Novo Usuário
+            <Button
+              size="icon"
+              className="bg-primary hover:scale-105 transition-transform text-white rounded-full h-9 w-9 shadow-lg shadow-primary/20 shrink-0"
+              aria-label="Novo usuário"
+            >
+              <Plus size={16} />
             </Button>
           </DialogTrigger>
           <DialogContent className="w-[95vw] sm:max-w-[460px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8">
@@ -208,76 +217,78 @@ export const AdminsManager = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
+      </CardHeader>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="animate-spin text-primary" size={32} />
-        </div>
-      ) : (
-        <Table>
-          <TableHeader>
-            <TableRow className="border-stone-100 hover:bg-transparent">
-              <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                E-mail
-              </TableHead>
-              <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                Nível
-              </TableHead>
-              <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
-                Ações
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {admins.map((admin: AdminUser) => (
-              <TableRow
-                key={`${admin.userId}-${admin.role}`}
-                className="border-stone-50 hover:bg-stone-50/50 transition-colors group"
-              >
-                <TableCell className="font-sans text-sm text-stone-900">
-                  <div className="flex items-center gap-3">
-                    {admin.email}
-                    {admin.isSelf && (
-                      <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded-full">
-                        Você
-                      </span>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span
-                    className={cn(
-                      "text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full",
-                      admin.role === "admin"
-                        ? "text-stone-700 bg-stone-100"
-                        : "text-stone-500 bg-stone-50 border border-stone-100",
-                    )}
-                  >
-                    {ROLE_LABEL[admin.role]}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right pr-8">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={admin.isSelf || removeMutation.isPending}
-                    title={admin.isSelf ? "Você não pode remover seu próprio acesso" : "Remover"}
-                    onClick={() => {
-                      if (confirm(`Deseja realmente remover o acesso de "${admin.email}"?`)) {
-                        removeMutation.mutate({ userId: admin.userId, role: admin.role });
-                      }
-                    }}
-                    className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all disabled:opacity-30"
-                  >
-                    <Trash2 size={16} />
-                  </Button>
-                </TableCell>
+      <CardContent className="p-0">
+        {isLoading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="animate-spin text-primary" size={32} />
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="border-stone-100 hover:bg-transparent">
+                <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
+                  E-mail
+                </TableHead>
+                <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
+                  Nível
+                </TableHead>
+                <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
+                  Ações
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-    </>
+            </TableHeader>
+            <TableBody>
+              {admins.map((admin: AdminUser) => (
+                <TableRow
+                  key={`${admin.userId}-${admin.role}`}
+                  className="border-stone-50 hover:bg-stone-50/50 transition-colors group"
+                >
+                  <TableCell className="font-sans font-semibold text-sm text-stone-900">
+                    <div className="flex items-center gap-3">
+                      {admin.email}
+                      {admin.isSelf && (
+                        <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded-full">
+                          Você
+                        </span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={cn(
+                        "text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full",
+                        admin.role === "admin"
+                          ? "text-stone-700 bg-stone-100"
+                          : "text-stone-500 bg-stone-50 border border-stone-100",
+                      )}
+                    >
+                      {ROLE_LABEL[admin.role]}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right pr-8">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={admin.isSelf || removeMutation.isPending}
+                      title={admin.isSelf ? "Você não pode remover seu próprio acesso" : "Remover"}
+                      onClick={() => {
+                        if (confirm(`Deseja realmente remover o acesso de "${admin.email}"?`)) {
+                          removeMutation.mutate({ userId: admin.userId, role: admin.role });
+                        }
+                      }}
+                      className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all disabled:opacity-30"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+    </Card>
   );
 };

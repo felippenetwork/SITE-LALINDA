@@ -44,8 +44,8 @@ export default function AdminConfigPage() {
       </div>
 
       <div className="space-y-8">
-        <Card className="rounded-[1.5rem] md:rounded-[2.5rem] border-stone-100 shadow-sm overflow-hidden">
-          <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 md:p-8">
+        <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
+          <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
               Dados de Contato do Site
             </CardTitle>
@@ -65,16 +65,7 @@ export default function AdminConfigPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[1.5rem] md:rounded-[2.5rem] border-stone-100 shadow-sm overflow-hidden">
-          <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 md:p-8">
-            <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
-              Usuários do Painel
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 md:p-8">
-            <AdminsManager />
-          </CardContent>
-        </Card>
+        <AdminsManager />
       </div>
     </>
   );

@@ -56,12 +56,25 @@ export default function AdminLinhasPage() {
   });
 
   const deleteLineMutation = useMutation({
-    mutationFn: deleteProductLine,
+    mutationFn: ({ id, cascade }: { id: string; cascade?: boolean }) =>
+      deleteProductLine(id, cascade ? { cascade } : undefined),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["product-lines"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Linha removida com sucesso");
     },
-    onError: (error: Error) => {
+    onError: (error: Error, variables) => {
+      if (error.message.includes("existem produtos cadastrados")) {
+        const line = lines.find((l) => l.id === variables.id);
+        const confirmCascade = confirm(
+          `A linha "${line?.name ?? ""}" possui produtos cadastrados nela.\n\n` +
+            "Deseja excluir a linha E todos os produtos cadastrados nela? Essa ação não pode ser desfeita.",
+        );
+        if (confirmCascade) {
+          deleteLineMutation.mutate({ id: variables.id, cascade: true });
+        }
+        return;
+      }
       toast.error("Erro ao excluir: " + error.message);
     },
   });
@@ -214,7 +227,7 @@ export default function AdminLinhasPage() {
                       disabled={deleteLineMutation.isPending}
                       onClick={() => {
                         if (confirm(`Deseja realmente excluir a linha "${line.name}"?`)) {
-                          deleteLineMutation.mutate(line.id);
+                          deleteLineMutation.mutate({ id: line.id });
                         }
                       }}
                       className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all"

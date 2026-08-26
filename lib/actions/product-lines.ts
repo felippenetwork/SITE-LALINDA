@@ -31,6 +31,7 @@ async function requireAdmin() {
 }
 
 function revalidateProductPages() {
+  revalidatePath("/admin/produtos");
   revalidatePath("/produtos", "layout");
   revalidatePath("/");
 }
@@ -82,8 +83,13 @@ export async function toggleProductLineAvailability(id: string, available: boole
   return { success: true };
 }
 
-export async function deleteProductLine(id: string) {
+export async function deleteProductLine(id: string, options?: { cascade?: boolean }) {
   const supabase = await requireAdmin();
+
+  if (options?.cascade) {
+    const { error: productsError } = await supabase.from("products").delete().eq("category_id", id);
+    if (productsError) throw productsError;
+  }
 
   const { error } = await supabase.from("product_lines").delete().eq("id", id);
   if (error) {

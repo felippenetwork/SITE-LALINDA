@@ -13,8 +13,9 @@ export async function getProductsAction() {
 
 // Defense in depth: RLS already allows any `authenticated` user to write
 // products, so this explicit `has_role` check is the real gate — mirrors
-// the pre-migration server-function behavior exactly.
-async function requireAdmin() {
+// the pre-migration server-function behavior exactly. Admin and Operador
+// both manage the catálogo; Operador just can't reach the Config page.
+async function requireCatalogAccess() {
   const supabase = await createClient();
 
   const {
@@ -22,11 +23,11 @@ async function requireAdmin() {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
 
-  const { data: hasRole, error: roleError } = await supabase.rpc("has_role", {
-    _user_id: user.id,
-    _role: "admin",
-  });
-  if (roleError || !hasRole) throw new Error("Forbidden: Admin role required");
+  const [{ data: isAdmin }, { data: isOperador }] = await Promise.all([
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    supabase.rpc("has_role", { _user_id: user.id, _role: "operador" }),
+  ]);
+  if (!isAdmin && !isOperador) throw new Error("Forbidden: Admin or Operador role required");
 
   return supabase;
 }
@@ -39,7 +40,7 @@ function revalidateProductPages() {
 
 export async function saveProduct(input: unknown) {
   const data = productSchema.parse(input);
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   if (data.id) {
     const { error } = await supabase
@@ -89,7 +90,7 @@ export async function saveProduct(input: unknown) {
 }
 
 export async function reorderProducts(orderedIds: string[]) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const results = await Promise.all(
     orderedIds.map((id, index) =>
@@ -104,7 +105,7 @@ export async function reorderProducts(orderedIds: string[]) {
 }
 
 export async function toggleProductAvailability(id: string, available: boolean) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const { error } = await supabase
     .from("products")
@@ -117,7 +118,7 @@ export async function toggleProductAvailability(id: string, available: boolean) 
 }
 
 export async function deleteProduct(id: string) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) throw error;

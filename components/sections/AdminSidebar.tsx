@@ -1,21 +1,37 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, MessageSquare, Settings, ExternalLink, LogOut, Menu } from "lucide-react";
+import {
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  ExternalLink,
+  LogOut,
+  Menu,
+  KeyRound,
+} from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ChangePasswordForm } from "@/components/forms/ChangePasswordForm";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [
-  { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
-  { label: "Leads", href: "/admin/leads", icon: MessageSquare },
-  { label: "Config", href: "/admin/config", icon: Settings },
-];
+interface AdminSidebarProps {
+  isAdmin: boolean;
+}
 
-export const AdminSidebar = () => {
+export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
+
+  const navItems = [
+    { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
+    { label: "Leads", href: "/admin/leads", icon: MessageSquare },
+    ...(isAdmin ? [{ label: "Config", href: "/admin/config", icon: Settings }] : []),
+  ];
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -23,6 +39,17 @@ export const AdminSidebar = () => {
     router.push("/");
     router.refresh();
   };
+
+  const passwordDialog = (
+    <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+      <DialogContent className="w-[95vw] sm:max-w-[520px] rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8">
+        <DialogHeader className="mb-6">
+          <DialogTitle className="text-3xl font-serif italic">Trocar Senha</DialogTitle>
+        </DialogHeader>
+        <ChangePasswordForm />
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <>
@@ -35,7 +62,7 @@ export const AdminSidebar = () => {
         </div>
 
         <nav className="flex-1 space-y-2">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -59,6 +86,12 @@ export const AdminSidebar = () => {
           >
             <ExternalLink size={14} /> Site Público
           </Link>
+          <button
+            onClick={() => setIsPasswordDialogOpen(true)}
+            className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+          >
+            <KeyRound size={14} /> Trocar Senha
+          </button>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
@@ -85,7 +118,7 @@ export const AdminSidebar = () => {
               Dashboard
             </span>
             <nav className="flex-1 space-y-2">
-              {NAV_ITEMS.map((item) => (
+              {navItems.map((item) => (
                 <SheetClose asChild key={item.href}>
                   <Link
                     href={item.href}
@@ -112,6 +145,12 @@ export const AdminSidebar = () => {
                 </Link>
               </SheetClose>
               <button
+                onClick={() => setIsPasswordDialogOpen(true)}
+                className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+              >
+                <KeyRound size={14} /> Trocar Senha
+              </button>
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
               >
@@ -122,6 +161,8 @@ export const AdminSidebar = () => {
           </SheetContent>
         </Sheet>
       </header>
+
+      {passwordDialog}
     </>
   );
 };

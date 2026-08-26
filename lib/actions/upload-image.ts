@@ -7,7 +7,7 @@ import { detectImageType } from "@/lib/upload/detect-image-type";
 const BUCKET = "product-images";
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB — matches the bucket's file_size_limit
 
-async function requireAdmin() {
+async function requireCatalogAccess() {
   const supabase = await createClient();
 
   const {
@@ -15,11 +15,11 @@ async function requireAdmin() {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
 
-  const { data: hasRole, error: roleError } = await supabase.rpc("has_role", {
-    _user_id: user.id,
-    _role: "admin",
-  });
-  if (roleError || !hasRole) throw new Error("Forbidden: Admin role required");
+  const [{ data: isAdmin }, { data: isOperador }] = await Promise.all([
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    supabase.rpc("has_role", { _user_id: user.id, _role: "operador" }),
+  ]);
+  if (!isAdmin && !isOperador) throw new Error("Forbidden: Admin or Operador role required");
 
   return supabase;
 }
@@ -42,7 +42,7 @@ export async function uploadImage(formData: FormData) {
     throw new Error("Formato de imagem não suportado (use JPG, PNG, WEBP ou GIF)");
   }
 
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const path = `uploads/${randomUUID()}.${detected.ext}`;
   const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, bytes, {

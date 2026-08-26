@@ -3,18 +3,21 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { createAdminSchema } from "@/lib/validation/admin";
+import { createAdminSchema, type PanelRole } from "@/lib/validation/admin";
 
 export interface AdminUser {
   userId: string;
   email: string;
+  role: PanelRole;
   isSelf: boolean;
 }
 
-// Defense in depth: RLS already allows any `authenticated` user to read
-// user_roles, so this explicit `has_role` check is the real gate. Writes to
-// user_roles go through `supabaseAdmin` below — `authenticated` only has a
-// `select` grant on that table (see migration 002_user_roles.sql).
+// Only Administrador manages panel users — Operador never reaches this,
+// regardless of URL. Defense in depth: RLS already allows any
+// `authenticated` user to read user_roles, so this explicit `has_role`
+// check is the real gate. Writes to user_roles go through `supabaseAdmin`
+// below — `authenticated` only has a `select` grant on that table (see
+// migration 002_user_roles.sql).
 async function requireAdmin() {
   const supabase = await createClient();
 
@@ -52,18 +55,21 @@ export async function listAdmins(): Promise<AdminUser[]> {
 
   const { data: roles, error } = await supabase
     .from("user_roles")
-    .select("user_id")
-    .eq("role", "admin");
+    .select("user_id, role")
+    .in("role", ["admin", "operador"]);
   if (error) throw error;
 
   const users = await listAllAuthUsers();
   const emailByUserId = new Map(users.map((u) => [u.id, u.email ?? "(sem e-mail)"]));
 
-  return (roles ?? []).map((r) => ({
-    userId: r.user_id,
-    email: emailByUserId.get(r.user_id) ?? "(usuário não encontrado)",
-    isSelf: r.user_id === currentUserId,
-  }));
+  return (roles ?? [])
+    .filter((r): r is { user_id: string; role: PanelRole } => r.role !== "user")
+    .map((r) => ({
+      userId: r.user_id,
+      email: emailByUserId.get(r.user_id) ?? "(usuário não encontrado)",
+      role: r.role,
+      isSelf: r.user_id === currentUserId,
+    }));
 }
 
 export async function createAdmin(input: unknown): Promise<{ granted: "created" | "existing" }> {
@@ -98,31 +104,32 @@ export async function createAdmin(input: unknown): Promise<{ granted: "created" 
 
   const { error: roleError } = await supabaseAdmin
     .from("user_roles")
-    .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+    .upsert({ user_id: userId, role: data.role }, { onConflict: "user_id,role" });
   if (roleError) throw roleError;
 
   await supabaseAdmin.from("audit_logs").insert({
     user_id: currentUserId,
-    action: granted === "created" ? "CREATE_ADMIN" : "GRANT_ADMIN",
+    action: granted === "created" ? "CREATE_USER" : "GRANT_ROLE",
     target_table: "user_roles",
     target_id: userId,
+    details: { role: data.role },
   });
 
   revalidatePath("/admin/config");
   return { granted };
 }
 
-export async function removeAdmin(userId: string) {
+export async function removeAdmin(userId: string, role: PanelRole) {
   const { currentUserId } = await requireAdmin();
   if (userId === currentUserId) {
-    throw new Error("Você não pode remover seu próprio acesso de administrador.");
+    throw new Error("Você não pode remover seu próprio acesso.");
   }
 
   const { error } = await supabaseAdmin
     .from("user_roles")
     .delete()
     .eq("user_id", userId)
-    .eq("role", "admin");
+    .eq("role", role);
   if (error) {
     if (error.code === "P0001") {
       throw new Error("Não é possível remover o último administrador.");
@@ -132,9 +139,10 @@ export async function removeAdmin(userId: string) {
 
   await supabaseAdmin.from("audit_logs").insert({
     user_id: currentUserId,
-    action: "REMOVE_ADMIN",
+    action: "REMOVE_ROLE",
     target_table: "user_roles",
     target_id: userId,
+    details: { role },
   });
 
   revalidatePath("/admin/config");

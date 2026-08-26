@@ -12,8 +12,9 @@ export async function getProductLinesAction() {
 }
 
 // Defense in depth: RLS already allows any `authenticated` user to write
-// product_lines, so this explicit `has_role` check is the real gate.
-async function requireAdmin() {
+// product_lines, so this explicit `has_role` check is the real gate. Admin
+// and Operador both manage the catálogo; Operador just can't reach Config.
+async function requireCatalogAccess() {
   const supabase = await createClient();
 
   const {
@@ -21,11 +22,11 @@ async function requireAdmin() {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
 
-  const { data: hasRole, error: roleError } = await supabase.rpc("has_role", {
-    _user_id: user.id,
-    _role: "admin",
-  });
-  if (roleError || !hasRole) throw new Error("Forbidden: Admin role required");
+  const [{ data: isAdmin }, { data: isOperador }] = await Promise.all([
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    supabase.rpc("has_role", { _user_id: user.id, _role: "operador" }),
+  ]);
+  if (!isAdmin && !isOperador) throw new Error("Forbidden: Admin or Operador role required");
 
   return supabase;
 }
@@ -38,7 +39,7 @@ function revalidateProductPages() {
 
 export async function saveProductLine(input: unknown): Promise<{ success: true; id: string }> {
   const data = productLineSchema.parse(input);
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   let id = data.id;
   if (id) {
@@ -77,7 +78,7 @@ export async function saveProductLine(input: unknown): Promise<{ success: true; 
 }
 
 export async function reorderProductLines(orderedIds: string[]) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const results = await Promise.all(
     orderedIds.map((id, index) =>
@@ -92,7 +93,7 @@ export async function reorderProductLines(orderedIds: string[]) {
 }
 
 export async function toggleProductLineAvailability(id: string, available: boolean) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   const { error } = await supabase
     .from("product_lines")
@@ -105,7 +106,7 @@ export async function toggleProductLineAvailability(id: string, available: boole
 }
 
 export async function deleteProductLine(id: string, options?: { cascade?: boolean }) {
-  const supabase = await requireAdmin();
+  const supabase = await requireCatalogAccess();
 
   if (options?.cascade) {
     const { error: productsError } = await supabase.from("products").delete().eq("category_id", id);

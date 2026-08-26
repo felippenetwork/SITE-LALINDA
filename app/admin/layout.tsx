@@ -16,10 +16,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/auth?redirect=/admin");
   }
 
+  const { data: isAdmin } = await supabase.rpc("has_role", {
+    _user_id: user.id,
+    _role: "admin",
+  });
+
   return (
     <QueryProvider>
       <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row font-sans">
-        <AdminSidebar />
+        <AdminSidebar isAdmin={!!isAdmin} />
         <main className="flex-1 lg:ml-72 p-6 md:p-12 lg:p-16">{children}</main>
       </div>
     </QueryProvider>

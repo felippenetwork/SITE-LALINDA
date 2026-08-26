@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Eye, EyeOff, Dices } from "lucide-react";
-import { listAdmins, createAdmin, removeAdmin } from "@/lib/actions/admins";
+import { listAdmins, createAdmin, removeAdmin, type AdminUser } from "@/lib/actions/admins";
+import type { PanelRole } from "@/lib/validation/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,12 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+
+const ROLE_LABEL: Record<PanelRole, string> = {
+  admin: "Administrador",
+  operador: "Operador",
+};
 
 function generateSecurePassword() {
   const charset = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
@@ -37,6 +44,7 @@ export const AdminsManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<PanelRole>("operador");
   const [showPassword, setShowPassword] = useState(false);
 
   const { data: admins = [], isLoading } = useQuery({
@@ -50,24 +58,26 @@ export const AdminsManager = () => {
       queryClient.invalidateQueries({ queryKey: ["admins"] });
       toast.success(
         result.granted === "created"
-          ? "Administrador criado — já pode fazer login com o e-mail e senha definidos"
-          : "Essa conta já existia — o papel de administrador foi concedido a ela",
+          ? "Usuário criado — já pode fazer login com o e-mail e senha definidos"
+          : "Essa conta já existia — o papel foi concedido a ela",
       );
       setIsDialogOpen(false);
       setEmail("");
       setPassword("");
+      setRole("operador");
       setShowPassword(false);
     },
     onError: (error: Error) => {
-      toast.error("Erro ao criar administrador: " + error.message);
+      toast.error("Erro ao criar usuário: " + error.message);
     },
   });
 
   const removeMutation = useMutation({
-    mutationFn: removeAdmin,
+    mutationFn: ({ userId, role }: { userId: string; role: PanelRole }) =>
+      removeAdmin(userId, role),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admins"] });
-      toast.success("Acesso de administrador removido");
+      toast.success("Acesso removido");
     },
     onError: (error: Error) => {
       toast.error("Erro ao remover: " + error.message);
@@ -79,7 +89,7 @@ export const AdminsManager = () => {
       toast.error("A senha precisa ter pelo menos 8 caracteres");
       return;
     }
-    createMutation.mutate({ email, password });
+    createMutation.mutate({ email, password, role });
   };
 
   return (
@@ -88,15 +98,43 @@ export const AdminsManager = () => {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-primary hover:scale-105 transition-transform text-white font-black px-8 py-6 rounded-full text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20 h-auto">
-              <Plus size={16} className="mr-2" /> Novo Administrador
+              <Plus size={16} className="mr-2" /> Novo Usuário
             </Button>
           </DialogTrigger>
           <DialogContent className="w-[95vw] sm:max-w-[460px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8">
             <DialogHeader className="mb-6">
-              <DialogTitle className="text-3xl font-serif italic">Novo Administrador</DialogTitle>
+              <DialogTitle className="text-3xl font-serif italic">Novo Usuário</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-6">
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest font-black text-stone-400">
+                  Nível de Acesso
+                </Label>
+                <div className="grid grid-cols-2 gap-2 bg-stone-50 border border-stone-100 rounded-xl p-1">
+                  {(["operador", "admin"] as const).map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => setRole(option)}
+                      className={cn(
+                        "rounded-lg py-2.5 text-[10px] font-black uppercase tracking-widest transition-all",
+                        role === option
+                          ? "bg-primary text-white shadow-sm"
+                          : "text-stone-500 hover:text-foreground",
+                      )}
+                    >
+                      {ROLE_LABEL[option]}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-stone-400 leading-relaxed">
+                  {role === "admin"
+                    ? "Acesso total: catálogo, leads e configurações do site."
+                    : "Acesso ao catálogo e aos leads. Sem acesso a configurações do site nem a criação de outros usuários."}
+                </p>
+              </div>
+
               <div className="space-y-2">
                 <Label
                   htmlFor="admin-email"
@@ -165,7 +203,7 @@ export const AdminsManager = () => {
                 {createMutation.isPending ? (
                   <Loader2 className="animate-spin mr-2" size={16} />
                 ) : null}
-                Criar Administrador
+                Criar Usuário
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -183,42 +221,51 @@ export const AdminsManager = () => {
               <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
                 E-mail
               </TableHead>
+              <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
+                Nível
+              </TableHead>
               <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
                 Ações
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {admins.map((admin) => (
+            {admins.map((admin: AdminUser) => (
               <TableRow
-                key={admin.userId}
+                key={`${admin.userId}-${admin.role}`}
                 className="border-stone-50 hover:bg-stone-50/50 transition-colors group"
               >
-                <TableCell className="font-sans text-sm text-stone-900 flex items-center gap-3">
-                  {admin.email}
-                  {admin.isSelf && (
-                    <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded-full">
-                      Você
-                    </span>
-                  )}
+                <TableCell className="font-sans text-sm text-stone-900">
+                  <div className="flex items-center gap-3">
+                    {admin.email}
+                    {admin.isSelf && (
+                      <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded-full">
+                        Você
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={cn(
+                      "text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full",
+                      admin.role === "admin"
+                        ? "text-stone-700 bg-stone-100"
+                        : "text-stone-500 bg-stone-50 border border-stone-100",
+                    )}
+                  >
+                    {ROLE_LABEL[admin.role]}
+                  </span>
                 </TableCell>
                 <TableCell className="text-right pr-8">
                   <Button
                     variant="ghost"
                     size="icon"
                     disabled={admin.isSelf || removeMutation.isPending}
-                    title={
-                      admin.isSelf
-                        ? "Você não pode remover seu próprio acesso"
-                        : "Remover administrador"
-                    }
+                    title={admin.isSelf ? "Você não pode remover seu próprio acesso" : "Remover"}
                     onClick={() => {
-                      if (
-                        confirm(
-                          `Deseja realmente remover o acesso de administrador de "${admin.email}"?`,
-                        )
-                      ) {
-                        removeMutation.mutate(admin.userId);
+                      if (confirm(`Deseja realmente remover o acesso de "${admin.email}"?`)) {
+                        removeMutation.mutate({ userId: admin.userId, role: admin.role });
                       }
                     }}
                     className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all disabled:opacity-30"

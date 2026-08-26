@@ -20,9 +20,10 @@ import { cn } from "@/lib/utils";
 
 interface AdminSidebarProps {
   isAdmin: boolean;
+  userEmail: string;
 }
 
-export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
+export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
@@ -32,6 +33,23 @@ export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
     { label: "Leads", href: "/admin/leads", icon: MessageSquare },
     ...(isAdmin ? [{ label: "Config", href: "/admin/config", icon: Settings }] : []),
   ];
+
+  const initials = userEmail.slice(0, 2).toUpperCase() || "?";
+  const roleLabel = isAdmin ? "Administrador" : "Operador";
+
+  const accountBlock = (
+    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 mb-4">
+      <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary text-[11px] font-black uppercase shrink-0">
+        {initials}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-sans font-semibold text-white truncate" title={userEmail}>
+          {userEmail}
+        </p>
+        <p className="text-[9px] font-sans uppercase tracking-widest text-stone-500">{roleLabel}</p>
+      </div>
+    </div>
+  );
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -61,7 +79,7 @@ export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
           </span>
         </div>
 
-        <nav className="flex-1 space-y-2">
+        <nav className="flex-1 flex flex-col justify-center space-y-2">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -79,26 +97,29 @@ export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
           ))}
         </nav>
 
-        <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">
-          <Link
-            href="/"
-            className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-          >
-            <ExternalLink size={14} /> Site Público
-          </Link>
-          <button
-            onClick={() => setIsPasswordDialogOpen(true)}
-            className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-          >
-            <KeyRound size={14} /> Trocar Senha
-          </button>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
-          >
-            <LogOut size={18} />
-            <span className="text-sm uppercase tracking-widest">Sair</span>
-          </button>
+        <div className="mt-auto pt-8 border-t border-stone-800">
+          {accountBlock}
+          <div className="space-y-4">
+            <Link
+              href="/"
+              className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+            >
+              <ExternalLink size={14} /> Site Público
+            </Link>
+            <button
+              onClick={() => setIsPasswordDialogOpen(true)}
+              className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+            >
+              <KeyRound size={14} /> Trocar Senha
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
+            >
+              <LogOut size={18} />
+              <span className="text-sm uppercase tracking-widest">Sair</span>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -117,7 +138,7 @@ export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
             <span className="text-[10px] font-sans font-black uppercase tracking-[0.3em] text-primary-light mb-8 block">
               Dashboard
             </span>
-            <nav className="flex-1 space-y-2">
+            <nav className="flex-1 flex flex-col justify-center space-y-2">
               {navItems.map((item) => (
                 <SheetClose asChild key={item.href}>
                   <Link
@@ -135,28 +156,31 @@ export const AdminSidebar = ({ isAdmin }: AdminSidebarProps) => {
                 </SheetClose>
               ))}
             </nav>
-            <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">
-              <SheetClose asChild>
-                <Link
-                  href="/"
+            <div className="mt-auto pt-8 border-t border-stone-800">
+              {accountBlock}
+              <div className="space-y-4">
+                <SheetClose asChild>
+                  <Link
+                    href="/"
+                    className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+                  >
+                    <ExternalLink size={14} /> Site Público
+                  </Link>
+                </SheetClose>
+                <button
+                  onClick={() => setIsPasswordDialogOpen(true)}
                   className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
                 >
-                  <ExternalLink size={14} /> Site Público
-                </Link>
-              </SheetClose>
-              <button
-                onClick={() => setIsPasswordDialogOpen(true)}
-                className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
-              >
-                <KeyRound size={14} /> Trocar Senha
-              </button>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
-              >
-                <LogOut size={18} />
-                <span className="text-sm uppercase tracking-widest">Sair</span>
-              </button>
+                  <KeyRound size={14} /> Trocar Senha
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-4 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
+                >
+                  <LogOut size={18} />
+                  <span className="text-sm uppercase tracking-widest">Sair</span>
+                </button>
+              </div>
             </div>
           </SheetContent>
         </Sheet>

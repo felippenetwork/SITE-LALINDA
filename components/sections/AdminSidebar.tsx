@@ -2,23 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  LayoutDashboard,
-  Layers,
-  MessageSquare,
-  Settings,
-  ExternalLink,
-  LogOut,
-  Menu,
-} from "lucide-react";
+import { LayoutDashboard, MessageSquare, Settings, ExternalLink, LogOut, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { label: "Produtos", href: "/admin/produtos", icon: LayoutDashboard },
-  { label: "Linhas", href: "/admin/linhas", icon: Layers },
+  { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
   { label: "Leads", href: "/admin/leads", icon: MessageSquare },
+  { label: "Config", href: "/admin/config", icon: Settings },
 ];
 
 export const AdminSidebar = () => {
@@ -58,10 +50,6 @@ export const AdminSidebar = () => {
               {item.label}
             </Link>
           ))}
-          <button className="w-full flex items-center gap-4 px-4 py-3 text-stone-500 hover:text-white hover:bg-white/5 rounded-xl font-bold transition-all">
-            <Settings size={18} />
-            <span className="text-sm uppercase tracking-widest">Config</span>
-          </button>
         </nav>
 
         <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">

@@ -31,16 +31,17 @@ async function requireAdmin() {
 }
 
 function revalidateProductPages() {
-  revalidatePath("/admin/produtos");
+  revalidatePath("/admin/catalogo");
   revalidatePath("/produtos", "layout");
   revalidatePath("/");
 }
 
-export async function saveProductLine(input: unknown) {
+export async function saveProductLine(input: unknown): Promise<{ success: true; id: string }> {
   const data = productLineSchema.parse(input);
   const supabase = await requireAdmin();
 
-  if (data.id) {
+  let id = data.id;
+  if (id) {
     const { error } = await supabase
       .from("product_lines")
       .update({
@@ -51,20 +52,40 @@ export async function saveProductLine(input: unknown) {
         available: data.available,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", data.id);
+      .eq("id", id);
     if (error) throw error;
   } else {
-    const { error } = await supabase.from("product_lines").insert([
-      {
-        name: data.name,
-        slug: data.slug,
-        description: data.description ?? null,
-        image_url: data.image_url || null,
-        available: data.available,
-      },
-    ]);
+    const { data: inserted, error } = await supabase
+      .from("product_lines")
+      .insert([
+        {
+          name: data.name,
+          slug: data.slug,
+          description: data.description ?? null,
+          image_url: data.image_url || null,
+          available: data.available,
+        },
+      ])
+      .select("id")
+      .single();
     if (error) throw error;
+    id = inserted.id;
   }
+
+  revalidateProductPages();
+  return { success: true, id };
+}
+
+export async function reorderProductLines(orderedIds: string[]) {
+  const supabase = await requireAdmin();
+
+  const results = await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase.from("product_lines").update({ sort_order: index }).eq("id", id),
+    ),
+  );
+  const failed = results.find((r) => r.error);
+  if (failed?.error) throw failed.error;
 
   revalidateProductPages();
   return { success: true };

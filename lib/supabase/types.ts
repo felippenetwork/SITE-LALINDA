@@ -114,6 +114,7 @@ export type Database = {
           id: string;
           image_url: string;
           name: string;
+          sort_order: number;
           updated_at: string | null;
           weight: string;
         };
@@ -126,6 +127,7 @@ export type Database = {
           id?: string;
           image_url: string;
           name: string;
+          sort_order?: number;
           updated_at?: string | null;
           weight: string;
         };
@@ -138,6 +140,7 @@ export type Database = {
           id?: string;
           image_url?: string;
           name?: string;
+          sort_order?: number;
           updated_at?: string | null;
           weight?: string;
         };
@@ -150,6 +153,33 @@ export type Database = {
             referencedColumns: ["id"];
           },
         ];
+      };
+      site_settings: {
+        Row: {
+          contact_email: string;
+          contact_phone: string;
+          facebook_url: string | null;
+          id: string;
+          instagram_url: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          contact_email: string;
+          contact_phone: string;
+          facebook_url?: string | null;
+          id?: string;
+          instagram_url?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          contact_email?: string;
+          contact_phone?: string;
+          facebook_url?: string | null;
+          id?: string;
+          instagram_url?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       timeline_events: {
         Row: {

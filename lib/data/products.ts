@@ -11,6 +11,7 @@ export interface BreadItem {
   category: string;
   description?: string | null;
   available: boolean;
+  sortOrder: number;
 }
 
 type ProductRow = Database["public"]["Tables"]["products"]["Row"] & {
@@ -28,6 +29,7 @@ function mapProduct(row: ProductRow): BreadItem {
     category: row.product_lines?.name ?? "",
     description: row.description,
     available: row.available ?? true,
+    sortOrder: row.sort_order,
   };
 }
 
@@ -37,7 +39,7 @@ export async function getProducts(): Promise<BreadItem[]> {
   const { data, error } = await supabaseAdmin
     .from("products")
     .select("*, product_lines(name)")
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   if (error) throw error;
   return (data ?? []).map(mapProduct);
@@ -48,7 +50,7 @@ export async function getProductsByLineId(lineId: string): Promise<BreadItem[]> 
     .from("products")
     .select("*, product_lines(name)")
     .eq("category_id", lineId)
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   if (error) throw error;
   return (data ?? []).map(mapProduct);

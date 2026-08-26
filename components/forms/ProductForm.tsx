@@ -22,9 +22,16 @@ interface ProductFormProps {
   lines: ProductLine[];
   onSubmit: (data: ProductFormValues) => void;
   isPending: boolean;
+  defaultCategoryId?: string;
 }
 
-export const ProductForm = ({ editingItem, lines, onSubmit, isPending }: ProductFormProps) => {
+export const ProductForm = ({
+  editingItem,
+  lines,
+  onSubmit,
+  isPending,
+  defaultCategoryId,
+}: ProductFormProps) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +43,7 @@ export const ProductForm = ({ editingItem, lines, onSubmit, isPending }: Product
     defaultValues: {
       id: editingItem?.id,
       name: editingItem?.name ?? "",
-      categoryId: editingItem?.categoryId ?? lines[0]?.id ?? "",
+      categoryId: editingItem?.categoryId ?? defaultCategoryId ?? lines[0]?.id ?? "",
       weight: editingItem?.weight ?? "",
       boxWeight: editingItem?.boxWeight ?? "",
       image_url: editingItem?.image ?? "",

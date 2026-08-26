@@ -32,7 +32,7 @@ async function requireAdmin() {
 }
 
 function revalidateProductPages() {
-  revalidatePath("/admin/produtos");
+  revalidatePath("/admin/catalogo");
   revalidatePath("/produtos", "layout");
   revalidatePath("/");
 }
@@ -57,6 +57,18 @@ export async function saveProduct(input: unknown) {
       .eq("id", data.id);
     if (error) throw error;
   } else {
+    // New products append to the end of their line's manual order rather
+    // than defaulting to 0, which would keep jumping newest items to the
+    // front of an already hand-ordered list.
+    const { data: lastRow } = await supabase
+      .from("products")
+      .select("sort_order")
+      .eq("category_id", data.categoryId)
+      .order("sort_order", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const nextSortOrder = (lastRow?.sort_order ?? -1) + 1;
+
     const { error } = await supabase.from("products").insert([
       {
         name: data.name,
@@ -66,10 +78,26 @@ export async function saveProduct(input: unknown) {
         category_id: data.categoryId,
         available: data.available,
         description: data.description ?? null,
+        sort_order: nextSortOrder,
       },
     ]);
     if (error) throw error;
   }
+
+  revalidateProductPages();
+  return { success: true };
+}
+
+export async function reorderProducts(orderedIds: string[]) {
+  const supabase = await requireAdmin();
+
+  const results = await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase.from("products").update({ sort_order: index }).eq("id", id),
+    ),
+  );
+  const failed = results.find((r) => r.error);
+  if (failed?.error) throw failed.error;
 
   revalidateProductPages();
   return { success: true };

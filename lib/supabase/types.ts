@@ -159,24 +159,30 @@ export type Database = {
           contact_email: string;
           contact_phone: string;
           facebook_url: string | null;
+          gtm_id: string | null;
           id: string;
           instagram_url: string | null;
+          meta_pixel_id: string | null;
           updated_at: string;
         };
         Insert: {
           contact_email: string;
           contact_phone: string;
           facebook_url?: string | null;
+          gtm_id?: string | null;
           id?: string;
           instagram_url?: string | null;
+          meta_pixel_id?: string | null;
           updated_at?: string;
         };
         Update: {
           contact_email?: string;
           contact_phone?: string;
           facebook_url?: string | null;
+          gtm_id?: string | null;
           id?: string;
           instagram_url?: string | null;
+          meta_pixel_id?: string | null;
           updated_at?: string;
         };
         Relationships: [];

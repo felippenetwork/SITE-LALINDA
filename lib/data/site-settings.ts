@@ -10,6 +10,8 @@ export interface SiteSettings {
   contactPhone: string;
   instagramUrl: string | null;
   facebookUrl: string | null;
+  gtmId: string | null;
+  metaPixelId: string | null;
 }
 
 type SiteSettingsRow = Database["public"]["Tables"]["site_settings"]["Row"];
@@ -20,6 +22,8 @@ function mapSiteSettings(row: SiteSettingsRow): SiteSettings {
     contactPhone: row.contact_phone,
     instagramUrl: row.instagram_url,
     facebookUrl: row.facebook_url,
+    gtmId: row.gtm_id,
+    metaPixelId: row.meta_pixel_id,
   };
 }
 

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getSiteSettings, SITE_SETTINGS_ID } from "@/lib/data/site-settings";
 import { siteSettingsSchema } from "@/lib/validation/site-settings";
+import { pixelSettingsSchema } from "@/lib/validation/pixel-settings";
 
 export async function getSiteSettingsAction() {
   return getSiteSettings();
@@ -53,5 +54,34 @@ export async function saveSiteSettings(input: unknown) {
 
   revalidatePath("/admin/config");
   revalidatePath("/");
+  return { success: true };
+}
+
+export async function savePixelSettings(input: unknown) {
+  const data = pixelSettingsSchema.parse(input);
+  const { supabase, userId } = await requireAdmin();
+
+  const { error } = await supabase
+    .from("site_settings")
+    .update({
+      gtm_id: data.gtmId || null,
+      meta_pixel_id: data.metaPixelId || null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", SITE_SETTINGS_ID);
+  if (error) throw error;
+
+  await supabase.from("audit_logs").insert({
+    user_id: userId,
+    action: "UPDATE",
+    target_table: "site_settings",
+    target_id: SITE_SETTINGS_ID,
+    details: { fields: ["gtm_id", "meta_pixel_id"] },
+  });
+
+  // These render in the root layout, shared by every route — revalidate
+  // the whole layout tree, not just "/".
+  revalidatePath("/admin/config");
+  revalidatePath("/", "layout");
   return { success: true };
 }

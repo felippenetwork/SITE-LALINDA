@@ -3,11 +3,17 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { getSiteSettingsAction, saveSiteSettings } from "@/lib/actions/site-settings";
+import {
+  getSiteSettingsAction,
+  saveSiteSettings,
+  savePixelSettings,
+} from "@/lib/actions/site-settings";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SiteSettingsForm } from "@/components/forms/SiteSettingsForm";
+import { PixelSettingsForm } from "@/components/forms/PixelSettingsForm";
 import { AdminsManager } from "@/components/sections/AdminsManager";
 import type { SiteSettingsValues } from "@/lib/validation/site-settings";
+import type { PixelSettingsValues } from "@/lib/validation/pixel-settings";
 
 export default function AdminConfigPage() {
   const queryClient = useQueryClient();
@@ -30,6 +36,21 @@ export default function AdminConfigPage() {
 
   const handleSaveSettings = (data: SiteSettingsValues) => {
     saveSettingsMutation.mutate(data);
+  };
+
+  const savePixelsMutation = useMutation({
+    mutationFn: savePixelSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+      toast.success("Rastreamento atualizado");
+    },
+    onError: (error: Error) => {
+      toast.error("Erro ao salvar: " + error.message);
+    },
+  });
+
+  const handleSavePixels = (data: PixelSettingsValues) => {
+    savePixelsMutation.mutate(data);
   };
 
   return (
@@ -60,6 +81,27 @@ export default function AdminConfigPage() {
                 settings={settings}
                 onSubmit={handleSaveSettings}
                 isPending={saveSettingsMutation.isPending}
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
+          <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+              Rastreamento e Marketing
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 md:p-8">
+            {isLoading || !settings ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="animate-spin text-primary" size={32} />
+              </div>
+            ) : (
+              <PixelSettingsForm
+                settings={settings}
+                onSubmit={handleSavePixels}
+                isPending={savePixelsMutation.isPending}
               />
             )}
           </CardContent>

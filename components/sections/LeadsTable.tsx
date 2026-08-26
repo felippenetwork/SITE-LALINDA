@@ -50,7 +50,7 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
       <TableBody>
         {leads.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-center py-20 text-stone-300 font-sans italic">
+            <TableCell colSpan={5} className="text-center py-20 text-stone-400 font-sans italic">
               Nenhum lead recebido ainda.
             </TableCell>
           </TableRow>
@@ -70,7 +70,9 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
               </TableCell>
               <TableCell>
                 <div className="flex flex-col">
-                  <span className="font-serif italic text-lg text-stone-900">{lead.name}</span>
+                  <span className="font-sans font-semibold text-sm text-stone-900">
+                    {lead.name}
+                  </span>
                   <span className="text-xs text-stone-400 font-sans">{lead.email}</span>
                 </div>
               </TableCell>

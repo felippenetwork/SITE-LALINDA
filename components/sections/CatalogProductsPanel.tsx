@@ -113,9 +113,11 @@ const SortableProductRow = ({
           <Image src={product.image} alt="" fill sizes="40px" className="object-cover" />
         </div>
       </TableCell>
-      <TableCell className="font-serif italic text-base text-stone-900">{product.name}</TableCell>
+      <TableCell className="font-sans font-semibold text-sm text-stone-900">
+        {product.name}
+      </TableCell>
       <TableCell className="font-sans text-xs text-stone-500">
-        {product.weight} / <span className="text-stone-300">{product.boxWeight || "-"}</span>
+        {product.weight} / <span className="text-stone-400">{product.boxWeight || "-"}</span>
       </TableCell>
       <TableCell>
         <Switch checked={product.available} disabled={isToggling} onCheckedChange={onToggle} />

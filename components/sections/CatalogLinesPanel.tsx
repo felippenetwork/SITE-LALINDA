@@ -115,8 +115,8 @@ const SortableLineRow = ({
       </TableCell>
       <TableCell
         className={cn(
-          "font-serif italic text-base",
-          isSelected ? "text-primary font-black" : "text-stone-900",
+          "font-sans font-semibold text-sm",
+          isSelected ? "text-primary" : "text-stone-900",
         )}
       >
         {line.name}

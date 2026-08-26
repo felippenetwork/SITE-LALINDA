@@ -48,7 +48,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
             id="gtmId"
             placeholder="GTM-XXXXXXX"
             {...register("gtmId")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12 font-mono text-sm"
+            className="rounded-xl border-stone-100 bg-stone-50 h-12"
           />
           {errors.gtmId && <p className="text-[10px] text-rose-500">{errors.gtmId.message}</p>}
         </div>
@@ -64,7 +64,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
             id="metaPixelId"
             placeholder="123456789012345"
             {...register("metaPixelId")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12 font-mono text-sm"
+            className="rounded-xl border-stone-100 bg-stone-50 h-12"
           />
           {errors.metaPixelId && (
             <p className="text-[10px] text-rose-500">{errors.metaPixelId.message}</p>

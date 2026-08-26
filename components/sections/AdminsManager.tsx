@@ -185,7 +185,7 @@ export const AdminsManager = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="rounded-xl border-stone-100 bg-stone-50 h-12 pr-12 font-mono text-sm"
+                    className="rounded-xl border-stone-100 bg-stone-50 h-12 pr-12"
                   />
                   <button
                     type="button"

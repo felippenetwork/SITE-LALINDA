@@ -83,7 +83,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
           id="slug"
           {...register("slug")}
           placeholder="ex: linha-premium"
-          className="rounded-xl border-stone-100 bg-stone-50 h-12 font-mono text-sm"
+          className="rounded-xl border-stone-100 bg-stone-50 h-12"
         />
         {errors.slug && <p className="text-[10px] text-rose-500">{errors.slug.message}</p>}
       </div>

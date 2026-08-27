@@ -13,25 +13,40 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
       className="pt-20 md:pt-40 pb-12 md:pb-20 px-4 md:px-8 bg-background relative"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="bg-stone-900 rounded-[3rem] md:rounded-[6rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl relative">
+        <div className="bg-stone-900 rounded-[3rem] md:rounded-[6rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -mr-32 -mt-32"></div>
-          <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 flex flex-col justify-center gap-10 md:gap-14 border-b lg:border-b-0 lg:border-r border-white/5 relative z-10">
-            <div>
-              <span className="text-primary font-serif italic text-xl md:text-3xl mb-6 md:mb-10 block">
-                Vamos Conversar?
-              </span>
-              <h2 className="text-5xl md:text-8xl lg:text-9xl font-serif italic text-white mb-6 md:mb-8 leading-[0.85] tracking-tighter">
-                Nosso Pão <br />
-                na Sua <br />
-                Vitrine.
-              </h2>
-              <p className="text-stone-400 font-sans leading-relaxed text-sm md:text-base max-w-sm mb-10 md:mb-14">
-                Seja para revender nossos pães em sua loja, fechar uma parceria para eventos ou
-                tirar qualquer dúvida, fale com a nossa equipe pelos canais de contato ou pelo
-                formulário.
-              </p>
-            </div>
 
+          {/* Headline — always first, both breakpoints */}
+          <div className="order-1 lg:col-start-1 lg:row-start-1 p-10 md:p-20 lg:p-32 lg:pb-14 relative z-10">
+            <span className="text-primary font-serif italic text-xl md:text-3xl mb-6 md:mb-10 block">
+              Vamos Conversar?
+            </span>
+            <h2 className="text-5xl md:text-8xl lg:text-9xl font-serif italic text-white mb-6 md:mb-8 leading-[0.85] tracking-tighter">
+              Nosso Pão <br />
+              na Sua <br />
+              Vitrine.
+            </h2>
+            <p className="text-stone-400 font-sans leading-relaxed text-sm md:text-base max-w-sm">
+              Seja para revender nossos pães em sua loja, fechar uma parceria para eventos ou tirar
+              qualquer dúvida, fale com a nossa equipe pelos canais de contato ou pelo formulário.
+            </p>
+          </div>
+
+          {/* Form — second on mobile (right after the headline, before the
+              contact channels), right column spanning both rows on desktop */}
+          <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 p-10 md:p-20 lg:p-32 bg-white/5 backdrop-blur-3xl border-t lg:border-t-0 lg:border-l border-white/5 relative z-10">
+            <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold mb-3">
+              Envie uma Mensagem
+            </p>
+            <h3 className="text-2xl md:text-3xl font-serif italic text-white mb-10 md:mb-14">
+              Como podemos ajudar?
+            </h3>
+            <LeadForm />
+          </div>
+
+          {/* Contact channels — last on mobile (after the send-message
+              button), still grouped under the headline on desktop */}
+          <div className="order-3 lg:col-start-1 lg:row-start-2 p-10 md:p-20 lg:p-32 lg:pt-0 border-t lg:border-t-0 border-white/5 relative z-10 flex flex-col justify-end">
             <div className="space-y-6 md:space-y-8">
               <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold mb-2">
                 Nossos Canais de Atendimento
@@ -50,16 +65,6 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 bg-white/5 backdrop-blur-3xl">
-            <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold mb-3">
-              Envie uma Mensagem
-            </p>
-            <h3 className="text-2xl md:text-3xl font-serif italic text-white mb-10 md:mb-14">
-              Como podemos ajudar?
-            </h3>
-            <LeadForm />
           </div>
         </div>
       </div>

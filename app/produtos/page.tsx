@@ -58,7 +58,7 @@ export default async function ProdutosPage() {
         </div>
       </main>
 
-      <Footer variant="dark" />
+      <Footer />
     </div>
   );
 }

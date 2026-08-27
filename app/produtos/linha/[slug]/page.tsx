@@ -101,7 +101,7 @@ export default async function ProductLinePage({ params }: LinePageProps) {
         </div>
       </main>
 
-      <Footer variant="dark" />
+      <Footer />
     </div>
   );
 }

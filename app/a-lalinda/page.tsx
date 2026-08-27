@@ -174,7 +174,7 @@ export default async function AboutPage() {
         </section>
       </main>
 
-      <Footer variant="dark" />
+      <Footer />
     </div>
   );
 }

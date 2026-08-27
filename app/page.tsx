@@ -46,7 +46,7 @@ export default async function HomePage() {
       <HeritageSection />
       <TimelineSection timelineEvents={timelineEvents} />
       <ContactSection settings={siteSettings} />
-      <Footer variant="light" />
+      <Footer />
     </div>
   );
 }

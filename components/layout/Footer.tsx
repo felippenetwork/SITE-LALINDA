@@ -1,32 +1,15 @@
 import { getSiteSettings } from "@/lib/data/site-settings";
 import { InstagramIcon, FacebookIcon } from "@/components/icons/SocialIcons";
-import { cn } from "@/lib/utils";
 
-interface FooterProps {
-  variant?: "light" | "dark";
-}
-
-export const Footer = async ({ variant = "light" }: FooterProps) => {
-  const isDark = variant === "dark";
+export const Footer = async () => {
   const { instagramUrl, facebookUrl } = await getSiteSettings();
   const hasSocials = Boolean(instagramUrl || facebookUrl);
 
   return (
-    <footer
-      className={cn(
-        "py-16 md:py-20",
-        isDark
-          ? "bg-stone-900 text-stone-400 border-t border-white/5"
-          : "bg-background text-stone-400 border-t border-stone-100",
-      )}
-    >
+    <footer className="py-12 md:py-16 bg-stone-900 text-stone-400 border-t border-white/5">
       <div className="container mx-auto px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
-          <h3
-            className={cn("text-3xl font-serif italic", isDark ? "text-white" : "text-foreground")}
-          >
-            La Linda
-          </h3>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+          <h3 className="text-4xl md:text-5xl font-serif italic text-white">La Linda</h3>
 
           {hasSocials && (
             <div className="flex items-center gap-4">
@@ -40,14 +23,9 @@ export const Footer = async ({ variant = "light" }: FooterProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram da La Linda"
-                    className={cn(
-                      "w-9 h-9 rounded-full flex items-center justify-center transition-all",
-                      isDark
-                        ? "border border-white/10 text-white hover:bg-primary hover:border-primary"
-                        : "bg-primary text-white hover:bg-primary/90",
-                    )}
+                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
                   >
-                    <InstagramIcon size={16} />
+                    <InstagramIcon size={22} />
                   </a>
                 )}
                 {facebookUrl && (
@@ -56,14 +34,9 @@ export const Footer = async ({ variant = "light" }: FooterProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook da La Linda"
-                    className={cn(
-                      "w-9 h-9 rounded-full flex items-center justify-center transition-all",
-                      isDark
-                        ? "border border-white/10 text-white hover:bg-primary hover:border-primary"
-                        : "bg-primary text-white hover:bg-primary/90",
-                    )}
+                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
                   >
-                    <FacebookIcon size={16} />
+                    <FacebookIcon size={22} />
                   </a>
                 )}
               </div>

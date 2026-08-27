@@ -64,7 +64,7 @@ export const LeadForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8" noValidate>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-widest font-black text-stone-500">
+          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
             Seu Nome
           </label>
           <input
@@ -77,7 +77,7 @@ export const LeadForm = () => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-widest font-black text-stone-500">
+          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
             Seu E-mail
           </label>
           <input
@@ -93,7 +93,7 @@ export const LeadForm = () => {
       </div>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-widest font-black text-stone-500">
+          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
             Telefone
           </label>
           <input
@@ -104,7 +104,7 @@ export const LeadForm = () => {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] uppercase tracking-widest font-black text-stone-500">
+          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
             Assunto
           </label>
           <input

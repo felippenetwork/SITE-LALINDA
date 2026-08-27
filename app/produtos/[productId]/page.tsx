@@ -126,7 +126,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </div>
       </main>
 
-      <Footer variant="dark" />
+      <Footer />
     </div>
   );
 }

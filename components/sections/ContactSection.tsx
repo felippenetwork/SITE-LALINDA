@@ -1,6 +1,5 @@
 import { Mail } from "lucide-react";
 import { LeadForm } from "@/components/forms/LeadForm";
-import { InstagramIcon, FacebookIcon } from "@/components/icons/SocialIcons";
 import type { SiteSettings } from "@/lib/data/site-settings";
 
 interface ContactSectionProps {
@@ -16,7 +15,7 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
       <div className="container mx-auto max-w-7xl">
         <div className="bg-stone-900 rounded-[3rem] md:rounded-[6rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px] rounded-full -mr-32 -mt-32"></div>
-          <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/5 relative z-10">
+          <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 flex flex-col justify-center gap-10 md:gap-14 border-b lg:border-b-0 lg:border-r border-white/5 relative z-10">
             <div>
               <span className="text-primary font-serif italic text-xl md:text-3xl mb-6 md:mb-10 block">
                 Vamos Conversar?
@@ -51,33 +50,6 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
                 </div>
               </div>
             </div>
-
-            {(settings.instagramUrl || settings.facebookUrl) && (
-              <div className="mt-12 md:mt-16 flex items-center gap-4">
-                {settings.instagramUrl && (
-                  <a
-                    href={settings.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram da La Linda"
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
-                  >
-                    <InstagramIcon size={18} />
-                  </a>
-                )}
-                {settings.facebookUrl && (
-                  <a
-                    href={settings.facebookUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook da La Linda"
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
-                  >
-                    <FacebookIcon size={18} />
-                  </a>
-                )}
-              </div>
-            )}
           </div>
 
           <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 bg-white/5 backdrop-blur-3xl">

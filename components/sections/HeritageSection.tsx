@@ -53,7 +53,7 @@ export const HeritageSection = () => {
               </h2>
             </div>
             <p className="text-stone-400 font-sans leading-relaxed text-base md:text-xl max-w-md">
-              Desde 1998, nossa missão é preservar a essência do pão. Assista ao documentário que
+              Desde 2011, nossa missão é preservar a essência do pão. Assista ao documentário que
               revela o segredo de nossa referência em qualidade.
             </p>
             <div className="pt-4">

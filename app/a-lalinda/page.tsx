@@ -75,7 +75,7 @@ export default async function AboutPage() {
             </h2>
           </div>
           <div className="absolute bottom-12 right-12 hidden lg:block">
-            <span className="text-white/20 font-serif italic text-[10rem] select-none">1998</span>
+            <span className="text-white/20 font-serif italic text-[10rem] select-none">2011</span>
           </div>
         </section>
 

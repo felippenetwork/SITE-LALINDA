@@ -1,4 +1,5 @@
 import { getSiteSettings } from "@/lib/data/site-settings";
+import { InstagramIcon, FacebookIcon } from "@/components/icons/SocialIcons";
 import { cn } from "@/lib/utils";
 
 interface FooterProps {
@@ -40,13 +41,13 @@ export const Footer = async ({ variant = "light" }: FooterProps) => {
                     rel="noopener noreferrer"
                     aria-label="Instagram da La Linda"
                     className={cn(
-                      "w-9 h-9 rounded-full flex items-center justify-center text-xs font-black transition-all",
+                      "w-9 h-9 rounded-full flex items-center justify-center transition-all",
                       isDark
                         ? "border border-white/10 text-white hover:bg-primary hover:border-primary"
                         : "bg-primary text-white hover:bg-primary/90",
                     )}
                   >
-                    IG
+                    <InstagramIcon size={16} />
                   </a>
                 )}
                 {facebookUrl && (
@@ -56,13 +57,13 @@ export const Footer = async ({ variant = "light" }: FooterProps) => {
                     rel="noopener noreferrer"
                     aria-label="Facebook da La Linda"
                     className={cn(
-                      "w-9 h-9 rounded-full flex items-center justify-center text-xs font-black transition-all",
+                      "w-9 h-9 rounded-full flex items-center justify-center transition-all",
                       isDark
                         ? "border border-white/10 text-white hover:bg-primary hover:border-primary"
                         : "bg-primary text-white hover:bg-primary/90",
                     )}
                   >
-                    FB
+                    <FacebookIcon size={16} />
                   </a>
                 )}
               </div>

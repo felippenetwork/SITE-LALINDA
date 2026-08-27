@@ -1,5 +1,6 @@
 import { Mail, Phone } from "lucide-react";
 import { LeadForm } from "@/components/forms/LeadForm";
+import { InstagramIcon, FacebookIcon } from "@/components/icons/SocialIcons";
 import type { SiteSettings } from "@/lib/data/site-settings";
 
 interface ContactSectionProps {
@@ -68,9 +69,10 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
                     href={settings.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all text-xs md:text-base"
+                    aria-label="Instagram da La Linda"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
                   >
-                    IG
+                    <InstagramIcon size={18} />
                   </a>
                 )}
                 {settings.facebookUrl && (
@@ -78,9 +80,10 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
                     href={settings.facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all text-xs md:text-base"
+                    aria-label="Facebook da La Linda"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all"
                   >
-                    FB
+                    <FacebookIcon size={18} />
                   </a>
                 )}
               </div>

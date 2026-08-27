@@ -64,12 +64,12 @@ export const LeadForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8" noValidate>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
             Seu Nome
           </label>
           <input
             {...register("name")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-serif italic text-lg md:text-xl focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="Nome Completo"
           />
           {errors.name && (
@@ -77,13 +77,13 @@ export const LeadForm = () => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
             Seu E-mail
           </label>
           <input
             type="email"
             {...register("email")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-serif italic text-lg md:text-xl focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="exemplo@email.com"
           />
           {errors.email && (
@@ -93,35 +93,35 @@ export const LeadForm = () => {
       </div>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
             Telefone
           </label>
           <input
             type="tel"
             {...register("phone")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-serif italic text-lg md:text-xl focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="(11) 99999-9999"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-xs uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
             Assunto
           </label>
           <input
             {...register("interest")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-serif italic text-lg md:text-xl focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="Ex: Revenda, Eventos, etc."
           />
         </div>
       </div>
       <div className="space-y-2">
-        <label className="text-[10px] uppercase tracking-widest font-black text-stone-500">
+        <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
           Mensagem
         </label>
         <textarea
           {...register("message")}
           rows={4}
-          className="w-full bg-transparent border-b border-white/10 py-4 text-white font-serif italic text-lg md:text-xl focus:border-primary outline-none transition-colors resize-none placeholder:text-stone-700"
+          className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors resize-none placeholder:text-stone-700"
           placeholder="Como podemos ajudar?"
         />
         {errors.message && (

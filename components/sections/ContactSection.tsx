@@ -34,7 +34,7 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
             </div>
 
             <div className="space-y-6 md:space-y-8">
-              <p className="text-xs font-sans uppercase tracking-widest text-stone-400 font-bold mb-2">
+              <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold mb-2">
                 Nossos Canais de Atendimento
               </p>
               <div className="flex items-center gap-6 group">
@@ -42,10 +42,10 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
                   <Mail size={20} />
                 </div>
                 <div>
-                  <p className="text-xs font-sans uppercase tracking-widest text-stone-400 font-bold">
+                  <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold">
                     E-mail
                   </p>
-                  <p className="text-white font-serif italic text-lg md:text-xl">
+                  <p className="text-white font-sans font-semibold text-base md:text-lg">
                     {settings.contactEmail}
                   </p>
                 </div>
@@ -81,7 +81,7 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
           </div>
 
           <div className="lg:w-1/2 p-10 md:p-20 lg:p-32 bg-white/5 backdrop-blur-3xl">
-            <p className="text-xs font-sans uppercase tracking-widest text-stone-400 font-bold mb-3">
+            <p className="text-sm font-sans uppercase tracking-widest text-stone-400 font-bold mb-3">
               Envie uma Mensagem
             </p>
             <h3 className="text-2xl md:text-3xl font-serif italic text-white mb-10 md:mb-14">

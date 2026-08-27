@@ -13,7 +13,7 @@ export const Footer = async () => {
 
           {hasSocials && (
             <div className="flex items-center gap-4">
-              <span className="text-[10px] font-sans uppercase tracking-widest font-bold">
+              <span className="text-sm font-sans uppercase tracking-widest font-bold">
                 Siga a La Linda nas redes sociais
               </span>
               <div className="flex items-center gap-3">
@@ -44,7 +44,7 @@ export const Footer = async () => {
           )}
         </div>
 
-        <p className="text-[10px] font-sans uppercase tracking-[0.5em] font-bold text-center md:text-left">
+        <p className="text-xs font-sans uppercase tracking-[0.25em] font-bold text-center md:text-left">
           &copy; 2026 La Linda Pães Especiais — Uma Herança Artesanal
         </p>
       </div>

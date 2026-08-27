@@ -102,6 +102,9 @@ export const LeadForm = () => {
             className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="(11) 99999-9999"
           />
+          {errors.phone && (
+            <p className="text-[10px] text-rose-400 font-sans">{errors.phone.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
@@ -112,6 +115,9 @@ export const LeadForm = () => {
             className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
             placeholder="Ex: Revenda, Eventos, etc."
           />
+          {errors.interest && (
+            <p className="text-[10px] text-rose-400 font-sans">{errors.interest.message}</p>
+          )}
         </div>
       </div>
       <div className="space-y-2">

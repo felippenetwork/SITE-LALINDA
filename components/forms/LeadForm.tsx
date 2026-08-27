@@ -64,8 +64,8 @@ export const LeadForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8" noValidate>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
-            Seu Nome
+          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+            Seu Nome <span className="text-primary">*</span>
           </label>
           <input
             {...register("name")}
@@ -77,8 +77,8 @@ export const LeadForm = () => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
-            Seu E-mail
+          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+            Seu E-mail <span className="text-primary">*</span>
           </label>
           <input
             type="email"
@@ -93,8 +93,8 @@ export const LeadForm = () => {
       </div>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
-            Telefone
+          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+            Telefone <span className="text-primary">*</span>
           </label>
           <input
             type="tel"
@@ -107,8 +107,8 @@ export const LeadForm = () => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
-            Assunto
+          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+            Assunto <span className="text-primary">*</span>
           </label>
           <input
             {...register("interest")}
@@ -121,8 +121,8 @@ export const LeadForm = () => {
         </div>
       </div>
       <div className="space-y-2">
-        <label className="text-sm uppercase tracking-widest font-bold text-stone-400">
-          Mensagem
+        <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+          Mensagem <span className="text-primary">*</span>
         </label>
         <textarea
           {...register("message")}

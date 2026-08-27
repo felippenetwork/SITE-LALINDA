@@ -23,12 +23,12 @@ export const ProductLinesBar = ({ lines }: ProductLinesBarProps) => {
                 key={line.id}
                 className="flex-[0_0_auto] group flex flex-col items-center gap-2 md:gap-3"
               >
-                <span className="relative block w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110 bg-stone-100">
+                <span className="relative block w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden transition-transform duration-500 group-hover:scale-110 bg-stone-100">
                   {line.image && (
-                    <Image src={line.image} alt="" fill sizes="48px" className="object-cover" />
+                    <Image src={line.image} alt="" fill sizes="64px" className="object-cover" />
                   )}
                 </span>
-                <span className="text-[8px] md:text-[9px] font-sans uppercase tracking-[0.2em] font-black text-stone-400 group-hover:text-primary transition-colors">
+                <span className="text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] font-black text-stone-500 group-hover:text-primary transition-colors">
                   {line.name}
                 </span>
               </Link>

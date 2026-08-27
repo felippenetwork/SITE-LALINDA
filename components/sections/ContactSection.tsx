@@ -1,4 +1,4 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 import { LeadForm } from "@/components/forms/LeadForm";
 import type { SiteSettings } from "@/lib/data/site-settings";
 
@@ -60,16 +60,6 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
               Como podemos ajudar?
             </h3>
             <LeadForm />
-
-            <a
-              href={`https://wa.me/${settings.contactPhone.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 flex items-center justify-center gap-3 text-sm font-sans font-bold uppercase tracking-widest text-stone-400 hover:text-primary transition-colors"
-            >
-              <MessageCircle size={18} className="text-green-500 shrink-0" />
-              Falar pelo WhatsApp
-            </a>
           </div>
         </div>
       </div>

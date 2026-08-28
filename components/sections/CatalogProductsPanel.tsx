@@ -46,6 +46,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Loader2,
   Plus,
   Pencil,
@@ -154,6 +164,7 @@ export const CatalogProductsPanel = ({
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<BreadItem | null>(null);
+  const [productPendingDelete, setProductPendingDelete] = useState<BreadItem | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -183,6 +194,7 @@ export const CatalogProductsPanel = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Produto removido com sucesso");
+      setProductPendingDelete(null);
     },
     onError: (error: Error) => {
       toast.error("Erro ao excluir: " + error.message);
@@ -342,11 +354,7 @@ export const CatalogProductsPanel = ({
                       key={product.id}
                       product={product}
                       onEdit={() => setEditingItem(product)}
-                      onDelete={() => {
-                        if (confirm(`Deseja realmente excluir o produto "${product.name}"?`)) {
-                          deleteProductMutation.mutate(product.id);
-                        }
-                      }}
+                      onDelete={() => setProductPendingDelete(product)}
                       onToggle={(available) =>
                         toggleAvailabilityMutation.mutate({ id: product.id, available })
                       }
@@ -363,6 +371,31 @@ export const CatalogProductsPanel = ({
           </DndContext>
         )}
       </CardContent>
+
+      <AlertDialog
+        open={!!productPendingDelete}
+        onOpenChange={(open) => !open && setProductPendingDelete(null)}
+      >
+        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir produto</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja realmente excluir o produto &quot;{productPendingDelete?.name}&quot;? Essa ação
+              não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                productPendingDelete && deleteProductMutation.mutate(productPendingDelete.id)
+              }
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };

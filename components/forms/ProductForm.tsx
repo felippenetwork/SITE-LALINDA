@@ -7,6 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DialogFooter } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { ImageUploadField } from "@/components/shared/ImageUploadField";
 import type { BreadItem } from "@/lib/data/products";
@@ -77,17 +84,21 @@ export const ProductForm = ({
           >
             Linha
           </Label>
-          <select
-            id="categoryId"
-            {...register("categoryId")}
-            className="w-full bg-stone-50 border border-stone-100 rounded-xl px-4 h-12 text-sm focus:ring-2 focus:ring-primary outline-none"
+          <Select
+            value={watch("categoryId")}
+            onValueChange={(value) => setValue("categoryId", value, { shouldValidate: true })}
           >
-            {lines.map((line) => (
-              <option key={line.id} value={line.id}>
-                {line.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="categoryId" className="rounded-xl border-stone-100 bg-stone-50 h-12">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {lines.map((line) => (
+                <SelectItem key={line.id} value={line.id}>
+                  {line.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label

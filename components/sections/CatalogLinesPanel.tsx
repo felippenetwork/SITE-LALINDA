@@ -45,6 +45,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Loader2, Plus, Pencil, Trash2, GripVertical, Layers } from "lucide-react";
 import { ProductLineForm } from "@/components/forms/ProductLineForm";
 import type { ProductLine } from "@/lib/data/product-lines";
@@ -156,6 +166,8 @@ export const CatalogLinesPanel = ({
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingLine, setEditingLine] = useState<ProductLine | null>(null);
+  const [linePendingDelete, setLinePendingDelete] = useState<ProductLine | null>(null);
+  const [lineCascadeConfirm, setLineCascadeConfirm] = useState<ProductLine | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -183,17 +195,13 @@ export const CatalogLinesPanel = ({
       queryClient.invalidateQueries({ queryKey: ["product-lines"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Linha removida com sucesso");
+      setLinePendingDelete(null);
+      setLineCascadeConfirm(null);
     },
     onError: (error: Error, variables) => {
       if (error.message.includes("existem produtos cadastrados")) {
-        const line = lines.find((l) => l.id === variables.id);
-        const confirmCascade = confirm(
-          `A linha "${line?.name ?? ""}" possui produtos cadastrados nela.\n\n` +
-            "Deseja excluir a linha E todos os produtos cadastrados nela? Essa ação não pode ser desfeita.",
-        );
-        if (confirmCascade) {
-          deleteLineMutation.mutate({ id: variables.id, cascade: true });
-        }
+        setLinePendingDelete(null);
+        setLineCascadeConfirm(lines.find((l) => l.id === variables.id) ?? null);
         return;
       }
       toast.error("Erro ao excluir: " + error.message);
@@ -327,11 +335,7 @@ export const CatalogLinesPanel = ({
                       isSelected={line.id === selectedLineId}
                       onSelect={() => onSelectLine(line.id)}
                       onEdit={() => setEditingLine(line)}
-                      onDelete={() => {
-                        if (confirm(`Deseja realmente excluir a linha "${line.name}"?`)) {
-                          deleteLineMutation.mutate({ id: line.id });
-                        }
-                      }}
+                      onDelete={() => setLinePendingDelete(line)}
                       onToggle={(available) =>
                         toggleAvailabilityMutation.mutate({ id: line.id, available })
                       }
@@ -347,6 +351,57 @@ export const CatalogLinesPanel = ({
           </DndContext>
         )}
       </CardContent>
+
+      <AlertDialog
+        open={!!linePendingDelete}
+        onOpenChange={(open) => !open && setLinePendingDelete(null)}
+      >
+        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir linha</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja realmente excluir a linha &quot;{linePendingDelete?.name}&quot;?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                linePendingDelete && deleteLineMutation.mutate({ id: linePendingDelete.id })
+              }
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!lineCascadeConfirm}
+        onOpenChange={(open) => !open && setLineCascadeConfirm(null)}
+      >
+        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Linha possui produtos cadastrados</AlertDialogTitle>
+            <AlertDialogDescription>
+              A linha &quot;{lineCascadeConfirm?.name}&quot; possui produtos cadastrados nela.
+              Deseja excluir a linha E todos os produtos cadastrados nela? Essa ação não pode ser
+              desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                lineCascadeConfirm &&
+                deleteLineMutation.mutate({ id: lineCascadeConfirm.id, cascade: true })
+              }
+            >
+              Excluir Tudo
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };

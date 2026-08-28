@@ -1,10 +1,14 @@
 "use server";
 
+import { after } from "next/server";
+import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getLeads } from "@/lib/data/leads";
 import { leadSchema } from "@/lib/validation/lead";
 import { isFormTokenValid } from "@/lib/security/lead-form-token";
 import { checkLeadRateLimit, getClientIp } from "@/lib/security/lead-rate-limit";
+import { sendLeadNotificationEmail } from "@/lib/email/send-lead-notification";
+import { getSiteSettings } from "@/lib/data/site-settings";
 
 // Thin RPC wrapper for the admin dashboard's useQuery — `getLeads` itself
 // still enforces the `has_role` check, this adds no extra trust.
@@ -51,5 +55,31 @@ export async function submitLead(input: unknown, meta: SubmitLeadMeta): Promise<
   ]);
 
   if (error) throw error;
+
+  // Scheduled to run after the response is already sent — never delays
+  // this action's return, and (per Next.js docs) runs even if something
+  // later in this function were to throw. Resend/network failures are
+  // caught and logged inside sendLeadNotificationEmail itself; nothing
+  // here can turn an email problem into a broken lead submission.
+  after(async () => {
+    try {
+      const host = (await headers()).get("host") ?? "";
+      const protocol = host.startsWith("localhost") ? "http" : "https";
+      const settings = await getSiteSettings();
+
+      await sendLeadNotificationEmail({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        interest: data.interest,
+        message: data.message,
+        to: settings.contactEmail,
+        adminUrl: `${protocol}://${host}/admin/leads`,
+      });
+    } catch (error) {
+      console.error("[lead-notification] failed before send could be attempted:", error);
+    }
+  });
+
   return { success: true };
 }

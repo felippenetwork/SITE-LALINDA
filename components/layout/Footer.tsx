@@ -45,7 +45,7 @@ export const Footer = async () => {
         </div>
 
         <p className="text-xs font-sans uppercase tracking-[0.25em] font-bold text-center md:text-left">
-          &copy; 2026 La Linda Pães Especiais — Uma Herança Artesanal
+          &copy; 2026 La Linda Pães Especiais — Uma Herança Artesanal Desde 2011
         </p>
       </div>
     </footer>

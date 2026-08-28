@@ -8,9 +8,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { submitLead } from "@/lib/actions/leads";
 import { leadSchema, type LeadFormValues } from "@/lib/validation/lead";
 
-export const LeadForm = () => {
+interface LeadFormProps {
+  formToken: string;
+}
+
+export const LeadForm = ({ formToken }: LeadFormProps) => {
   const [status, setStatus] = useState<"idle" | "success">("idle");
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<"generic" | "rate_limited" | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -23,15 +27,27 @@ export const LeadForm = () => {
     defaultValues: { name: "", email: "", phone: "", interest: "", message: "" },
   });
 
-  const onSubmit = (data: LeadFormValues) => {
-    setSubmitError(false);
+  // The honeypot is a plain uncontrolled input — kept out of react-hook-form
+  // /zod so it's never treated as a real field to validate. Reading it off
+  // the native form element (via the submit event) rather than a ref avoids
+  // React Compiler flagging a possible ref-read-during-render, and still
+  // sees whatever a bot wrote regardless of how it wrote it.
+  const onSubmit = (data: LeadFormValues, event?: React.BaseSyntheticEvent) => {
+    setSubmitError(null);
+    const form = event?.target as HTMLFormElement | undefined;
+    const honeypot = (form?.elements.namedItem("company") as HTMLInputElement | null)?.value ?? "";
+
     startTransition(async () => {
       try {
-        await submitLead(data);
-        setStatus("success");
-        reset();
+        const result = await submitLead(data, { honeypot, formToken });
+        if (result.success) {
+          setStatus("success");
+          reset();
+        } else {
+          setSubmitError("rate_limited");
+        }
       } catch {
-        setSubmitError(true);
+        setSubmitError("generic");
       }
     });
   };
@@ -62,6 +78,17 @@ export const LeadForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 md:space-y-8" noValidate>
+      {/* Honeypot: invisible to humans (CSS, not display:none/type=hidden —
+          both are trivial for bots to detect), unreachable by keyboard/screen
+          reader. Any bot that auto-fills every input in the DOM catches it. */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px overflow-hidden"
+      />
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
           <label className="text-base uppercase tracking-widest font-bold text-stone-400">
@@ -135,7 +162,12 @@ export const LeadForm = () => {
         )}
       </div>
 
-      {submitError && (
+      {submitError === "rate_limited" && (
+        <p className="text-xs text-rose-400 font-sans text-center">
+          Você atingiu o limite de envios. Tente novamente em 1 hora.
+        </p>
+      )}
+      {submitError === "generic" && (
         <p className="text-xs text-rose-400 font-sans text-center">
           Não foi possível enviar sua mensagem agora. Tente novamente em instantes.
         </p>

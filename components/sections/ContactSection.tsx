@@ -1,5 +1,6 @@
 import { Mail } from "lucide-react";
 import { LeadForm } from "@/components/forms/LeadForm";
+import { mintFormToken } from "@/lib/security/lead-form-token";
 import type { SiteSettings } from "@/lib/data/site-settings";
 
 interface ContactSectionProps {
@@ -7,6 +8,8 @@ interface ContactSectionProps {
 }
 
 export const ContactSection = ({ settings }: ContactSectionProps) => {
+  const formToken = mintFormToken();
+
   return (
     <section
       id="contato"
@@ -41,7 +44,7 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
             <h3 className="text-2xl md:text-3xl font-serif italic text-white mb-10 md:mb-14">
               Como podemos ajudar?
             </h3>
-            <LeadForm />
+            <LeadForm formToken={formToken} />
           </div>
 
           {/* Contact channels — last on mobile (after the send-message

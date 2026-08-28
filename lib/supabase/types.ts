@@ -68,6 +68,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      leads_rate_limit: {
+        Row: {
+          created_at: string;
+          id: string;
+          ip: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          ip: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          ip?: string;
+        };
+        Relationships: [];
+      };
       product_lines: {
         Row: {
           available: boolean;

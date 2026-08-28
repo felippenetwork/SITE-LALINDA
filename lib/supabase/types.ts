@@ -181,6 +181,12 @@ export type Database = {
           id: string;
           instagram_url: string | null;
           meta_pixel_id: string | null;
+          stat_1_value: number;
+          stat_1_label: string;
+          stat_2_value: number;
+          stat_2_label: string;
+          stat_3_value: number;
+          stat_3_label: string;
           updated_at: string;
         };
         Insert: {
@@ -191,6 +197,12 @@ export type Database = {
           id?: string;
           instagram_url?: string | null;
           meta_pixel_id?: string | null;
+          stat_1_value?: number;
+          stat_1_label?: string;
+          stat_2_value?: number;
+          stat_2_label?: string;
+          stat_3_value?: number;
+          stat_3_label?: string;
           updated_at?: string;
         };
         Update: {
@@ -201,6 +213,12 @@ export type Database = {
           id?: string;
           instagram_url?: string | null;
           meta_pixel_id?: string | null;
+          stat_1_value?: number;
+          stat_1_label?: string;
+          stat_2_value?: number;
+          stat_2_label?: string;
+          stat_3_value?: number;
+          stat_3_label?: string;
           updated_at?: string;
         };
         Relationships: [];

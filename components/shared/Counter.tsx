@@ -12,13 +12,25 @@ interface CounterProps {
 const DURATION_MS = 1500;
 
 export const Counter = ({ value, label, suffix = "" }: CounterProps) => {
-  const [count, setCount] = useState(0);
+  // Starts at the real final value — not 0 — so the correct number is what
+  // renders on first paint regardless of whether JS ever runs, hydration
+  // succeeds, or the IntersectionObserver below ever fires. The count-up
+  // animation is a progressive enhancement layered on top, never the only
+  // path to the right number.
+  const [count, setCount] = useState(value);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const frameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (!inView) return undefined;
 
+    // `count` already starts at `value` — if motion is reduced, there's
+    // nothing to do, the correct number is already showing.
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return undefined;
+
+    // The reset to (near) 0 happens naturally on the first tick below
+    // rather than via a synchronous setState here in the effect body.
     const start = performance.now();
     const tick = (now: number) => {
       const progress = Math.min((now - start) / DURATION_MS, 1);

@@ -42,7 +42,7 @@ export default async function HomePage() {
       <HeroCarousel />
       <ProductLinesBar lines={productLines} />
       <EssenceSection featuredProducts={featuredProducts} />
-      <StatsSection />
+      <StatsSection stats={siteSettings.stats} />
       <HeritageSection />
       <TimelineSection timelineEvents={timelineEvents} />
       <ContactSection settings={siteSettings} />

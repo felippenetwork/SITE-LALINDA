@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getSiteSettings, SITE_SETTINGS_ID } from "@/lib/data/site-settings";
 import { siteSettingsSchema } from "@/lib/validation/site-settings";
 import { pixelSettingsSchema } from "@/lib/validation/pixel-settings";
+import { statsSettingsSchema } from "@/lib/validation/stats-settings";
 
 export async function getSiteSettingsAction() {
   return getSiteSettings();
@@ -83,5 +84,39 @@ export async function savePixelSettings(input: unknown) {
   // the whole layout tree, not just "/".
   revalidatePath("/admin/config");
   revalidatePath("/", "layout");
+  return { success: true };
+}
+
+export async function saveStatsSettings(input: unknown) {
+  const data = statsSettingsSchema.parse(input);
+  const { supabase, userId } = await requireAdmin();
+
+  const [stat1, stat2, stat3] = data.stats;
+
+  const { error } = await supabase
+    .from("site_settings")
+    .update({
+      stat_1_value: stat1.value,
+      stat_1_label: stat1.label,
+      stat_2_value: stat2.value,
+      stat_2_label: stat2.label,
+      stat_3_value: stat3.value,
+      stat_3_label: stat3.label,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", SITE_SETTINGS_ID);
+  if (error) throw error;
+
+  await supabase.from("audit_logs").insert({
+    user_id: userId,
+    action: "UPDATE",
+    target_table: "site_settings",
+    target_id: SITE_SETTINGS_ID,
+    details: { fields: ["stats"] },
+  });
+
+  // StatsSection only renders on the home page, not the shared layout.
+  revalidatePath("/admin/config");
+  revalidatePath("/");
   return { success: true };
 }

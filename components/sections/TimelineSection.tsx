@@ -52,7 +52,7 @@ export const TimelineSection = ({ timelineEvents }: TimelineSectionProps) => {
   const [emblaTimeline] = useEmblaCarousel({ dragFree: true, align: "start" });
 
   return (
-    <section className="py-20 md:py-40 bg-background overflow-hidden">
+    <section className="py-16 md:py-24 bg-background overflow-hidden">
       <div className="px-6 md:px-8 mb-12 md:mb-20">
         <h2 className="text-4xl md:text-6xl font-serif italic text-center">Nossa Trajetória</h2>
       </div>

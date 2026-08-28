@@ -79,7 +79,7 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-40 bg-white">
+        <section className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-6 md:px-8">
             <div className="grid lg:grid-cols-12 gap-16 md:gap-24 items-start">
               <div className="lg:col-span-5">
@@ -121,9 +121,9 @@ export default async function AboutPage() {
 
         <TimelineSection timelineEvents={timelineEvents} />
 
-        <section className="py-20 md:py-40 bg-stone-50">
+        <section className="py-16 md:py-24 bg-stone-50">
           <div className="container mx-auto px-6 md:px-8">
-            <div className="max-w-4xl mx-auto text-center mb-24">
+            <div className="max-w-4xl mx-auto text-center mb-14 md:mb-16">
               <h3 className="text-6xl font-serif italic mb-8">Nossas Diretrizes</h3>
               <p className="text-stone-400 font-sans uppercase tracking-[0.2em] text-[10px] font-black">
                 O que nos move a cada madrugada
@@ -146,18 +146,18 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-40 bg-white">
+        <section className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-6 md:px-8">
             <ProductLinesShowcase lines={productLines} />
           </div>
         </section>
 
-        <section className="py-20 md:py-40 bg-primary overflow-hidden relative">
+        <section className="py-16 md:py-24 bg-primary overflow-hidden relative">
           <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
             <h3 className="text-4xl md:text-8xl font-serif italic text-white mb-8 md:mb-12">
               Experimente <br />a Tradição
             </h3>
-            <p className="text-white/70 font-sans text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-white/70 font-sans text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
               Cada pão La Linda é um convite para desacelerar e apreciar o que há de mais nobre na
               panificação.
             </p>

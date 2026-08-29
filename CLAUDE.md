@@ -34,7 +34,7 @@ Standard App Router file conventions. Notable routes:
 - `/produtos` — overview of product lines (`ProductLinesShowcase`), not a flat catalog.
 - `/produtos/linha/[slug]` — one line's page: header + grid of its products. 404s if the line doesn't exist or is paused (`available = false`).
 - `/produtos/[productId]` — single product detail.
-- `/admin/*` — gated by `middleware.ts` (redirects to `/auth` if unauthenticated) and re-checked in `app/admin/layout.tsx` (Supabase's own guidance: don't rely on middleware alone). Contains `produtos`, `linhas`, `leads` sections, each a client component using TanStack Query for the list + a dialog form for create/edit.
+- `/admin/*` — gated by `middleware.ts` (redirects to `/auth` if unauthenticated) and re-checked in `app/admin/layout.tsx` (Supabase's own guidance: don't rely on middleware alone). Contains `produtos`, `linhas`, `leads` sections, each a client component using TanStack Query for the list + a dialog form for create/edit. Destructive actions use `AlertDialog` (shadcn/ui) instead of native `confirm()` — except `AdminsManager.tsx`'s "remove access" action, which still calls `window.confirm()` directly. Known, deferred pending item: bring it in line with the same `AlertDialog` pattern next time native-component debt in the admin gets revisited.
 - `app/error.tsx` / `app/global-error.tsx` / `app/not-found.tsx` — standard Next.js error boundaries; no custom error pipeline beyond these.
 
 ### Server actions and the three-Supabase-client model
@@ -71,7 +71,11 @@ RLS is enabled on every table, covering all four operations where relevant; publ
 
 ### Styling
 
-Tailwind v4 (CSS-based config in `app/globals.css`, no `tailwind.config.js`) with shadcn/ui `new-york` style. Theme tokens are defined as CSS custom properties in `:root` (and a currently-unused `.dark` block) and mapped into Tailwind's `@theme inline`. `--primary` is the brand terracotta; `--primary-light` is a separate, more vivid/legible tint for text sitting on dark photo backgrounds (hero captions, section eyebrows on `bg-stone-900`) — `--primary` alone doesn't clear WCAG contrast there. Path alias `@/*` → repo root (see `tsconfig.json` and `components.json`).
+Tailwind v4 (CSS-based config in `app/globals.css`, no `tailwind.config.js`) with shadcn/ui `new-york` style. Theme tokens are defined as CSS custom properties in `:root` (and a currently-unused `.dark` block) and mapped into Tailwind's `@theme inline`. `--primary` is the brand terracotta; `--primary-light` is a separate, more vivid/legible tint for text sitting on dark photo backgrounds (hero captions, section eyebrows on `bg-foreground`) — `--primary` alone doesn't clear WCAG contrast there. `--muted-foreground-on-dark` exists for the same reason but for body/placeholder text on dark surfaces (e.g. `LeadForm` inputs on `ContactSection`'s dark card) — `--muted-foreground` is tuned for light backgrounds and is close to invisible on dark ones. Path alias `@/*` → repo root (see `tsconfig.json` and `components.json`).
+
+Brand-specific code (everything outside `components/ui/*`) was migrated off raw Tailwind `stone-*` utilities onto the token system above (design audit finding #4) — `stone-*` in that code now means "not yet migrated," not "intentional." Known, deliberately deferred exceptions, pending the Sprint 3 admin redesign:
+- `text-stone-300`, `text-stone-600`, `text-stone-700` (outside `LeadForm`) — muted icon/text tones lighter or darker than `--muted-foreground`/`--foreground`, with no equivalent tier in the current palette.
+- `border-stone-800`, `bg-stone-800`, `bg-stone-950` — the admin sidebar/sheet's own dark chrome, a shade beyond `--foreground`, with no token for "darker than the darkest brand tone."
 
 ### Deployment
 

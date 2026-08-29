@@ -22,11 +22,11 @@ export default async function ProdutosPage() {
   const lines = (await getProductLines()).filter((line) => line.available);
 
   return (
-    <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="Produtos" />
 
       <main>
-        <section className="relative h-[50vh] md:h-[60vh] flex items-end px-6 md:px-8 pb-16 md:pb-20 bg-stone-900 overflow-hidden pt-16 md:pt-0">
+        <section className="relative h-[50vh] md:h-[60vh] flex items-end px-6 md:px-8 pb-16 md:pb-20 bg-foreground overflow-hidden pt-16 md:pt-0">
           <div className="absolute inset-0 opacity-50">
             <Image
               src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072"
@@ -37,7 +37,7 @@ export default async function ProdutosPage() {
               className="object-cover"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/40 to-transparent" />
           <div className="relative z-10 max-w-7xl mx-auto w-full">
             <span className="text-primary-light font-serif italic text-lg md:text-xl mb-3 md:mb-4 block">
               A Coleção La Linda

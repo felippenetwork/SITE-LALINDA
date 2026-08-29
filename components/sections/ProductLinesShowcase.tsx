@@ -27,7 +27,7 @@ export const ProductLinesShowcase = ({ lines }: ProductLinesShowcaseProps) => {
         <h3 className="text-3xl md:text-5xl font-serif italic leading-tight text-foreground mb-4">
           Cada linha, um propósito
         </h3>
-        <p className="text-stone-500 font-sans leading-relaxed text-sm md:text-base">
+        <p className="text-muted-foreground font-sans leading-relaxed text-sm md:text-base">
           Da fornada de todo dia à mesa que pede requinte — escolha uma linha para conhecer o
           catálogo completo dela.
         </p>
@@ -49,7 +49,7 @@ export const ProductLinesShowcase = ({ lines }: ProductLinesShowcaseProps) => {
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/20 to-transparent" />
 
             <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
               <h4 className="text-2xl md:text-3xl font-serif italic text-white mb-2 md:mb-3">
@@ -85,18 +85,18 @@ export const ProductLinesShowcase = ({ lines }: ProductLinesShowcaseProps) => {
               />
             )}
           </div>
-          <div className="w-full md:w-3/5 bg-white border border-stone-100 border-t-0 md:border-t md:border-l-0 rounded-b-[2rem] md:rounded-b-none md:rounded-r-[2.5rem] p-8 md:p-12 flex flex-col justify-center">
-            <h4 className="text-2xl md:text-3xl font-serif italic text-stone-900 mb-3">
+          <div className="w-full md:w-3/5 bg-white border border-border border-t-0 md:border-t md:border-l-0 rounded-b-[2rem] md:rounded-b-none md:rounded-r-[2.5rem] p-8 md:p-12 flex flex-col justify-center">
+            <h4 className="text-2xl md:text-3xl font-serif italic text-foreground mb-3">
               {banner.name}
             </h4>
             {banner.description && (
-              <p className="text-stone-500 font-sans text-sm leading-relaxed max-w-lg mb-4">
+              <p className="text-muted-foreground font-sans text-sm leading-relaxed max-w-lg mb-4">
                 {banner.description}
               </p>
             )}
-            <span className="inline-flex items-center gap-3 text-stone-900 font-sans uppercase tracking-widest text-[9px] font-black group-hover:text-primary transition-colors">
+            <span className="inline-flex items-center gap-3 text-foreground font-sans uppercase tracking-widest text-[9px] font-black group-hover:text-primary transition-colors">
               Ver Linha
-              <span className="w-8 h-[1px] bg-stone-200 group-hover:w-12 group-hover:bg-primary transition-all" />
+              <span className="w-8 h-[1px] bg-border group-hover:w-12 group-hover:bg-primary transition-all" />
             </span>
           </div>
         </Link>

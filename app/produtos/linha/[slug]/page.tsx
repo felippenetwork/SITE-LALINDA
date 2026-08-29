@@ -43,11 +43,11 @@ export default async function ProductLinePage({ params }: LinePageProps) {
   const products = await getProductsByLineId(line.id);
 
   return (
-    <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="Produtos" />
 
       <main className="pb-24">
-        <section className="relative h-[45vh] md:h-[55vh] overflow-hidden bg-stone-900">
+        <section className="relative h-[45vh] md:h-[55vh] overflow-hidden bg-foreground">
           {line.image && (
             <Image
               src={line.image}
@@ -58,7 +58,7 @@ export default async function ProductLinePage({ params }: LinePageProps) {
               className="object-cover opacity-60"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/20 to-transparent" />
           <div className="relative h-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col justify-end pb-12 md:pb-16">
             <Link
               href="/produtos"
@@ -86,8 +86,8 @@ export default async function ProductLinePage({ params }: LinePageProps) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-40 bg-white rounded-[4rem] border border-stone-100 shadow-xl shadow-stone-200/20">
-              <p className="text-stone-400 font-serif italic text-2xl">
+            <div className="text-center py-40 bg-white rounded-[4rem] border border-border shadow-xl shadow-border/20">
+              <p className="text-muted-foreground font-serif italic text-2xl">
                 Ainda não há produtos cadastrados nesta linha.
               </p>
               <Link

@@ -16,10 +16,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/auth?redirect=/admin");
   }
 
-  const { data: isAdmin } = await supabase.rpc("has_role", {
-    _user_id: user.id,
-    _role: "admin",
-  });
+  const [{ data: isAdmin }, { data: isOperador }] = await Promise.all([
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+    supabase.rpc("has_role", { _user_id: user.id, _role: "operador" }),
+  ]);
+
+  // Real access gate, not just "has a session" — an authenticated user with
+  // no admin/operador role (e.g. a future cliente account, once
+  // clientes.user_id accounts exist) must never reach the admin shell at
+  // all, same reasoning as app/admin/config/layout.tsx's isAdmin check.
+  if (!isAdmin && !isOperador) {
+    redirect("/auth?redirect=/admin");
+  }
 
   return (
     <QueryProvider>

@@ -49,11 +49,11 @@ export default async function AboutPage() {
   const productLines = allProductLines.filter((line) => line.available);
 
   return (
-    <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="A Lalinda" />
 
       <main>
-        <section className="relative h-[50vh] md:h-[60vh] flex items-center px-6 md:px-8 bg-stone-900 overflow-hidden pt-16 md:pt-0">
+        <section className="relative h-[50vh] md:h-[60vh] flex items-center px-6 md:px-8 bg-foreground overflow-hidden pt-16 md:pt-0">
           <div className="absolute inset-0 opacity-40">
             <Image
               src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?q=80&w=2070"
@@ -87,26 +87,26 @@ export default async function AboutPage() {
               </div>
 
               <div className="lg:col-span-7 grid md:grid-cols-2 gap-8">
-                <div className="bg-stone-50 p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-stone-100 group hover:bg-white hover:shadow-2xl hover:shadow-stone-200/50 transition-all duration-500">
+                <div className="bg-background p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-border group hover:bg-white hover:shadow-2xl hover:shadow-border/50 transition-all duration-500">
                   <span className="text-3xl md:text-4xl mb-6 md:mb-8 block grayscale group-hover:grayscale-0 transition-all">
                     🥖
                   </span>
                   <h4 className="text-xl md:text-2xl font-serif italic mb-4 md:mb-6">
                     Qualidade Artesanal
                   </h4>
-                  <p className="text-stone-500 font-sans text-xs md:text-sm leading-relaxed">
+                  <p className="text-muted-foreground font-sans text-xs md:text-sm leading-relaxed">
                     Respeitamos o tempo da natureza, utilizando fermentação natural (Levain) que
                     resulta em pães mais nutritivos, saborosos e de fácil digestão.
                   </p>
                 </div>
-                <div className="bg-stone-900 p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+                <div className="bg-foreground p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
                   <span className="text-3xl md:text-4xl mb-6 md:mb-8 block grayscale group-hover:grayscale-0 transition-all">
                     🤝
                   </span>
                   <h4 className="text-xl md:text-2xl font-serif italic mb-4 md:mb-6 text-primary">
                     Compromisso
                   </h4>
-                  <p className="text-stone-400 font-sans text-xs md:text-sm leading-relaxed">
+                  <p className="text-muted-foreground-on-dark font-sans text-xs md:text-sm leading-relaxed">
                     Trabalhamos em parceria com produtores locais e investimos na capacitação de
                     nossa equipe, valorizando o ofício do padeiro.
                   </p>
@@ -121,11 +121,11 @@ export default async function AboutPage() {
 
         <TimelineSection timelineEvents={timelineEvents} />
 
-        <section className="py-16 md:py-24 bg-stone-50">
+        <section className="py-16 md:py-24 bg-background">
           <div className="container mx-auto px-6 md:px-8">
             <div className="max-w-4xl mx-auto text-center mb-14 md:mb-16">
               <h3 className="text-6xl font-serif italic mb-8">Nossas Diretrizes</h3>
-              <p className="text-stone-400 font-sans uppercase tracking-[0.2em] text-[10px] font-black">
+              <p className="text-muted-foreground font-sans uppercase tracking-[0.2em] text-[10px] font-black">
                 O que nos move a cada madrugada
               </p>
             </div>
@@ -137,7 +137,7 @@ export default async function AboutPage() {
                     {item.letter}
                   </div>
                   <h4 className="text-3xl font-serif italic mb-6">{item.title}</h4>
-                  <p className="text-stone-500 font-sans text-sm leading-relaxed italic">
+                  <p className="text-muted-foreground font-sans text-sm leading-relaxed italic">
                     {item.desc}
                   </p>
                 </div>
@@ -163,7 +163,7 @@ export default async function AboutPage() {
             </p>
             <Link
               href="/produtos"
-              className="inline-block bg-white text-stone-900 px-10 md:px-16 py-4 md:py-6 rounded-full font-sans uppercase tracking-widest text-[9px] md:text-[10px] font-black hover:bg-stone-900 hover:text-white transition-all shadow-2xl"
+              className="inline-block bg-white text-foreground px-10 md:px-16 py-4 md:py-6 rounded-full font-sans uppercase tracking-widest text-[9px] md:text-[10px] font-black hover:bg-foreground hover:text-white transition-all shadow-2xl"
             >
               Ver Nossa Coleção
             </Link>

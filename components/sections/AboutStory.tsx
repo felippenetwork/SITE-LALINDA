@@ -10,7 +10,7 @@ export const AboutStory = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
     >
-      <div className="relative aspect-square w-full max-w-xs mb-12 rounded-[2rem] md:rounded-[3rem] border border-stone-100 overflow-hidden hover:shadow-2xl hover:shadow-stone-200/50 transition-shadow duration-500">
+      <div className="relative aspect-square w-full max-w-xs mb-12 rounded-[2rem] md:rounded-[3rem] border border-border overflow-hidden hover:shadow-2xl hover:shadow-border/50 transition-shadow duration-500">
         <Image
           src="/logo-lalinda.jpg"
           alt="Mascote La Linda: padeira artesanal segurando uma cesta de pães e um rolo de macarrão"
@@ -23,11 +23,11 @@ export const AboutStory = () => {
         Onde o tempo <br />
         se torna sabor.
       </h3>
-      <p className="text-stone-500 font-sans leading-relaxed text-lg mb-8">
+      <p className="text-muted-foreground font-sans leading-relaxed text-lg mb-8">
         Fundada em 2011, a La Linda nasceu com o propósito de resgatar a panificação clássica.
         Acreditamos que o pão é mais do que um alimento; é um símbolo de união, conforto e tradição.
       </p>
-      <p className="text-stone-500 font-sans leading-relaxed text-lg mb-12">
+      <p className="text-muted-foreground font-sans leading-relaxed text-lg mb-12">
         Ao longo de mais de uma década, evoluímos tecnologicamente, mas mantivemos o coração
         artesanal. Cada pão que sai de nossos fornos carrega consigo horas de fermentação natural e
         mãos experientes que moldam a massa.

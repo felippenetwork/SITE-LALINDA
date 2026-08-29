@@ -88,7 +88,7 @@ export const ChangePasswordForm = () => {
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           required
-          className="rounded-xl border-stone-100 bg-stone-50 h-12"
+          className="rounded-xl border-border bg-background h-12"
         />
       </div>
 
@@ -107,7 +107,7 @@ export const ChangePasswordForm = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
         </div>
         <div className="space-y-2">
@@ -124,7 +124,7 @@ export const ChangePasswordForm = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
         </div>
       </div>

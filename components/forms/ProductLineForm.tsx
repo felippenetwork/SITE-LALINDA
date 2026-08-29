@@ -67,7 +67,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
               if (!editingLine) setValue("slug", slugify(e.target.value));
             },
           })}
-          className="rounded-xl border-stone-100 bg-stone-50 focus:ring-primary h-12"
+          className="rounded-xl border-border bg-background focus:ring-primary h-12"
         />
         {errors.name && <p className="text-[10px] text-rose-500">{errors.name.message}</p>}
       </div>
@@ -83,7 +83,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
           id="slug"
           {...register("slug")}
           placeholder="ex: linha-premium"
-          className="rounded-xl border-stone-100 bg-stone-50 h-12"
+          className="rounded-xl border-border bg-background h-12"
         />
         {errors.slug && <p className="text-[10px] text-rose-500">{errors.slug.message}</p>}
       </div>
@@ -105,7 +105,7 @@ export const ProductLineForm = ({ editingLine, onSubmit, isPending }: ProductLin
         <Textarea
           id="description"
           {...register("description")}
-          className="rounded-xl border-stone-100 bg-stone-50 min-h-[100px]"
+          className="rounded-xl border-border bg-background min-h-[100px]"
         />
       </div>
 

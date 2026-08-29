@@ -30,8 +30,8 @@ export default function AdminCatalogoPage() {
   return (
     <>
       <div className="mb-12 lg:mb-16">
-        <h2 className="text-3xl md:text-4xl font-serif italic text-stone-900 mb-2">Catálogo</h2>
-        <p className="text-stone-400 font-sans text-xs md:text-sm tracking-wide">
+        <h2 className="text-3xl md:text-4xl font-serif italic text-foreground mb-2">Catálogo</h2>
+        <p className="text-muted-foreground font-sans text-xs md:text-sm tracking-wide">
           Gestão de linhas e produtos do catálogo artesanal La Linda
         </p>
       </div>

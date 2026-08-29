@@ -44,7 +44,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
             id="contactEmail"
             type="email"
             {...register("contactEmail")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.contactEmail && (
             <p className="text-[10px] text-rose-500">{errors.contactEmail.message}</p>
@@ -61,7 +61,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
           <Input
             id="contactPhone"
             {...register("contactPhone")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.contactPhone && (
             <p className="text-[10px] text-rose-500">{errors.contactPhone.message}</p>
@@ -81,7 +81,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
             id="instagramUrl"
             placeholder="https://instagram.com/lalinda"
             {...register("instagramUrl")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.instagramUrl && (
             <p className="text-[10px] text-rose-500">{errors.instagramUrl.message}</p>
@@ -99,7 +99,7 @@ export const SiteSettingsForm = ({ settings, onSubmit, isPending }: SiteSettings
             id="facebookUrl"
             placeholder="https://facebook.com/lalinda"
             {...register("facebookUrl")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.facebookUrl && (
             <p className="text-[10px] text-rose-500">{errors.facebookUrl.message}</p>

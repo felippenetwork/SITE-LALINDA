@@ -29,7 +29,7 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
   return (
     <Table>
       <TableHeader>
-        <TableRow className="border-stone-100 hover:bg-transparent">
+        <TableRow className="border-border hover:bg-transparent">
           <TableHead className="pl-8 py-6 text-[10px] uppercase tracking-widest font-black">
             Data
           </TableHead>
@@ -53,7 +53,7 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
             <TableCell colSpan={5} className="py-16 px-6">
               <div className="flex flex-col items-center justify-center text-center">
                 <MessageSquare className="text-stone-300 mb-4" size={32} />
-                <p className="text-sm text-stone-500">Nenhum lead recebido ainda.</p>
+                <p className="text-sm text-muted-foreground">Nenhum lead recebido ainda.</p>
               </div>
             </TableCell>
           </TableRow>
@@ -61,10 +61,10 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
           leads.map((lead) => (
             <TableRow
               key={lead.id}
-              className="border-stone-50 hover:bg-stone-50/50 transition-colors"
+              className="border-border hover:bg-background/50 transition-colors"
             >
               <TableCell className="pl-8 py-6">
-                <div className="flex items-center gap-2 text-stone-400">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <Clock size={12} />
                   <span className="text-[10px] font-sans font-black uppercase tracking-widest">
                     {lead.created_at ? new Date(lead.created_at).toLocaleDateString("pt-BR") : "—"}
@@ -73,10 +73,10 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
               </TableCell>
               <TableCell>
                 <div className="flex flex-col">
-                  <span className="font-sans font-semibold text-sm text-stone-900">
+                  <span className="font-sans font-semibold text-sm text-foreground">
                     {lead.name}
                   </span>
-                  <span className="text-xs text-stone-400 font-sans">{lead.email}</span>
+                  <span className="text-xs text-muted-foreground font-sans">{lead.email}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -87,11 +87,11 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
                   {lead.interest || "Geral"}
                 </Badge>
               </TableCell>
-              <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap text-stone-500 text-sm font-sans italic">
+              <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap text-muted-foreground text-sm font-sans italic">
                 &ldquo;{lead.message}&rdquo;
               </TableCell>
               <TableCell className="text-right pr-8">
-                <Badge className="bg-stone-900 text-white text-[9px] uppercase tracking-widest font-black px-3 rounded-full">
+                <Badge className="bg-foreground text-white text-[9px] uppercase tracking-widest font-black px-3 rounded-full">
                   Novo
                 </Badge>
               </TableCell>

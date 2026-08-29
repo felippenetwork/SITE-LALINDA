@@ -71,7 +71,7 @@ export const ProductForm = ({
         <Input
           id="name"
           {...register("name")}
-          className="rounded-xl border-stone-100 bg-stone-50 focus:ring-primary h-12"
+          className="rounded-xl border-border bg-background focus:ring-primary h-12"
         />
         {errors.name && <p className="text-[10px] text-rose-500">{errors.name.message}</p>}
       </div>
@@ -88,7 +88,7 @@ export const ProductForm = ({
             value={watch("categoryId")}
             onValueChange={(value) => setValue("categoryId", value, { shouldValidate: true })}
           >
-            <SelectTrigger id="categoryId" className="rounded-xl border-stone-100 bg-stone-50 h-12">
+            <SelectTrigger id="categoryId" className="rounded-xl border-border bg-background h-12">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -111,7 +111,7 @@ export const ProductForm = ({
             id="weight"
             {...register("weight")}
             placeholder="ex: 50g"
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.weight && <p className="text-[10px] text-rose-500">{errors.weight.message}</p>}
         </div>
@@ -128,7 +128,7 @@ export const ProductForm = ({
           id="boxWeight"
           {...register("boxWeight")}
           placeholder="ex: 5kg"
-          className="rounded-xl border-stone-100 bg-stone-50 h-12"
+          className="rounded-xl border-border bg-background h-12"
         />
       </div>
 
@@ -149,7 +149,7 @@ export const ProductForm = ({
         <Textarea
           id="description"
           {...register("description")}
-          className="rounded-xl border-stone-100 bg-stone-50 min-h-[100px]"
+          className="rounded-xl border-border bg-background min-h-[100px]"
         />
       </div>
 

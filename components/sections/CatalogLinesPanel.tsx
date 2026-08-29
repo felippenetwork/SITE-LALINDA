@@ -99,9 +99,9 @@ const SortableLineRow = ({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       onClick={onSelect}
       className={cn(
-        "border-stone-50 cursor-pointer transition-colors group",
+        "border-border cursor-pointer transition-colors group",
         isDragging ? "relative z-10 bg-white opacity-70" : "",
-        isSelected ? "bg-primary/5 border-l-4 border-l-primary" : "hover:bg-stone-50/50",
+        isSelected ? "bg-primary/5 border-l-4 border-l-primary" : "hover:bg-background/50",
       )}
     >
       <TableCell className="pl-4 py-4 w-8">
@@ -109,7 +109,7 @@ const SortableLineRow = ({
           type="button"
           aria-label={`Reordenar ${line.name}`}
           onClick={(e) => e.stopPropagation()}
-          className="text-stone-300 opacity-40 group-hover:opacity-100 hover:text-stone-500 transition-opacity cursor-grab active:cursor-grabbing"
+          className="text-stone-300 opacity-40 group-hover:opacity-100 hover:text-muted-foreground transition-opacity cursor-grab active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -117,7 +117,7 @@ const SortableLineRow = ({
         </button>
       </TableCell>
       <TableCell className="pl-2 py-4 w-14">
-        <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-stone-100 bg-stone-100">
+        <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-border bg-accent">
           {line.image && (
             <Image src={line.image} alt="" fill sizes="40px" className="object-cover" />
           )}
@@ -126,7 +126,7 @@ const SortableLineRow = ({
       <TableCell
         className={cn(
           "font-sans font-semibold text-sm",
-          isSelected ? "text-primary" : "text-stone-900",
+          isSelected ? "text-primary" : "text-foreground",
         )}
       >
         {line.name}
@@ -245,9 +245,9 @@ export const CatalogLinesPanel = ({
   };
 
   return (
-    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
-      <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
+      <CardHeader className="bg-background/50 border-b border-border p-6 flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-muted-foreground">
           Linhas de Produtos
         </CardTitle>
 
@@ -270,7 +270,7 @@ export const CatalogLinesPanel = ({
               <Plus size={16} />
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-[500px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8">
+          <DialogContent className="w-[95vw] sm:max-w-[500px] rounded-[1.5rem] sm:rounded-[2rem] border-border p-6 sm:p-8">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-3xl font-serif italic">
                 {editingLine ? "Editar Linha" : "Nova Linha"}
@@ -293,7 +293,7 @@ export const CatalogLinesPanel = ({
         ) : lines.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-16 px-6">
             <Layers className="text-stone-300 mb-4" size={32} />
-            <p className="text-sm text-stone-500 mb-4">Nenhuma linha cadastrada ainda.</p>
+            <p className="text-sm text-muted-foreground mb-4">Nenhuma linha cadastrada ainda.</p>
             <Button
               onClick={() => setIsDialogOpen(true)}
               className="bg-primary text-white rounded-full px-6 py-5 font-black text-[10px] uppercase tracking-widest h-auto"
@@ -309,7 +309,7 @@ export const CatalogLinesPanel = ({
           >
             <Table>
               <TableHeader>
-                <TableRow className="border-stone-100 hover:bg-transparent">
+                <TableRow className="border-border hover:bg-transparent">
                   <TableHead className="w-8 pl-4"></TableHead>
                   <TableHead className="w-14 pl-2"></TableHead>
                   <TableHead className="text-[10px] uppercase tracking-widest font-black">
@@ -356,7 +356,7 @@ export const CatalogLinesPanel = ({
         open={!!linePendingDelete}
         onOpenChange={(open) => !open && setLinePendingDelete(null)}
       >
-        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+        <AlertDialogContent className="rounded-[1.5rem] border-border">
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir linha</AlertDialogTitle>
             <AlertDialogDescription>
@@ -380,7 +380,7 @@ export const CatalogLinesPanel = ({
         open={!!lineCascadeConfirm}
         onOpenChange={(open) => !open && setLineCascadeConfirm(null)}
       >
-        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+        <AlertDialogContent className="rounded-[1.5rem] border-border">
           <AlertDialogHeader>
             <AlertDialogTitle>Linha possui produtos cadastrados</AlertDialogTitle>
             <AlertDialogDescription>

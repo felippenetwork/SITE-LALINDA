@@ -103,7 +103,7 @@ const SortableProductRow = ({
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
-        "border-stone-50 hover:bg-stone-50/50 transition-colors group",
+        "border-border hover:bg-background/50 transition-colors group",
         isDragging ? "relative z-10 bg-white opacity-70" : "",
       )}
     >
@@ -111,7 +111,7 @@ const SortableProductRow = ({
         <button
           type="button"
           aria-label={`Reordenar ${product.name}`}
-          className="text-stone-300 opacity-40 group-hover:opacity-100 hover:text-stone-500 transition-opacity cursor-grab active:cursor-grabbing"
+          className="text-stone-300 opacity-40 group-hover:opacity-100 hover:text-muted-foreground transition-opacity cursor-grab active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -119,15 +119,15 @@ const SortableProductRow = ({
         </button>
       </TableCell>
       <TableCell className="pl-2 py-4 w-14">
-        <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-stone-100 group-hover:scale-110 transition-transform">
+        <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-border group-hover:scale-110 transition-transform">
           <Image src={product.image} alt="" fill sizes="40px" className="object-cover" />
         </div>
       </TableCell>
-      <TableCell className="font-sans font-semibold text-sm text-stone-900">
+      <TableCell className="font-sans font-semibold text-sm text-foreground">
         {product.name}
       </TableCell>
-      <TableCell className="font-sans text-xs text-stone-500">
-        {product.weight} / <span className="text-stone-400">{product.boxWeight || "-"}</span>
+      <TableCell className="font-sans text-xs text-muted-foreground">
+        {product.weight} / <span className="text-muted-foreground">{product.boxWeight || "-"}</span>
       </TableCell>
       <TableCell>
         <Switch checked={product.available} disabled={isToggling} onCheckedChange={onToggle} />
@@ -247,10 +247,10 @@ export const CatalogProductsPanel = ({
 
   if (!selectedLine) {
     return (
-      <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
+      <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
         <CardContent className="flex flex-col items-center justify-center text-center py-24 px-6">
           <MousePointerClick className="text-stone-300 mb-4" size={32} />
-          <p className="text-sm text-stone-500">
+          <p className="text-sm text-muted-foreground">
             Crie ou selecione uma linha à esquerda para gerenciar os produtos dela.
           </p>
         </CardContent>
@@ -259,9 +259,9 @@ export const CatalogProductsPanel = ({
   }
 
   return (
-    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
-      <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
+      <CardHeader className="bg-background/50 border-b border-border p-6 flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-muted-foreground">
           Produtos — {selectedLine.name}
         </CardTitle>
 
@@ -284,7 +284,7 @@ export const CatalogProductsPanel = ({
               <Plus size={16} />
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-[500px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-[95vw] sm:max-w-[500px] rounded-[1.5rem] sm:rounded-[2rem] border-border p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-3xl font-serif italic">
                 {editingItem ? "Editar Produto" : "Novo Produto"}
@@ -309,7 +309,7 @@ export const CatalogProductsPanel = ({
         ) : lineProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-16 px-6">
             <Croissant className="text-stone-300 mb-4" size={32} />
-            <p className="text-sm text-stone-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Nenhum produto cadastrado nesta linha ainda.
             </p>
             <Button
@@ -327,7 +327,7 @@ export const CatalogProductsPanel = ({
           >
             <Table>
               <TableHeader>
-                <TableRow className="border-stone-100 hover:bg-transparent">
+                <TableRow className="border-border hover:bg-transparent">
                   <TableHead className="w-8 pl-4"></TableHead>
                   <TableHead className="w-14 pl-2"></TableHead>
                   <TableHead className="text-[10px] uppercase tracking-widest font-black">
@@ -376,7 +376,7 @@ export const CatalogProductsPanel = ({
         open={!!productPendingDelete}
         onOpenChange={(open) => !open && setProductPendingDelete(null)}
       >
-        <AlertDialogContent className="rounded-[1.5rem] border-stone-100">
+        <AlertDialogContent className="rounded-[1.5rem] border-border">
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir produto</AlertDialogTitle>
             <AlertDialogDescription>

@@ -29,7 +29,7 @@ export const StatsSettingsForm = ({ settings, onSubmit, isPending }: StatsSettin
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <div className="grid sm:grid-cols-3 gap-6">
         {([0, 1, 2] as const).map((index) => (
-          <div key={index} className="space-y-4 p-4 rounded-xl bg-stone-50 border border-stone-100">
+          <div key={index} className="space-y-4 p-4 rounded-xl bg-background border border-border">
             <div className="space-y-2">
               <Label
                 htmlFor={`stats.${index}.value`}
@@ -41,7 +41,7 @@ export const StatsSettingsForm = ({ settings, onSubmit, isPending }: StatsSettin
                 id={`stats.${index}.value`}
                 type="number"
                 {...register(`stats.${index}.value`)}
-                className="rounded-xl border-stone-100 bg-white h-12"
+                className="rounded-xl border-border bg-white h-12"
               />
               {errors.stats?.[index]?.value && (
                 <p className="text-[10px] text-rose-500">{errors.stats[index]?.value?.message}</p>
@@ -58,7 +58,7 @@ export const StatsSettingsForm = ({ settings, onSubmit, isPending }: StatsSettin
               <Input
                 id={`stats.${index}.label`}
                 {...register(`stats.${index}.label`)}
-                className="rounded-xl border-stone-100 bg-white h-12"
+                className="rounded-xl border-border bg-white h-12"
               />
               {errors.stats?.[index]?.label && (
                 <p className="text-[10px] text-rose-500">{errors.stats[index]?.label?.message}</p>

@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <QueryProvider>
-      <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row font-sans">
+      <div className="min-h-screen bg-background flex flex-col lg:flex-row font-sans">
         <AdminSidebar isAdmin={!!isAdmin} userEmail={user.email ?? ""} />
         <main className="flex-1 lg:ml-72 p-6 md:p-12 lg:p-16">{children}</main>
       </div>

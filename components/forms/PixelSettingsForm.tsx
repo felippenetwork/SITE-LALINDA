@@ -30,7 +30,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-      <p className="text-xs text-stone-400 leading-relaxed max-w-2xl">
+      <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
         Cole os códigos abaixo para ativar o rastreamento de visitantes no site. O Google Tag
         Manager já cobre Google Analytics e conversão do Google Ads — configure essas tags dentro do
         próprio painel do GTM (tagmanager.google.com), não aqui.
@@ -48,7 +48,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
             id="gtmId"
             placeholder="GTM-XXXXXXX"
             {...register("gtmId")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.gtmId && <p className="text-[10px] text-rose-500">{errors.gtmId.message}</p>}
         </div>
@@ -64,7 +64,7 @@ export const PixelSettingsForm = ({ settings, onSubmit, isPending }: PixelSettin
             id="metaPixelId"
             placeholder="123456789012345"
             {...register("metaPixelId")}
-            className="rounded-xl border-stone-100 bg-stone-50 h-12"
+            className="rounded-xl border-border bg-background h-12"
           />
           {errors.metaPixelId && (
             <p className="text-[10px] text-rose-500">{errors.metaPixelId.message}</p>

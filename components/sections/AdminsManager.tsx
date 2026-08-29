@@ -94,9 +94,9 @@ export const AdminsManager = () => {
   };
 
   return (
-    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
-      <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+    <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
+      <CardHeader className="bg-background/50 border-b border-border p-6 flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-muted-foreground">
           Usuários do Painel
         </CardTitle>
 
@@ -110,7 +110,7 @@ export const AdminsManager = () => {
               <Plus size={16} />
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[95vw] sm:max-w-[460px] rounded-[1.5rem] sm:rounded-[2rem] border-stone-100 p-6 sm:p-8">
+          <DialogContent className="w-[95vw] sm:max-w-[460px] rounded-[1.5rem] sm:rounded-[2rem] border-border p-6 sm:p-8">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-3xl font-serif italic">Novo Usuário</DialogTitle>
             </DialogHeader>
@@ -120,7 +120,7 @@ export const AdminsManager = () => {
                 <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
                   Nível de Acesso
                 </Label>
-                <div className="grid grid-cols-2 gap-2 bg-stone-50 border border-stone-100 rounded-xl p-1">
+                <div className="grid grid-cols-2 gap-2 bg-background border border-border rounded-xl p-1">
                   {(["operador", "admin"] as const).map((option) => (
                     <button
                       key={option}
@@ -130,14 +130,14 @@ export const AdminsManager = () => {
                         "rounded-lg py-2.5 text-[10px] font-black uppercase tracking-widest transition-all",
                         role === option
                           ? "bg-primary text-white shadow-sm"
-                          : "text-stone-500 hover:text-foreground",
+                          : "text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {ROLE_LABEL[option]}
                     </button>
                   ))}
                 </div>
-                <p className="text-[10px] text-stone-400 leading-relaxed">
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
                   {role === "admin"
                     ? "Acesso total: catálogo, leads e configurações do site."
                     : "Acesso ao catálogo e aos leads. Sem acesso a configurações do site nem a criação de outros usuários."}
@@ -156,7 +156,7 @@ export const AdminsManager = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="rounded-xl border-stone-100 bg-stone-50 h-12"
+                  className="rounded-xl border-border bg-background h-12"
                 />
               </div>
 
@@ -185,18 +185,18 @@ export const AdminsManager = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="rounded-xl border-stone-100 bg-stone-50 h-12 pr-12"
+                    className="rounded-xl border-border bg-background h-12 pr-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-foreground transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
-                <p className="text-[10px] text-stone-400 leading-relaxed">
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
                   Anote essa senha e compartilhe com a pessoa por um canal seguro — ela não fica
                   visível novamente depois de criada.
                 </p>
@@ -227,7 +227,7 @@ export const AdminsManager = () => {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="border-stone-100 hover:bg-transparent">
+              <TableRow className="border-border hover:bg-transparent">
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
                   E-mail
                 </TableHead>
@@ -243,9 +243,9 @@ export const AdminsManager = () => {
               {admins.map((admin: AdminUser) => (
                 <TableRow
                   key={`${admin.userId}-${admin.role}`}
-                  className="border-stone-50 hover:bg-stone-50/50 transition-colors group"
+                  className="border-border hover:bg-background/50 transition-colors group"
                 >
-                  <TableCell className="font-sans font-semibold text-sm text-stone-900">
+                  <TableCell className="font-sans font-semibold text-sm text-foreground">
                     <div className="flex items-center gap-3">
                       {admin.email}
                       {admin.isSelf && (
@@ -260,8 +260,8 @@ export const AdminsManager = () => {
                       className={cn(
                         "text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full",
                         admin.role === "admin"
-                          ? "text-stone-700 bg-stone-100"
-                          : "text-stone-500 bg-stone-50 border border-stone-100",
+                          ? "text-stone-700 bg-accent"
+                          : "text-muted-foreground bg-background border border-border",
                       )}
                     >
                       {ROLE_LABEL[admin.role]}
@@ -274,6 +274,11 @@ export const AdminsManager = () => {
                       disabled={admin.isSelf || removeMutation.isPending}
                       title={admin.isSelf ? "Você não pode remover seu próprio acesso" : "Remover"}
                       onClick={() => {
+                        // PENDING: native confirm(), unlike every destructive
+                        // action in CatalogLinesPanel/CatalogProductsPanel,
+                        // which use AlertDialog (shadcn/ui). Bring this in
+                        // line with that pattern next time admin
+                        // native-component debt gets revisited.
                         if (confirm(`Deseja realmente remover o acesso de "${admin.email}"?`)) {
                           removeMutation.mutate({ userId: admin.userId, role: admin.role });
                         }

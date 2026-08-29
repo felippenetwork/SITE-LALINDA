@@ -14,17 +14,17 @@ export default function AdminLeadsPage() {
   return (
     <>
       <div className="mb-12 lg:mb-16">
-        <h2 className="text-3xl md:text-4xl font-serif italic text-stone-900 mb-2">
+        <h2 className="text-3xl md:text-4xl font-serif italic text-foreground mb-2">
           Leads e Contatos
         </h2>
-        <p className="text-stone-400 font-sans text-xs md:text-sm tracking-wide">
+        <p className="text-muted-foreground font-sans text-xs md:text-sm tracking-wide">
           Novas oportunidades de negócio
         </p>
       </div>
 
-      <Card className="rounded-[1.5rem] md:rounded-[2rem] border-stone-100 shadow-sm overflow-hidden">
-        <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-stone-500">
+      <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
+        <CardHeader className="bg-background/50 border-b border-border p-6 flex-row items-center justify-between space-y-0">
+          <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-muted-foreground">
             Oportunidades — {leads.length} Leads
           </CardTitle>
         </CardHeader>

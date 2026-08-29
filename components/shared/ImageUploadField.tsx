@@ -55,7 +55,7 @@ export const ImageUploadField = ({ label, value, onChange }: ImageUploadFieldPro
       </span>
 
       <div className="flex items-center gap-4">
-        <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-stone-100 bg-stone-50 shrink-0">
+        <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-background shrink-0">
           {value ? (
             <Image src={value} alt="" fill sizes="80px" className="object-cover" />
           ) : (
@@ -83,7 +83,7 @@ export const ImageUploadField = ({ label, value, onChange }: ImageUploadFieldPro
               type="button"
               onClick={() => inputRef.current?.click()}
               disabled={isUploading}
-              className="px-5 py-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-[10px] font-sans uppercase tracking-widest font-black text-stone-600 transition-colors disabled:opacity-50"
+              className="px-5 py-3 rounded-xl border border-border bg-background hover:bg-accent text-[10px] font-sans uppercase tracking-widest font-black text-stone-600 transition-colors disabled:opacity-50"
             >
               {isUploading ? "Enviando..." : value ? "Trocar Imagem" : "Enviar Imagem"}
             </button>

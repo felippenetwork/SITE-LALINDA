@@ -61,7 +61,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
             <p className="text-xs font-sans font-semibold text-white truncate" title={userEmail}>
               {userEmail}
             </p>
-            <p className="text-[9px] font-sans uppercase tracking-widest text-stone-500">
+            <p className="text-[9px] font-sans uppercase tracking-widest text-muted-foreground-on-dark">
               {roleLabel}
             </p>
           </div>
@@ -71,7 +71,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
         align="start"
         side="top"
         sideOffset={8}
-        className="w-64 bg-stone-900 border-stone-800 text-white p-2 rounded-2xl"
+        className="w-64 bg-foreground border-stone-800 text-white p-2 rounded-2xl"
       >
         <DropdownMenuItem
           onClick={() => setIsPasswordDialogOpen(true)}
@@ -119,7 +119,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-sans uppercase tracking-[0.2em] font-black transition-all",
                 pathname === item.href
                   ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]"
-                  : "text-stone-500 hover:text-white hover:bg-white/5",
+                  : "text-muted-foreground-on-dark hover:text-white hover:bg-white/5",
               )}
             >
               <item.icon size={18} />
@@ -131,7 +131,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
         <div className="mt-auto pt-8 border-t border-stone-800 space-y-4">
           <Link
             href="/"
-            className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+            className="flex items-center gap-4 px-4 py-2 text-muted-foreground-on-dark hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
           >
             <ExternalLink size={14} /> Site Público
           </Link>
@@ -163,7 +163,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
                       "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-sans uppercase tracking-[0.2em] font-black transition-all",
                       pathname === item.href
                         ? "bg-primary text-white"
-                        : "text-stone-500 hover:text-white hover:bg-white/5",
+                        : "text-muted-foreground-on-dark hover:text-white hover:bg-white/5",
                     )}
                   >
                     <item.icon size={18} />
@@ -176,7 +176,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
               <SheetClose asChild>
                 <Link
                   href="/"
-                  className="flex items-center gap-4 px-4 py-2 text-stone-500 hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
+                  className="flex items-center gap-4 px-4 py-2 text-muted-foreground-on-dark hover:text-white transition-colors text-xs uppercase tracking-widest font-black"
                 >
                   <ExternalLink size={14} /> Site Público
                 </Link>

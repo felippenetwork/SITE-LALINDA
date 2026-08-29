@@ -50,10 +50,10 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center p-4 md:p-8 font-serif selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 font-serif selection:bg-primary selection:text-white">
       <Link
         href="/"
-        className="inline-flex items-center gap-4 text-stone-400 font-sans uppercase tracking-widest text-[8px] md:text-[10px] font-black mb-8 md:mb-12 hover:text-foreground transition-colors group"
+        className="inline-flex items-center gap-4 text-muted-foreground font-sans uppercase tracking-widest text-[8px] md:text-[10px] font-black mb-8 md:mb-12 hover:text-foreground transition-colors group"
       >
         <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Voltar
         ao Início
@@ -61,18 +61,20 @@ export function LoginForm() {
 
       <div className="w-full max-w-[450px]">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-4xl md:text-5xl italic text-stone-900 mb-4 leading-none">La Linda</h1>
+          <h1 className="text-4xl md:text-5xl italic text-foreground mb-4 leading-none">
+            La Linda
+          </h1>
           <span className="text-[10px] font-sans font-black uppercase tracking-[0.4em] text-primary block">
             Acesso Reservado
           </span>
         </div>
 
-        <Card className="rounded-[2rem] md:rounded-[3rem] border-stone-100 shadow-sm overflow-hidden">
-          <CardHeader className="bg-stone-50/50 border-b border-stone-100 p-6 md:p-10 text-center">
-            <CardTitle className="text-xl md:text-2xl italic text-stone-900">
+        <Card className="rounded-[2rem] md:rounded-[3rem] border-border shadow-sm overflow-hidden">
+          <CardHeader className="bg-background/50 border-b border-border p-6 md:p-10 text-center">
+            <CardTitle className="text-xl md:text-2xl italic text-foreground">
               Login Administrativo
             </CardTitle>
-            <CardDescription className="font-sans text-stone-400 text-[10px] md:text-xs uppercase tracking-widest mt-2 font-bold">
+            <CardDescription className="font-sans text-muted-foreground text-[10px] md:text-xs uppercase tracking-widest mt-2 font-bold">
               Gerencie seu catálogo artesanal
             </CardDescription>
           </CardHeader>
@@ -93,7 +95,7 @@ export function LoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="admin@lalinda.com.br"
-                  className="rounded-2xl border-stone-100 bg-stone-50 h-14 focus:ring-primary focus:border-primary px-6 font-sans text-sm"
+                  className="rounded-2xl border-border bg-background h-14 focus:ring-primary focus:border-primary px-6 font-sans text-sm"
                 />
               </div>
 
@@ -111,7 +113,7 @@ export function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="rounded-2xl border-stone-100 bg-stone-50 h-14 focus:ring-primary focus:border-primary px-6 font-sans text-sm"
+                  className="rounded-2xl border-border bg-background h-14 focus:ring-primary focus:border-primary px-6 font-sans text-sm"
                 />
               </div>
 

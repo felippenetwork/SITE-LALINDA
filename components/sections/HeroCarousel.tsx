@@ -46,7 +46,7 @@ export const HeroCarousel = () => {
   ];
 
   return (
-    <section className="relative h-[65vh] md:h-[75vh] lg:h-[85vh] overflow-hidden bg-stone-900">
+    <section className="relative h-[65vh] md:h-[75vh] lg:h-[85vh] overflow-hidden bg-foreground">
       <div className="h-full" ref={emblaRef}>
         <div className="flex h-full">
           {slides.map((s, i) => (
@@ -66,8 +66,8 @@ export const HeroCarousel = () => {
                   className="object-cover opacity-60"
                 />
               </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-r from-stone-900/85 via-stone-900/55 to-stone-900/20" />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/55 to-foreground/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
               <div className="absolute inset-0 flex items-center px-6 md:px-24">
                 <div className="max-w-4xl">
                   <motion.span

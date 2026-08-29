@@ -14,7 +14,7 @@ export const HeritageSection = () => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <section className="py-20 md:py-40 bg-stone-900 text-white overflow-hidden">
+    <section className="py-20 md:py-40 bg-foreground text-white overflow-hidden">
       <div className="container mx-auto px-6 md:px-8">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 md:gap-32">
           <div className="w-full lg:w-1/2 order-1">
@@ -52,14 +52,14 @@ export const HeritageSection = () => {
                 Fibras.
               </h2>
             </div>
-            <p className="text-stone-400 font-sans leading-relaxed text-base md:text-xl max-w-md">
+            <p className="text-muted-foreground-on-dark font-sans leading-relaxed text-base md:text-xl max-w-md">
               Desde 2011, nossa missão é preservar a essência do pão. Assista ao documentário que
               revela o segredo de nossa referência em qualidade.
             </p>
             <div className="pt-4">
               <Link
                 href="/a-lalinda"
-                className="bg-white text-stone-900 px-10 md:px-14 py-5 md:py-7 rounded-full font-sans uppercase tracking-[0.2em] text-[9px] md:text-[10px] font-black hover:bg-primary hover:text-white transition-all shadow-xl shadow-black/10 active:scale-95"
+                className="bg-white text-foreground px-10 md:px-14 py-5 md:py-7 rounded-full font-sans uppercase tracking-[0.2em] text-[9px] md:text-[10px] font-black hover:bg-primary hover:text-white transition-all shadow-xl shadow-black/10 active:scale-95"
               >
                 Nossa Jornada
               </Link>

@@ -40,7 +40,7 @@ const EssenceCard = ({ product, index, isFeatured }: EssenceCardProps) => {
           inView ? "grayscale-0" : "grayscale"
         }`}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/10 to-transparent opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5 md:p-8 md:opacity-0 md:group-hover:opacity-100">
+      <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5 md:p-8 md:opacity-0 md:group-hover:opacity-100">
         <h4 className="text-white font-serif italic text-xl md:text-2xl mb-1 md:mb-2">
           {product.name}
         </h4>
@@ -74,7 +74,7 @@ export const EssenceSection = ({ featuredProducts }: EssenceSectionProps) => {
                 Pão, <br />
                 Propósito <br />& Paixão
               </h2>
-              <p className="text-stone-500 font-sans leading-relaxed text-base md:text-lg max-w-md mb-8 md:mb-12">
+              <p className="text-muted-foreground font-sans leading-relaxed text-base md:text-lg max-w-md mb-8 md:mb-12">
                 Cada fornada carrega o compromisso de honrar a tradição artesanal, transformando o
                 simples pão em um banquete de memórias.
               </p>
@@ -83,10 +83,10 @@ export const EssenceSection = ({ featuredProducts }: EssenceSectionProps) => {
                 className="inline-flex items-center gap-4 text-foreground font-sans uppercase tracking-widest text-[9px] md:text-[10px] font-black group"
               >
                 Nossa História{" "}
-                <span className="w-8 h-[1px] md:w-12 bg-stone-200 group-hover:w-20 group-hover:bg-primary transition-all"></span>
+                <span className="w-8 h-[1px] md:w-12 bg-border group-hover:w-20 group-hover:bg-primary transition-all"></span>
               </Link>
             </motion.div>
-            <div className="absolute -top-10 -left-10 md:-top-20 md:-left-20 text-[12rem] md:text-[20rem] font-serif italic text-stone-100 -z-10 select-none">
+            <div className="absolute -top-10 -left-10 md:-top-20 md:-left-20 text-[12rem] md:text-[20rem] font-serif italic text-border -z-10 select-none">
               L
             </div>
           </div>

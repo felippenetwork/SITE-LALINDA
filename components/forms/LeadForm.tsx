@@ -63,7 +63,7 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
         <h3 className="text-3xl md:text-4xl font-serif italic text-white mb-6">
           Mensagem Recebida
         </h3>
-        <p className="text-stone-400 font-sans leading-relaxed max-w-xs mx-auto">
+        <p className="text-muted-foreground-on-dark font-sans leading-relaxed max-w-xs mx-auto">
           Logo um de nossos especialistas entrará em contato com você.
         </p>
         <button
@@ -91,12 +91,12 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
       />
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-base uppercase tracking-widest font-bold text-muted-foreground-on-dark">
             Seu Nome <span className="text-primary">*</span>
           </label>
           <input
             {...register("name")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-muted-foreground-on-dark"
             placeholder="Nome Completo"
           />
           {errors.name && (
@@ -104,13 +104,13 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-base uppercase tracking-widest font-bold text-muted-foreground-on-dark">
             Seu E-mail <span className="text-primary">*</span>
           </label>
           <input
             type="email"
             {...register("email")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-muted-foreground-on-dark"
             placeholder="exemplo@email.com"
           />
           {errors.email && (
@@ -120,13 +120,13 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
       </div>
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-2">
-          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-base uppercase tracking-widest font-bold text-muted-foreground-on-dark">
             Telefone <span className="text-primary">*</span>
           </label>
           <input
             type="tel"
             {...register("phone")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-muted-foreground-on-dark"
             placeholder="(11) 99999-9999"
           />
           {errors.phone && (
@@ -134,12 +134,12 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
           )}
         </div>
         <div className="space-y-2">
-          <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+          <label className="text-base uppercase tracking-widest font-bold text-muted-foreground-on-dark">
             Assunto <span className="text-primary">*</span>
           </label>
           <input
             {...register("interest")}
-            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-stone-700"
+            className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors placeholder:text-muted-foreground-on-dark"
             placeholder="Ex: Revenda, Eventos, etc."
           />
           {errors.interest && (
@@ -148,13 +148,13 @@ export const LeadForm = ({ formToken }: LeadFormProps) => {
         </div>
       </div>
       <div className="space-y-2">
-        <label className="text-base uppercase tracking-widest font-bold text-stone-400">
+        <label className="text-base uppercase tracking-widest font-bold text-muted-foreground-on-dark">
           Mensagem <span className="text-primary">*</span>
         </label>
         <textarea
           {...register("message")}
           rows={4}
-          className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors resize-none placeholder:text-stone-700"
+          className="w-full bg-transparent border-b border-white/10 py-4 text-white font-sans font-medium text-base md:text-lg focus:border-primary outline-none transition-colors resize-none placeholder:text-muted-foreground-on-dark"
           placeholder="Como podemos ajudar?"
         />
         {errors.message && (

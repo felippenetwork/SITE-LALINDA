@@ -14,7 +14,7 @@ export const ProductLinesBar = ({ lines }: ProductLinesBarProps) => {
 
   return (
     <section className="relative z-20 -mt-10 px-8">
-      <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-2xl shadow-stone-200/50 border border-stone-100 p-6 md:p-8">
+      <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-2xl shadow-border/50 border border-border p-6 md:p-8">
         <div className="overflow-hidden" ref={emblaLines}>
           <div className="flex gap-8 md:gap-24 items-center">
             {lines.map((line) => (
@@ -23,12 +23,12 @@ export const ProductLinesBar = ({ lines }: ProductLinesBarProps) => {
                 key={line.id}
                 className="flex-[0_0_auto] group flex flex-col items-center gap-2 md:gap-3"
               >
-                <span className="relative block w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden transition-transform duration-500 group-hover:scale-110 bg-stone-100">
+                <span className="relative block w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden transition-transform duration-500 group-hover:scale-110 bg-accent">
                   {line.image && (
                     <Image src={line.image} alt="" fill sizes="64px" className="object-cover" />
                   )}
                 </span>
-                <span className="text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] font-black text-stone-500 group-hover:text-primary transition-colors">
+                <span className="text-[10px] md:text-xs font-sans uppercase tracking-[0.2em] font-black text-muted-foreground group-hover:text-primary transition-colors">
                   {line.name}
                 </span>
               </Link>

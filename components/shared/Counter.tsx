@@ -54,7 +54,7 @@ export const Counter = ({ value, label, suffix = "" }: CounterProps) => {
         {count}
         {suffix}
       </div>
-      <div className="text-stone-400 font-sans uppercase tracking-[0.2em] text-[10px] font-bold">
+      <div className="text-muted-foreground-on-dark font-sans uppercase tracking-[0.2em] text-[10px] font-bold">
         {label}
       </div>
     </div>

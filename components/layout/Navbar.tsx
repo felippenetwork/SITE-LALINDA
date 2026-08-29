@@ -25,8 +25,8 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-500",
         isTransparent
-          ? "bg-stone-900/40 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none border-b border-white/5 lg:border-none"
-          : "bg-white/80 backdrop-blur-md border-b border-stone-100",
+          ? "bg-foreground/40 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none border-b border-white/5 lg:border-none"
+          : "bg-white/80 backdrop-blur-md border-b border-border",
       )}
     >
       <nav className="mx-auto px-4 md:px-8 py-3 md:py-6 flex items-center justify-between">
@@ -46,7 +46,7 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
             "hidden lg:flex items-center gap-12 px-10 py-4 rounded-full border shadow-sm backdrop-blur-md",
             isTransparent || isDark
               ? "bg-white/5 border-white/10"
-              : "bg-stone-50/50 border-stone-100",
+              : "bg-background/50 border-border",
           )}
         >
           {menuItems.map((item) => (
@@ -57,7 +57,7 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
                 "relative text-[10px] font-sans uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:text-primary group/nav",
                 (isTransparent || isDark) && activeItem !== item.label ? "text-white" : "",
                 !isTransparent && !isDark && activeItem !== item.label
-                  ? "text-stone-400 hover:text-foreground"
+                  ? "text-muted-foreground hover:text-foreground"
                   : "",
                 activeItem === item.label ? "text-primary" : "",
               )}
@@ -86,7 +86,7 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
               <button
                 className={cn(
                   "lg:hidden p-2 hover:text-primary transition-colors",
-                  isTransparent || isDark ? "text-white mix-blend-difference" : "text-stone-900",
+                  isTransparent || isDark ? "text-white mix-blend-difference" : "text-foreground",
                 )}
                 aria-label="Menu"
               >
@@ -95,7 +95,7 @@ export const Navbar = ({ variant = "light", activeItem }: NavbarProps) => {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="bg-stone-900 border-stone-800 text-white p-12 flex flex-col justify-center"
+              className="bg-foreground border-stone-800 text-white p-12 flex flex-col justify-center"
             >
               <nav className="flex flex-col gap-8 text-center">
                 {menuItems.map((item) => (

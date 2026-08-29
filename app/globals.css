@@ -32,6 +32,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-muted-foreground-on-dark: var(--muted-foreground-on-dark);
 
   --font-serif: "Instrument Serif", serif;
   --font-sans: "Work Sans", sans-serif;
@@ -69,6 +70,11 @@
   --border: oklch(0.92 0.015 60);
   --input: oklch(0.92 0.015 60);
   --ring: oklch(0.6 0.12 30);
+
+  /* Muted text meant to sit on a dark (--foreground-toned) surface — e.g.
+     input placeholders in ContactSection/LeadForm. --muted-foreground is
+     tuned for light backgrounds and reads as near-invisible on dark ones. */
+  --muted-foreground-on-dark: oklch(0.55 0.02 40);
 }
 
 .dark {

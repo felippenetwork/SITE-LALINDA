@@ -6,7 +6,7 @@ export const Footer = async () => {
   const hasSocials = Boolean(instagramUrl || facebookUrl);
 
   return (
-    <footer className="py-12 md:py-16 bg-stone-900 text-stone-400 border-t border-white/5">
+    <footer className="py-12 md:py-16 bg-foreground text-muted-foreground-on-dark border-t border-white/5">
       <div className="container mx-auto px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
           <h3 className="text-4xl md:text-5xl font-serif italic text-white">La Linda</h3>

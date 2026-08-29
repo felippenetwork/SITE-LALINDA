@@ -46,7 +46,7 @@ export default async function ProductLinePage({ params }: LinePageProps) {
     <div className="min-h-screen bg-background font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="Produtos" />
 
-      <main className="pb-24">
+      <main>
         <section className="relative h-[45vh] md:h-[55vh] overflow-hidden bg-foreground">
           {line.image && (
             <Image
@@ -78,7 +78,7 @@ export default async function ProductLinePage({ params }: LinePageProps) {
           </div>
         </section>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-16 md:pt-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-16 md:pb-24">
           {products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
               {products.map((item) => (

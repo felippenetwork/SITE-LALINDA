@@ -53,7 +53,7 @@ export default async function ProdutosPage() {
           </div>
         </section>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-16 md:pb-24">
           <ProductLinesShowcase lines={lines} />
         </div>
       </main>

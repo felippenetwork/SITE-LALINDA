@@ -13,7 +13,7 @@ export const ContactSection = ({ settings }: ContactSectionProps) => {
   return (
     <section
       id="contato"
-      className="pt-20 md:pt-40 pb-12 md:pb-20 px-4 md:px-8 bg-background relative"
+      className="pt-20 md:pt-40 pb-16 md:pb-24 px-4 md:px-8 bg-background relative"
     >
       <div className="container mx-auto max-w-7xl">
         <div className="bg-foreground rounded-[3rem] md:rounded-[6rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl relative">

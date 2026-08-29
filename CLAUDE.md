@@ -34,7 +34,7 @@ Standard App Router file conventions. Notable routes:
 - `/produtos` — overview of product lines (`ProductLinesShowcase`), not a flat catalog.
 - `/produtos/linha/[slug]` — one line's page: header + grid of its products. 404s if the line doesn't exist or is paused (`available = false`).
 - `/produtos/[productId]` — single product detail.
-- `/admin/*` — gated by `middleware.ts` (redirects to `/auth` if unauthenticated) and re-checked in `app/admin/layout.tsx` (Supabase's own guidance: don't rely on middleware alone). Contains `produtos`, `linhas`, `leads` sections, each a client component using TanStack Query for the list + a dialog form for create/edit. Destructive actions use `AlertDialog` (shadcn/ui) instead of native `confirm()` — except `AdminsManager.tsx`'s "remove access" action, which still calls `window.confirm()` directly. Known, deferred pending item: bring it in line with the same `AlertDialog` pattern next time native-component debt in the admin gets revisited.
+- `/admin/*` — gated by `middleware.ts` (redirects to `/auth` if unauthenticated) and re-checked in `app/admin/layout.tsx` (Supabase's own guidance: don't rely on middleware alone). Contains `produtos`, `linhas`, `leads` sections, each a client component using TanStack Query for the list + a dialog form for create/edit. Every destructive action (products, lines, and admin/operador access removal) uses `AlertDialog` (shadcn/ui) instead of native `confirm()`.
 - `app/error.tsx` / `app/global-error.tsx` / `app/not-found.tsx` — standard Next.js error boundaries; no custom error pipeline beyond these.
 
 ### Server actions and the three-Supabase-client model

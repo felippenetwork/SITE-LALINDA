@@ -26,6 +26,16 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 const ROLE_LABEL: Record<PanelRole, string> = {
@@ -47,6 +57,7 @@ export const AdminsManager = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<PanelRole>("operador");
   const [showPassword, setShowPassword] = useState(false);
+  const [adminPendingRemoval, setAdminPendingRemoval] = useState<AdminUser | null>(null);
 
   const { data: admins = [], isLoading } = useQuery({
     queryKey: ["admins"],
@@ -79,6 +90,7 @@ export const AdminsManager = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admins"] });
       toast.success("Acesso removido");
+      setAdminPendingRemoval(null);
     },
     onError: (error: Error) => {
       toast.error("Erro ao remover: " + error.message);
@@ -273,16 +285,7 @@ export const AdminsManager = () => {
                       size="icon"
                       disabled={admin.isSelf || removeMutation.isPending}
                       title={admin.isSelf ? "Você não pode remover seu próprio acesso" : "Remover"}
-                      onClick={() => {
-                        // PENDING: native confirm(), unlike every destructive
-                        // action in CatalogLinesPanel/CatalogProductsPanel,
-                        // which use AlertDialog (shadcn/ui). Bring this in
-                        // line with that pattern next time admin
-                        // native-component debt gets revisited.
-                        if (confirm(`Deseja realmente remover o acesso de "${admin.email}"?`)) {
-                          removeMutation.mutate({ userId: admin.userId, role: admin.role });
-                        }
-                      }}
+                      onClick={() => setAdminPendingRemoval(admin)}
                       className="h-10 w-10 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all disabled:opacity-30"
                     >
                       <Trash2 size={16} />
@@ -294,6 +297,36 @@ export const AdminsManager = () => {
           </Table>
         )}
       </CardContent>
+
+      <AlertDialog
+        open={!!adminPendingRemoval}
+        onOpenChange={(open) => !open && setAdminPendingRemoval(null)}
+      >
+        <AlertDialogContent className="rounded-[1.5rem] border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover acesso</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja realmente remover o acesso de &quot;{adminPendingRemoval?.email}&quot; (
+              {adminPendingRemoval && ROLE_LABEL[adminPendingRemoval.role]})? Essa pessoa perderá
+              acesso ao painel imediatamente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                adminPendingRemoval &&
+                removeMutation.mutate({
+                  userId: adminPendingRemoval.userId,
+                  role: adminPendingRemoval.role,
+                })
+              }
+            >
+              Remover
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };

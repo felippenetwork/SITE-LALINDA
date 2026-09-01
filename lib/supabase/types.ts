@@ -38,6 +38,123 @@ export type Database = {
         };
         Relationships: [];
       };
+      clientes: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          origem_lead_id: string | null;
+          razao_social: string;
+          cnpj: string;
+          inscricao_estadual: string | null;
+          email: string;
+          contato_nome: string;
+          telefone: string;
+          logradouro: string;
+          numero: string | null;
+          bairro: string | null;
+          cidade: string;
+          uf: string;
+          cep: string;
+          status: string;
+          grupo_preco_id: string | null;
+          aprovado_por: string | null;
+          aprovado_em: string | null;
+          boleto_liberado: boolean;
+          boleto_prazos_dias: number[] | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          origem_lead_id?: string | null;
+          razao_social: string;
+          cnpj: string;
+          inscricao_estadual?: string | null;
+          email: string;
+          contato_nome: string;
+          telefone: string;
+          logradouro: string;
+          numero?: string | null;
+          bairro?: string | null;
+          cidade: string;
+          uf: string;
+          cep: string;
+          status?: string;
+          grupo_preco_id?: string | null;
+          aprovado_por?: string | null;
+          aprovado_em?: string | null;
+          boleto_liberado?: boolean;
+          boleto_prazos_dias?: number[] | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          origem_lead_id?: string | null;
+          razao_social?: string;
+          cnpj?: string;
+          inscricao_estadual?: string | null;
+          email?: string;
+          contato_nome?: string;
+          telefone?: string;
+          logradouro?: string;
+          numero?: string | null;
+          bairro?: string | null;
+          cidade?: string;
+          uf?: string;
+          cep?: string;
+          status?: string;
+          grupo_preco_id?: string | null;
+          aprovado_por?: string | null;
+          aprovado_em?: string | null;
+          boleto_liberado?: boolean;
+          boleto_prazos_dias?: number[] | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "clientes_grupo_preco_id_fkey";
+            columns: ["grupo_preco_id"];
+            isOneToOne: false;
+            referencedRelation: "grupos_preco";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clientes_origem_lead_id_fkey";
+            columns: ["origem_lead_id"];
+            isOneToOne: false;
+            referencedRelation: "leads";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      grupos_preco: {
+        Row: {
+          id: string;
+          nome: string;
+          descricao: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          nome: string;
+          descricao?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          nome?: string;
+          descricao?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       leads: {
         Row: {
           created_at: string | null;

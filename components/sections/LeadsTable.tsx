@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -9,15 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Loader2, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Clock, Loader2, MessageSquare, Building2 } from "lucide-react";
 import type { Lead } from "@/lib/data/leads";
 
 interface LeadsTableProps {
   leads: Lead[];
   isLoading: boolean;
+  convertedLeadIds: Set<string>;
 }
 
-export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
+export const LeadsTable = ({ leads, isLoading, convertedLeadIds }: LeadsTableProps) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -42,15 +45,18 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
           <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
             Mensagem
           </TableHead>
-          <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
+          <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
             Status
+          </TableHead>
+          <TableHead className="text-right pr-8 py-6 text-[10px] uppercase tracking-widest font-black">
+            Cliente
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {leads.length === 0 ? (
           <TableRow className="hover:bg-transparent">
-            <TableCell colSpan={5} className="py-16 px-6">
+            <TableCell colSpan={6} className="py-16 px-6">
               <div className="flex flex-col items-center justify-center text-center">
                 <MessageSquare className="text-stone-300 mb-4" size={32} />
                 <p className="text-sm text-muted-foreground">Nenhum lead recebido ainda.</p>
@@ -90,10 +96,31 @@ export const LeadsTable = ({ leads, isLoading }: LeadsTableProps) => {
               <TableCell className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap text-muted-foreground text-sm font-sans italic">
                 &ldquo;{lead.message}&rdquo;
               </TableCell>
-              <TableCell className="text-right pr-8">
+              <TableCell>
                 <Badge className="bg-foreground text-white text-[9px] uppercase tracking-widest font-black px-3 rounded-full">
                   Novo
                 </Badge>
+              </TableCell>
+              <TableCell className="text-right pr-8">
+                {convertedLeadIds.has(lead.id) ? (
+                  <Badge
+                    variant="outline"
+                    className="bg-emerald-50 border-emerald-100 text-emerald-600 text-[9px] uppercase tracking-widest font-black px-3"
+                  >
+                    Já é Cliente
+                  </Badge>
+                ) : (
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full border-border text-[9px] uppercase tracking-widest font-black h-8"
+                  >
+                    <Link href={`/admin/clientes?fromLead=${lead.id}`}>
+                      <Building2 size={12} className="mr-1.5" /> Converter em Cliente
+                    </Link>
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))

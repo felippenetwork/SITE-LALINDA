@@ -3,7 +3,7 @@
 import { after } from "next/server";
 import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { getLeads } from "@/lib/data/leads";
+import { getLeads, getLeadById } from "@/lib/data/leads";
 import { leadSchema } from "@/lib/validation/lead";
 import { isFormTokenValid } from "@/lib/security/lead-form-token";
 import { checkLeadRateLimit, getClientIp } from "@/lib/security/lead-rate-limit";
@@ -14,6 +14,11 @@ import { getSiteSettings } from "@/lib/data/site-settings";
 // still enforces the `has_role` check, this adds no extra trust.
 export async function getLeadsAction() {
   return getLeads();
+}
+
+// Used only to pre-fill the "Converter em cliente" form on /admin/clientes.
+export async function getLeadByIdAction(id: string) {
+  return getLeadById(id);
 }
 
 interface SubmitLeadMeta {

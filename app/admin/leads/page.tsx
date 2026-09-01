@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getLeadsAction } from "@/lib/actions/leads";
+import { getConvertedLeadIdsAction } from "@/lib/actions/clientes";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LeadsTable } from "@/components/sections/LeadsTable";
 
@@ -9,6 +10,11 @@ export default function AdminLeadsPage() {
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ["leads"],
     queryFn: getLeadsAction,
+  });
+
+  const { data: convertedLeadIds = [] } = useQuery({
+    queryKey: ["converted-lead-ids"],
+    queryFn: getConvertedLeadIdsAction,
   });
 
   return (
@@ -29,7 +35,11 @@ export default function AdminLeadsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
-          <LeadsTable leads={leads} isLoading={isLoading} />
+          <LeadsTable
+            leads={leads}
+            isLoading={isLoading}
+            convertedLeadIds={new Set(convertedLeadIds)}
+          />
         </CardContent>
       </Card>
     </>

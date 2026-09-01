@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   MessageSquare,
+  Building2,
   Settings,
   ExternalLink,
   LogOut,
@@ -37,6 +38,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
   const navItems = [
     { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
     { label: "Leads", href: "/admin/leads", icon: MessageSquare },
+    { label: "Clientes", href: "/admin/clientes", icon: Building2 },
     ...(isAdmin ? [{ label: "Config", href: "/admin/config", icon: Settings }] : []),
   ];
 

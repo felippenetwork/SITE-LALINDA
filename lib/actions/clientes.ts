@@ -2,11 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { getClientes, getGruposPreco, getConvertedLeadIds } from "@/lib/data/clientes";
+import {
+  getClientes,
+  getClienteById,
+  getGruposPreco,
+  getConvertedLeadIds,
+} from "@/lib/data/clientes";
 import { clienteSchema } from "@/lib/validation/cliente";
 
 export async function getClientesAction() {
   return getClientes();
+}
+
+export async function getClienteByIdAction(id: string) {
+  return getClienteById(id);
 }
 
 export async function getGruposPrecoAction() {

@@ -33,6 +33,14 @@ export async function getClientes(): Promise<Cliente[]> {
   return data ?? [];
 }
 
+export async function getClienteById(id: string): Promise<Cliente | null> {
+  const supabase = await requireClientesAccess();
+
+  const { data, error } = await supabase.from("clientes").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 export async function getGruposPreco(): Promise<GrupoPreco[]> {
   const supabase = await requireClientesAccess();
 

@@ -155,6 +155,90 @@ export type Database = {
         };
         Relationships: [];
       };
+      precos: {
+        Row: {
+          id: string;
+          produto_id: string;
+          grupo_preco_id: string;
+          valor: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          produto_id: string;
+          grupo_preco_id: string;
+          valor: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          produto_id?: string;
+          grupo_preco_id?: string;
+          valor?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "precos_produto_id_fkey";
+            columns: ["produto_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "precos_grupo_preco_id_fkey";
+            columns: ["grupo_preco_id"];
+            isOneToOne: false;
+            referencedRelation: "grupos_preco";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      precos_excecao: {
+        Row: {
+          id: string;
+          cliente_id: string;
+          produto_id: string;
+          valor: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          cliente_id: string;
+          produto_id: string;
+          valor: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          cliente_id?: string;
+          produto_id?: string;
+          valor?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "precos_excecao_cliente_id_fkey";
+            columns: ["cliente_id"];
+            isOneToOne: false;
+            referencedRelation: "clientes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "precos_excecao_produto_id_fkey";
+            columns: ["produto_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       leads: {
         Row: {
           created_at: string | null;

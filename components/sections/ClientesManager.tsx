@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Building2, Loader2, Pencil, Plus, ShieldCheck, ShieldOff } from "lucide-react";
+import { Building2, Loader2, Pencil, Plus, ShieldCheck, ShieldOff, Tags } from "lucide-react";
+import { useIsAdmin } from "@/components/providers/AdminRoleProvider";
 import {
   getClientesAction,
   getGruposPrecoAction,
@@ -81,6 +83,7 @@ export const ClientesManager = ({
   onPrefillConsumed,
 }: ClientesManagerProps) => {
   const queryClient = useQueryClient();
+  const isAdmin = useIsAdmin();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("todos");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
@@ -336,6 +339,28 @@ export const ClientesManager = ({
                           className="h-9 w-9 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all"
                         >
                           <ShieldOff size={14} />
+                        </Button>
+                      )}
+                      {isAdmin && (
+                        <Button
+                          asChild={!!cliente.grupo_preco_id}
+                          variant="ghost"
+                          size="icon"
+                          disabled={!cliente.grupo_preco_id}
+                          title={
+                            cliente.grupo_preco_id
+                              ? "Ver preços"
+                              : "Defina um grupo de preço para ver os preços deste cliente"
+                          }
+                          className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary transition-all disabled:opacity-30"
+                        >
+                          {cliente.grupo_preco_id ? (
+                            <Link href={`/admin/precos/clientes/${cliente.id}`}>
+                              <Tags size={14} />
+                            </Link>
+                          ) : (
+                            <Tags size={14} />
+                          )}
                         </Button>
                       )}
                     </div>

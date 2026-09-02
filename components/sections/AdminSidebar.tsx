@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   MessageSquare,
   Building2,
+  Tags,
   Settings,
   ExternalLink,
   LogOut,
@@ -39,6 +40,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
     { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
     { label: "Leads", href: "/admin/leads", icon: MessageSquare },
     { label: "Clientes", href: "/admin/clientes", icon: Building2 },
+    ...(isAdmin ? [{ label: "Preços", href: "/admin/precos", icon: Tags }] : []),
     ...(isAdmin ? [{ label: "Config", href: "/admin/config", icon: Settings }] : []),
   ];
 
@@ -119,7 +121,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
               href={item.href}
               className={cn(
                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-sans uppercase tracking-[0.2em] font-black transition-all",
-                pathname === item.href
+                pathname === item.href || pathname.startsWith(item.href + "/")
                   ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]"
                   : "text-muted-foreground-on-dark hover:text-white hover:bg-white/5",
               )}
@@ -163,7 +165,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
                     href={item.href}
                     className={cn(
                       "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-sans uppercase tracking-[0.2em] font-black transition-all",
-                      pathname === item.href
+                      pathname === item.href || pathname.startsWith(item.href + "/")
                         ? "bg-primary text-white"
                         : "text-muted-foreground-on-dark hover:text-white hover:bg-white/5",
                     )}

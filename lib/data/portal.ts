@@ -62,11 +62,14 @@ export async function getMinhaClienteStatus(): Promise<string | null> {
 export interface MinhaCliente {
   id: string;
   grupoPrecoId: string | null;
+  regiaoEntregaId: string | null;
+  boletoLiberado: boolean;
+  boletoPrazosDias: number[] | null;
 }
 
-// Usado pela tela de catálogo — id e grupo do cliente logado, pra
-// resolver os próprios preços. getPortalDestination() já garante que só
-// se chega aqui aprovado.
+// Usado pelo catálogo (resolver preço) e pelo checkout (resolver preço +
+// forma de pagamento + região) — getPortalDestination() já garante que
+// só se chega aqui aprovado.
 export async function getMinhaCliente(): Promise<MinhaCliente | null> {
   const supabase = await createClient();
 
@@ -77,11 +80,43 @@ export async function getMinhaCliente(): Promise<MinhaCliente | null> {
 
   const { data } = await supabase
     .from("clientes")
-    .select("id, grupo_preco_id")
+    .select("id, grupo_preco_id, regiao_entrega_id, boleto_liberado, boleto_prazos_dias")
     .eq("user_id", user.id)
     .maybeSingle();
   if (!data) return null;
-  return { id: data.id, grupoPrecoId: data.grupo_preco_id };
+  return {
+    id: data.id,
+    grupoPrecoId: data.grupo_preco_id,
+    regiaoEntregaId: data.regiao_entrega_id,
+    boletoLiberado: data.boleto_liberado,
+    boletoPrazosDias: data.boleto_prazos_dias,
+  };
+}
+
+export interface RegiaoEntrega {
+  id: string;
+  nome: string;
+  diasSemanaEntrega: number[];
+  horarioCorte: string;
+}
+
+// Não é dado sensível ("Autenticados leem regioes de entrega", migration
+// 021) — qualquer authenticated lê, RLS não precisa restringir por dono.
+export async function getRegiaoEntrega(id: string): Promise<RegiaoEntrega | null> {
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("regioes_entrega")
+    .select("id, nome, dias_semana_entrega, horario_corte")
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    id: data.id,
+    nome: data.nome,
+    diasSemanaEntrega: data.dias_semana_entrega,
+    horarioCorte: data.horario_corte,
+  };
 }
 
 // Preço resolvido pro cliente logado: precos_excecao (se existir pro

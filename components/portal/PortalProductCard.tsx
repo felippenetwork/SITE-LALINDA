@@ -1,6 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
+import { Plus, Minus, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/lib/format";
+import { useCart } from "@/components/portal/CartContext";
 import type { BreadItem } from "@/lib/data/products";
 
 interface PortalProductCardProps {
@@ -9,9 +16,21 @@ interface PortalProductCardProps {
 }
 
 // Mesma linguagem visual de components/shared/ProductCard.tsx (site
-// público), mas sem link — não existe página de detalhe nem carrinho
-// ainda — e com o preço resolvido no lugar do "Ver Detalhes".
+// público), mas sem link — não existe página de detalhe ainda — e com o
+// preço resolvido + controle de quantidade/adicionar ao carrinho no
+// lugar do "Ver Detalhes".
 export const PortalProductCard = ({ item, valor }: PortalProductCardProps) => {
+  const { adicionarItem } = useCart();
+  const [quantidade, setQuantidade] = useState(1);
+
+  const podeAdicionar = item.available && valor !== null;
+
+  const handleAdicionar = () => {
+    adicionarItem(item.id, item.name, quantidade);
+    toast.success(`${item.name} adicionado ao carrinho`);
+    setQuantidade(1);
+  };
+
   return (
     <div>
       <div className="mb-6 relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] aspect-[4/5] bg-white">
@@ -60,14 +79,45 @@ export const PortalProductCard = ({ item, valor }: PortalProductCardProps) => {
         </div>
 
         {valor !== null ? (
-          <p className="text-xl font-serif italic text-primary">{formatBRL(valor)}</p>
+          <p className="text-xl font-serif italic text-primary mb-4">{formatBRL(valor)}</p>
         ) : (
           <Badge
             variant="outline"
-            className="bg-background border-border text-muted-foreground text-[9px] uppercase tracking-widest font-black px-3"
+            className="bg-background border-border text-muted-foreground text-[9px] uppercase tracking-widest font-black px-3 mb-4"
           >
             Consulte Disponibilidade
           </Badge>
+        )}
+
+        {podeAdicionar && (
+          <div className="flex items-center gap-2">
+            <div className="flex items-center border border-border rounded-full">
+              <button
+                type="button"
+                onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
+                aria-label="Diminuir quantidade"
+                className="h-9 w-9 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Minus size={14} />
+              </button>
+              <span className="w-8 text-center text-sm font-sans font-semibold">{quantidade}</span>
+              <button
+                type="button"
+                onClick={() => setQuantidade((q) => q + 1)}
+                aria-label="Aumentar quantidade"
+                className="h-9 w-9 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+            <Button
+              type="button"
+              onClick={handleAdicionar}
+              className="flex-1 bg-primary text-white rounded-full h-9 text-[9px] font-black uppercase tracking-widest gap-2"
+            >
+              <ShoppingCart size={14} /> Adicionar
+            </Button>
+          </div>
         )}
       </div>
     </div>

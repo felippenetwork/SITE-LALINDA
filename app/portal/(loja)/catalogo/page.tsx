@@ -6,38 +6,12 @@ import { getProducts } from "@/lib/data/products";
 import { getProductLines } from "@/lib/data/product-lines";
 import { PortalProductCard } from "@/components/portal/PortalProductCard";
 import { PortalLogoutButton } from "@/components/shared/PortalLogoutButton";
+import { CartSummaryButton } from "@/components/portal/CartSummaryButton";
+import { MensagemCard } from "@/components/portal/MensagemCard";
 
 export const metadata: Metadata = {
   title: "Catálogo | La Linda",
 };
-
-function MensagemCard({
-  icon: Icon,
-  titulo,
-  mensagem,
-}: {
-  icon: typeof PackageSearch;
-  titulo: string;
-  mensagem: string;
-}) {
-  return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 text-center">
-      <div className="w-full max-w-[480px]">
-        <h1 className="text-4xl md:text-5xl font-serif italic text-foreground mb-8 leading-none">
-          La Linda
-        </h1>
-        <div className="bg-card border border-border rounded-[2rem] p-10 shadow-sm">
-          <Icon className="mx-auto mb-6 text-primary" size={40} />
-          <h2 className="text-2xl font-serif italic text-foreground mb-3">{titulo}</h2>
-          <p className="text-sm text-muted-foreground font-sans leading-relaxed">{mensagem}</p>
-        </div>
-        <div className="mt-8">
-          <PortalLogoutButton />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default async function PortalCatalogoPage() {
   const destination = await getPortalDestination();
@@ -81,7 +55,7 @@ export default async function PortalCatalogoPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20">
-        <div className="flex items-center justify-between mb-12 md:mb-16">
+        <div className="flex items-center justify-between mb-12 md:mb-16 gap-4">
           <div>
             <h1 className="text-4xl md:text-5xl font-serif italic text-foreground mb-2">
               Catálogo
@@ -90,7 +64,10 @@ export default async function PortalCatalogoPage() {
               Preços exclusivos para o seu cadastro
             </p>
           </div>
-          <PortalLogoutButton />
+          <div className="flex items-center gap-3 shrink-0">
+            <CartSummaryButton />
+            <PortalLogoutButton />
+          </div>
         </div>
 
         {linhasComProdutos.length === 0 ? (

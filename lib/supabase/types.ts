@@ -58,6 +58,7 @@ export type Database = {
           cep: string;
           status: string;
           grupo_preco_id: string | null;
+          regiao_entrega_id: string | null;
           aprovado_por: string | null;
           aprovado_em: string | null;
           boleto_liberado: boolean;
@@ -84,6 +85,7 @@ export type Database = {
           cep: string;
           status?: string;
           grupo_preco_id?: string | null;
+          regiao_entrega_id?: string | null;
           aprovado_por?: string | null;
           aprovado_em?: string | null;
           boleto_liberado?: boolean;
@@ -110,6 +112,7 @@ export type Database = {
           cep?: string;
           status?: string;
           grupo_preco_id?: string | null;
+          regiao_entrega_id?: string | null;
           aprovado_por?: string | null;
           aprovado_em?: string | null;
           boleto_liberado?: boolean;
@@ -130,6 +133,141 @@ export type Database = {
             columns: ["origem_lead_id"];
             isOneToOne: false;
             referencedRelation: "leads";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "clientes_regiao_entrega_id_fkey";
+            columns: ["regiao_entrega_id"];
+            isOneToOne: false;
+            referencedRelation: "regioes_entrega";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      regioes_entrega: {
+        Row: {
+          id: string;
+          nome: string;
+          dias_semana_entrega: number[];
+          horario_corte: string;
+          ativa: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          nome: string;
+          dias_semana_entrega: number[];
+          horario_corte: string;
+          ativa?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          nome?: string;
+          dias_semana_entrega?: number[];
+          horario_corte?: string;
+          ativa?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      pedidos: {
+        Row: {
+          id: string;
+          cliente_id: string;
+          status: string;
+          metodo_pagamento: string;
+          prazo_dias_escolhido: number | null;
+          status_pagamento: string;
+          data_entrega_prevista: string;
+          valor_total: number;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          cliente_id: string;
+          status?: string;
+          metodo_pagamento: string;
+          prazo_dias_escolhido?: number | null;
+          status_pagamento?: string;
+          data_entrega_prevista: string;
+          valor_total: number;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          cliente_id?: string;
+          status?: string;
+          metodo_pagamento?: string;
+          prazo_dias_escolhido?: number | null;
+          status_pagamento?: string;
+          data_entrega_prevista?: string;
+          valor_total?: number;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_cliente_id_fkey";
+            columns: ["cliente_id"];
+            isOneToOne: false;
+            referencedRelation: "clientes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pedido_itens: {
+        Row: {
+          id: string;
+          pedido_id: string;
+          produto_id: string;
+          produto_nome: string;
+          quantidade: number;
+          preco_unitario: number;
+          subtotal: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          pedido_id: string;
+          produto_id: string;
+          produto_nome: string;
+          quantidade: number;
+          preco_unitario: number;
+          subtotal: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          pedido_id?: string;
+          produto_id?: string;
+          produto_nome?: string;
+          quantidade?: number;
+          preco_unitario?: number;
+          subtotal?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pedido_itens_pedido_id_fkey";
+            columns: ["pedido_id"];
+            isOneToOne: false;
+            referencedRelation: "pedidos";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pedido_itens_produto_id_fkey";
+            columns: ["produto_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
             referencedColumns: ["id"];
           },
         ];
@@ -483,6 +621,16 @@ export type Database = {
           _user_id: string;
         };
         Returns: boolean;
+      };
+      criar_pedido: {
+        Args: {
+          p_cliente_id: string;
+          p_metodo_pagamento: string;
+          p_prazo_dias_escolhido: number | null;
+          p_data_entrega_prevista: string;
+          p_itens: Json;
+        };
+        Returns: string;
       };
     };
     Enums: {

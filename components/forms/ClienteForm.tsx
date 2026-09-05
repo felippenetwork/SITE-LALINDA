@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import type { Cliente, GrupoPreco } from "@/lib/data/clientes";
 import { clienteSchema, type ClienteInput, type ClienteValues } from "@/lib/validation/cliente";
+import { cn } from "@/lib/utils";
 
 // Sublead de origem, só os campos usados para pré-preencher o cadastro
 // avulso a partir de "Converter em cliente" em /admin/leads.
@@ -59,7 +60,8 @@ export const ClienteForm = ({
     defaultValues: {
       id: editingCliente?.id,
       razao_social: editingCliente?.razao_social ?? "",
-      cnpj: editingCliente?.cnpj ?? "",
+      tipo_documento: (editingCliente?.tipo_documento as "cpf" | "cnpj" | undefined) ?? "cnpj",
+      documento: editingCliente?.documento ?? "",
       inscricao_estadual: editingCliente?.inscricao_estadual ?? "",
       email: editingCliente?.email ?? prefillLead?.email ?? "",
       contato_nome: editingCliente?.contato_nome ?? prefillLead?.name ?? "",
@@ -76,6 +78,7 @@ export const ClienteForm = ({
     },
   });
 
+  const tipoDocumento = watch("tipo_documento") ?? "cnpj";
   const boletoLiberado = watch("boleto_liberado") ?? false;
   const prazos = watch("boleto_prazos_dias") ?? [];
 
@@ -113,10 +116,45 @@ export const ClienteForm = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2 sm:col-span-2">
           <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
-            Razão Social
+            Tipo de Documento
+          </Label>
+          <div className="grid grid-cols-2 gap-2 bg-background border border-border rounded-xl p-1">
+            {(["cnpj", "cpf"] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => {
+                  setValue("tipo_documento", option, { shouldValidate: true });
+                  // Pessoa física: nome e contato são a mesma pessoa —
+                  // sincroniza o que já foi digitado até aqui, o resto é
+                  // coberto pelo onChange de razão social abaixo.
+                  if (option === "cpf") {
+                    setValue("contato_nome", watch("razao_social"), { shouldValidate: true });
+                  }
+                }}
+                className={cn(
+                  "rounded-lg py-2.5 text-[10px] font-black uppercase tracking-widest transition-all",
+                  tipoDocumento === option
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {option === "cnpj" ? "Empresa (CNPJ)" : "Pessoa Física (CPF)"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2 sm:col-span-2">
+          <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
+            {tipoDocumento === "cpf" ? "Nome Completo" : "Razão Social"}
           </Label>
           <Input
-            {...register("razao_social")}
+            {...register("razao_social", {
+              onChange: (e) => {
+                if (tipoDocumento === "cpf") setValue("contato_nome", e.target.value);
+              },
+            })}
             className="rounded-xl border-border bg-background h-12"
           />
           {errors.razao_social && (
@@ -126,25 +164,29 @@ export const ClienteForm = ({
 
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
-            CNPJ
+            {tipoDocumento === "cpf" ? "CPF" : "CNPJ"}
           </Label>
           <Input
-            {...register("cnpj")}
-            placeholder="00.000.000/0000-00"
+            {...register("documento")}
+            placeholder={tipoDocumento === "cpf" ? "000.000.000-00" : "00.000.000/0000-00"}
             className="rounded-xl border-border bg-background h-12"
           />
-          {errors.cnpj && <p className="text-[10px] text-rose-500">{errors.cnpj.message}</p>}
+          {errors.documento && (
+            <p className="text-[10px] text-rose-500">{errors.documento.message}</p>
+          )}
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
-            Inscrição Estadual
-          </Label>
-          <Input
-            {...register("inscricao_estadual")}
-            className="rounded-xl border-border bg-background h-12"
-          />
-        </div>
+        {tipoDocumento === "cnpj" && (
+          <div className="space-y-2">
+            <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
+              Inscrição Estadual
+            </Label>
+            <Input
+              {...register("inscricao_estadual")}
+              className="rounded-xl border-border bg-background h-12"
+            />
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
@@ -171,18 +213,20 @@ export const ClienteForm = ({
           )}
         </div>
 
-        <div className="space-y-2 sm:col-span-2">
-          <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
-            Nome do Contato
-          </Label>
-          <Input
-            {...register("contato_nome")}
-            className="rounded-xl border-border bg-background h-12"
-          />
-          {errors.contato_nome && (
-            <p className="text-[10px] text-rose-500">{errors.contato_nome.message}</p>
-          )}
-        </div>
+        {tipoDocumento === "cnpj" && (
+          <div className="space-y-2 sm:col-span-2">
+            <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
+              Nome do Contato
+            </Label>
+            <Input
+              {...register("contato_nome")}
+              className="rounded-xl border-border bg-background h-12"
+            />
+            {errors.contato_nome && (
+              <p className="text-[10px] text-rose-500">{errors.contato_nome.message}</p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="border-t border-border pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">

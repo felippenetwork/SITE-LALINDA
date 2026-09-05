@@ -44,7 +44,8 @@ export type Database = {
           user_id: string | null;
           origem_lead_id: string | null;
           razao_social: string;
-          cnpj: string;
+          documento: string;
+          tipo_documento: string;
           inscricao_estadual: string | null;
           email: string;
           contato_nome: string;
@@ -69,7 +70,8 @@ export type Database = {
           user_id?: string | null;
           origem_lead_id?: string | null;
           razao_social: string;
-          cnpj: string;
+          documento: string;
+          tipo_documento: string;
           inscricao_estadual?: string | null;
           email: string;
           contato_nome: string;
@@ -94,7 +96,8 @@ export type Database = {
           user_id?: string | null;
           origem_lead_id?: string | null;
           razao_social?: string;
-          cnpj?: string;
+          documento?: string;
+          tipo_documento?: string;
           inscricao_estadual?: string | null;
           email?: string;
           contato_nome?: string;

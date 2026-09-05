@@ -75,7 +75,8 @@ export async function saveCliente(input: unknown): Promise<{ success: true; id: 
   const payload = {
     origem_lead_id: data.origem_lead_id ?? null,
     razao_social: data.razao_social,
-    cnpj: data.cnpj,
+    tipo_documento: data.tipo_documento,
+    documento: data.documento,
     inscricao_estadual: data.inscricao_estadual || null,
     email: data.email,
     contato_nome: data.contato_nome,
@@ -108,7 +109,7 @@ export async function saveCliente(input: unknown): Promise<{ success: true; id: 
       .single();
     if (error) {
       if (error.code === "23505") {
-        throw new Error("Já existe um cliente cadastrado com este CNPJ.");
+        throw new Error("Já existe um cliente cadastrado com este CPF/CNPJ.");
       }
       throw error;
     }

@@ -66,6 +66,13 @@ const STATUS_STYLE: Record<Cliente["status"], string> = {
   suspenso: "text-rose-600 bg-rose-50",
 };
 
+function formatDocumento(tipo: string, digits: string): string {
+  if (tipo === "cpf") {
+    return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+  }
+  return digits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+}
+
 interface LeadPrefill {
   id: string;
   name: string;
@@ -250,7 +257,7 @@ export const ClientesManager = ({
                   Razão Social
                 </TableHead>
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
-                  CNPJ
+                  CPF/CNPJ
                 </TableHead>
                 <TableHead className="py-6 text-[10px] uppercase tracking-widest font-black">
                   Cidade/UF
@@ -279,7 +286,7 @@ export const ClientesManager = ({
                     {cliente.razao_social}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground font-sans">
-                    {cliente.cnpj}
+                    {formatDocumento(cliente.tipo_documento, cliente.documento)}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground font-sans">
                     {cliente.cidade}/{cliente.uf}

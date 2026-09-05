@@ -40,6 +40,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // /portal/cadastro (o formulário de criar conta/entrar) e
+  // /portal/callback (troca o code do OAuth por sessão, roda antes de
+  // qualquer sessão existir) precisam continuar acessíveis sem login —
+  // todo o resto de /portal exige sessão.
+  const isPortalPublicRoute =
+    request.nextUrl.pathname.startsWith("/portal/cadastro") ||
+    request.nextUrl.pathname.startsWith("/portal/callback");
+  if (!user && request.nextUrl.pathname.startsWith("/portal") && !isPortalPublicRoute) {
+    const redirectUrl = new URL("/portal/cadastro", request.url);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   return response;
 }
 

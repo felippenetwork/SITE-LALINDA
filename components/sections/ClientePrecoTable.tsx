@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { PriceCell, formatBRL } from "@/components/shared/PriceCell";
+import { PriceCell } from "@/components/shared/PriceCell";
+import { formatBRL } from "@/lib/format";
 import type { BreadItem } from "@/lib/data/products";
 import type { Preco, PrecoExcecao } from "@/lib/data/precos";
 

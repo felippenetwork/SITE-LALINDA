@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { PackageSearch, HelpCircle } from "lucide-react";
+import Link from "next/link";
+import { PackageSearch, HelpCircle, Receipt } from "lucide-react";
 import { getPortalDestination, getMinhaCliente, getMeusPrecos } from "@/lib/data/portal";
 import { getProducts } from "@/lib/data/products";
 import { getProductLines } from "@/lib/data/product-lines";
@@ -65,6 +66,12 @@ export default async function PortalCatalogoPage() {
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/portal/pedidos"
+              className="inline-flex items-center gap-2 text-[10px] font-sans font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Receipt size={14} /> Meus Pedidos
+            </Link>
             <CartSummaryButton />
             <PortalLogoutButton />
           </div>

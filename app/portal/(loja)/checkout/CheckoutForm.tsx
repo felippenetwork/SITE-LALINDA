@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowLeft, Loader2, Minus, Plus, Trash2, Truck } from "lucide-react";
+import { ArrowLeft, Loader2, Minus, Plus, Receipt, Trash2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -99,7 +99,7 @@ export function CheckoutForm({
         return;
       }
       limparCarrinho();
-      router.push(`/portal/pedidos/${resultado.pedidoId}`);
+      router.push(`/portal/pedidos/${resultado.pedidoId}?confirmado=1`);
     } catch {
       toast.error("Erro inesperado ao confirmar o pedido. Tente novamente.");
     } finally {
@@ -110,12 +110,20 @@ export function CheckoutForm({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto px-4 md:px-8 py-12 md:py-20">
-        <Link
-          href="/portal/catalogo"
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft size={14} /> Voltar ao Catálogo
-        </Link>
+        <div className="flex items-center gap-6 mb-8">
+          <Link
+            href="/portal/catalogo"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft size={14} /> Voltar ao Catálogo
+          </Link>
+          <Link
+            href="/portal/pedidos"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Receipt size={14} /> Meus Pedidos
+          </Link>
+        </div>
 
         <h1 className="text-4xl md:text-5xl font-serif italic text-foreground mb-10">
           Finalizar Pedido

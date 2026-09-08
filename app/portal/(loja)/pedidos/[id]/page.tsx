@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, ArrowLeft } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Receipt } from "lucide-react";
 import { getPortalDestination } from "@/lib/data/portal";
 import { getMeuPedido } from "@/lib/data/pedido";
+import { PedidoStatusBadge } from "@/components/portal/PedidoStatusBadge";
 import { formatBRL } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Pedido Confirmado | La Linda",
+  title: "Pedido | La Linda",
 };
 
 const METODO_LABEL: Record<string, string> = {
@@ -25,8 +26,21 @@ function formatarDataExibicao(isoDate: string): string {
   });
 }
 
-export default async function PortalPedidoPage({ params }: { params: Promise<{ id: string }> }) {
+// Esta tela serve dois papéis: confirmação logo após o checkout
+// (?confirmado=1, mandado só pelo redirect do CheckoutForm) e detalhe de
+// um pedido antigo, acessado pela lista (/portal/pedidos). O conteúdo
+// (itens, preço no momento da compra, pagamento, total) é idêntico nos
+// dois casos — só o cabeçalho/link de voltar mudam.
+export default async function PortalPedidoPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ confirmado?: string }>;
+}) {
   const { id } = await params;
+  const { confirmado } = await searchParams;
+  const vemDoCheckout = confirmado === "1";
 
   const destination = await getPortalDestination();
   if (destination !== "/portal/catalogo") redirect(destination);
@@ -37,18 +51,31 @@ export default async function PortalPedidoPage({ params }: { params: Promise<{ i
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-4 md:px-8 py-12 md:py-20">
-        <Link
-          href="/portal/catalogo"
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft size={14} /> Voltar ao Catálogo
-        </Link>
+        <div className="flex items-center gap-6 mb-8">
+          <Link
+            href={vemDoCheckout ? "/portal/catalogo" : "/portal/pedidos"}
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft size={14} /> {vemDoCheckout ? "Voltar ao Catálogo" : "Voltar aos Pedidos"}
+          </Link>
+          {vemDoCheckout && (
+            <Link
+              href="/portal/pedidos"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-black text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Receipt size={14} /> Meus Pedidos
+            </Link>
+          )}
+        </div>
 
         <div className="text-center mb-10">
-          <CheckCircle2 className="mx-auto mb-4 text-primary" size={48} />
-          <h1 className="text-3xl md:text-4xl font-serif italic text-foreground mb-2">
-            Pedido Confirmado
+          {vemDoCheckout && <CheckCircle2 className="mx-auto mb-4 text-primary" size={48} />}
+          <h1 className="text-3xl md:text-4xl font-serif italic text-foreground mb-3">
+            {vemDoCheckout ? "Pedido Confirmado" : `Pedido #${pedido.id.slice(0, 8)}`}
           </h1>
+          <div className="flex justify-center mb-3">
+            <PedidoStatusBadge status={pedido.status} />
+          </div>
           <p className="text-muted-foreground font-sans text-sm">
             Previsão de entrega:{" "}
             <span className="font-semibold text-foreground capitalize">

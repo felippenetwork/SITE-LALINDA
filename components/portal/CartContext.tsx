@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-const STORAGE_KEY = "lalinda-portal-carrinho";
+const DEFAULT_STORAGE_KEY = "lalinda-portal-carrinho";
 
 export interface CartItem {
   produtoId: string;
@@ -24,7 +24,18 @@ const CartContext = createContext<CartContextValue | null>(null);
 // Carrinho guarda só produtoId/nome/quantidade — nunca preço. Preço é
 // sempre resolvido ao vivo em quem exibe (catálogo, checkout), pra nunca
 // mostrar um valor que ficou desatualizado entre adicionar e finalizar.
-export function CartProvider({ children }: { children: ReactNode }) {
+//
+// storageKey é opcional (default = carrinho do portal) — a área /vendas
+// usa uma chave própria ("lalinda-vendas-carrinho") pra nunca colidir com
+// o carrinho de um cliente de verdade, caso as duas sessões por acaso
+// rodem no mesmo navegador.
+export function CartProvider({
+  children,
+  storageKey = DEFAULT_STORAGE_KEY,
+}: {
+  children: ReactNode;
+  storageKey?: string;
+}) {
   const [itens, setItens] = useState<CartItem[]>([]);
 
   // Hidrata do localStorage só depois do mount — bridging com sistema
@@ -35,21 +46,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     queueMicrotask(() => {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(storageKey);
         if (raw) setItens(JSON.parse(raw));
       } catch {
         // localStorage indisponível (aba privada, etc.) — carrinho só não persiste.
       }
     });
-  }, []);
+  }, [storageKey]);
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(itens));
+      localStorage.setItem(storageKey, JSON.stringify(itens));
     } catch {
       // idem acima — falha silenciosa, carrinho continua funcionando em memória.
     }
-  }, [itens]);
+  }, [storageKey, itens]);
 
   const adicionarItem = (produtoId: string, nome: string, quantidade: number) => {
     setItens((atual) => {

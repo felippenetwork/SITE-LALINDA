@@ -52,6 +52,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // Conta de vendedor é criada manualmente pelo admin, sem autocadastro —
+  // /vendas/login é a única rota pública do grupo. O gate de papel
+  // (has_role(vendedor)) é checado de novo em app/vendas/(app)/layout.tsx
+  // (mesmo raciocínio de app/admin/layout.tsx: middleware sozinho não é
+  // suficiente, é reforço, não a única checagem).
+  const isVendasPublicRoute = request.nextUrl.pathname.startsWith("/vendas/login");
+  if (!user && request.nextUrl.pathname.startsWith("/vendas") && !isVendasPublicRoute) {
+    const redirectUrl = new URL("/vendas/login", request.url);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   return response;
 }
 

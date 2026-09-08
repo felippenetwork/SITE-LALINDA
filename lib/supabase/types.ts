@@ -272,6 +272,80 @@ export type Database = {
           },
         ];
       };
+      pedidos_rascunho: {
+        Row: {
+          id: string;
+          cliente_id: string;
+          criado_por: string;
+          metodo_pagamento: string;
+          prazo_dias_escolhido: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          cliente_id: string;
+          criado_por: string;
+          metodo_pagamento: string;
+          prazo_dias_escolhido?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          cliente_id?: string;
+          criado_por?: string;
+          metodo_pagamento?: string;
+          prazo_dias_escolhido?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_rascunho_cliente_id_fkey";
+            columns: ["cliente_id"];
+            isOneToOne: false;
+            referencedRelation: "clientes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pedido_rascunho_itens: {
+        Row: {
+          id: string;
+          pedido_rascunho_id: string;
+          produto_id: string;
+          quantidade: number;
+        };
+        Insert: {
+          id?: string;
+          pedido_rascunho_id: string;
+          produto_id: string;
+          quantidade: number;
+        };
+        Update: {
+          id?: string;
+          pedido_rascunho_id?: string;
+          produto_id?: string;
+          quantidade?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pedido_rascunho_itens_pedido_rascunho_id_fkey";
+            columns: ["pedido_rascunho_id"];
+            isOneToOne: false;
+            referencedRelation: "pedidos_rascunho";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pedido_rascunho_itens_produto_id_fkey";
+            columns: ["produto_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       grupos_preco: {
         Row: {
           id: string;
@@ -634,7 +708,7 @@ export type Database = {
       };
     };
     Enums: {
-      app_role: "admin" | "operador" | "user";
+      app_role: "admin" | "operador" | "user" | "vendedor";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -756,7 +830,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "operador", "user"],
+      app_role: ["admin", "operador", "user", "vendedor"],
     },
   },
 } as const;

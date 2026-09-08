@@ -1,0 +1,11 @@
+-- Sprint 4 — vendedor externo (parte 1/2).
+--
+-- Só o valor de enum, sozinho nesta migration/transação. Postgres não
+-- permite usar um valor recém-adicionado a um enum (em policy, CHECK,
+-- etc.) na MESMA transação em que foi adicionado — já vivido 2x nesta
+-- sessão como bug (GRANT em pedidos, GRANT em criar_pedido) por
+-- assumir comportamento que a doc não garantia; aqui é evitado de
+-- propósito, não descoberto por erro. A migration 025 (tudo que
+-- referencia 'vendedor') só pode rodar depois desta estar confirmada
+-- aplicada.
+alter type public.app_role add value 'vendedor';

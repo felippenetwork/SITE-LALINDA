@@ -13,17 +13,27 @@ import type { BreadItem } from "@/lib/data/products";
 interface PortalProductCardProps {
   item: BreadItem;
   valor: number | null;
+  // Área /vendas, cliente ainda sem grupo de preço: o vendedor precisa
+  // conseguir montar o pedido mesmo sem preço resolvido (vira rascunho,
+  // preço só é calculado quando o admin converter). Default false mantém
+  // o comportamento original do portal — cliente nunca adiciona item sem
+  // preço, porque pra ele isso sempre significa "não posso comprar".
+  permitirSemPreco?: boolean;
 }
 
 // Mesma linguagem visual de components/shared/ProductCard.tsx (site
 // público), mas sem link — não existe página de detalhe ainda — e com o
 // preço resolvido + controle de quantidade/adicionar ao carrinho no
 // lugar do "Ver Detalhes".
-export const PortalProductCard = ({ item, valor }: PortalProductCardProps) => {
+export const PortalProductCard = ({
+  item,
+  valor,
+  permitirSemPreco = false,
+}: PortalProductCardProps) => {
   const { adicionarItem } = useCart();
   const [quantidade, setQuantidade] = useState(1);
 
-  const podeAdicionar = item.available && valor !== null;
+  const podeAdicionar = item.available && (valor !== null || permitirSemPreco);
 
   const handleAdicionar = () => {
     adicionarItem(item.id, item.name, quantidade);
@@ -85,7 +95,7 @@ export const PortalProductCard = ({ item, valor }: PortalProductCardProps) => {
             variant="outline"
             className="bg-background border-border text-muted-foreground text-[9px] uppercase tracking-widest font-black px-3 mb-4"
           >
-            Consulte Disponibilidade
+            {permitirSemPreco ? "Preço a Definir" : "Consulte Disponibilidade"}
           </Badge>
         )}
 

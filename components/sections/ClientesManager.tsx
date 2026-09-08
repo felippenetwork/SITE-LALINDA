@@ -4,7 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Building2, Loader2, Pencil, Plus, ShieldCheck, ShieldOff, Tags } from "lucide-react";
+import {
+  Building2,
+  FileClock,
+  Loader2,
+  Pencil,
+  Plus,
+  ShieldCheck,
+  ShieldOff,
+  Tags,
+  Trash2,
+} from "lucide-react";
 import { useIsAdmin } from "@/components/providers/AdminRoleProvider";
 import {
   getClientesAction,
@@ -13,6 +23,12 @@ import {
   approveCliente,
   suspendCliente,
 } from "@/lib/actions/clientes";
+import {
+  getRascunhosAdminAction,
+  confirmarRascunhoAction,
+  excluirRascunhoAction,
+} from "@/lib/actions/vendas";
+import type { Rascunho } from "@/lib/data/vendas";
 import type { ClienteValues } from "@/lib/validation/cliente";
 import { Button } from "@/components/ui/button";
 import {
@@ -96,6 +112,8 @@ export const ClientesManager = ({
   const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
   const [prefillLead, setPrefillLead] = useState<LeadPrefill | null>(null);
   const [clientePendingSuspend, setClientePendingSuspend] = useState<Cliente | null>(null);
+  const [clienteRascunhosAberto, setClienteRascunhosAberto] = useState<Cliente | null>(null);
+  const [rascunhoPendingDelete, setRascunhoPendingDelete] = useState<Rascunho | null>(null);
 
   const { data: clientes = [], isLoading } = useQuery({
     queryKey: ["clientes"],
@@ -106,6 +124,19 @@ export const ClientesManager = ({
     queryKey: ["grupos-preco"],
     queryFn: getGruposPrecoAction,
   });
+
+  // Rascunhos de qualquer vendedor, sem restrição — mesma tela serve pra
+  // decidir "confirmar" (vira pedido de verdade) ou "excluir" (descarta).
+  const { data: rascunhos = [] } = useQuery({
+    queryKey: ["rascunhos"],
+    queryFn: getRascunhosAdminAction,
+  });
+  const rascunhosPorCliente = new Map<string, Rascunho[]>();
+  for (const rascunho of rascunhos) {
+    const lista = rascunhosPorCliente.get(rascunho.clienteId) ?? [];
+    lista.push(rascunho);
+    rascunhosPorCliente.set(rascunho.clienteId, lista);
+  }
 
   // Chegou via "Converter em cliente" em /admin/leads — abre o formulário
   // já preenchido. Ajuste de estado durante a renderização (não em efeito)
@@ -156,6 +187,33 @@ export const ClientesManager = ({
       queryClient.invalidateQueries({ queryKey: ["clientes"] });
       toast.success("Cliente suspenso");
       setClientePendingSuspend(null);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const confirmarRascunhoMutation = useMutation({
+    mutationFn: confirmarRascunhoAction,
+    onSuccess: (resultado) => {
+      if (!resultado.success) {
+        toast.error(resultado.error);
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ["rascunhos"] });
+      toast.success("Rascunho confirmado — pedido criado");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const excluirRascunhoMutation = useMutation({
+    mutationFn: excluirRascunhoAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rascunhos"] });
+      toast.success("Rascunho excluído");
+      setRascunhoPendingDelete(null);
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -370,6 +428,20 @@ export const ClientesManager = ({
                           )}
                         </Button>
                       )}
+                      {(rascunhosPorCliente.get(cliente.id)?.length ?? 0) > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title="Pedidos em rascunho (lançados por vendedor)"
+                          onClick={() => setClienteRascunhosAberto(cliente)}
+                          className="relative h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary transition-all"
+                        >
+                          <FileClock size={14} />
+                          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-black text-white">
+                            {rascunhosPorCliente.get(cliente.id)?.length}
+                          </span>
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -399,6 +471,109 @@ export const ClientesManager = ({
               }
             >
               Suspender
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Dialog
+        open={!!clienteRascunhosAberto}
+        onOpenChange={(open) => !open && setClienteRascunhosAberto(null)}
+      >
+        <DialogContent className="w-[95vw] sm:max-w-[600px] rounded-[1.5rem] sm:rounded-[2rem] border-border p-6 sm:p-8">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-2xl font-serif italic">
+              Rascunhos — {clienteRascunhosAberto?.razao_social}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+            {(clienteRascunhosAberto
+              ? (rascunhosPorCliente.get(clienteRascunhosAberto.id) ?? [])
+              : []
+            ).map((rascunho) => {
+              const podeConfirmar =
+                !!clienteRascunhosAberto?.grupo_preco_id &&
+                !!clienteRascunhosAberto?.regiao_entrega_id;
+              return (
+                <div key={rascunho.id} className="border border-border rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center justify-between text-[10px] uppercase tracking-widest font-black text-muted-foreground">
+                    <span>{new Date(rascunho.createdAt).toLocaleDateString("pt-BR")}</span>
+                    <span>
+                      {rascunho.metodoPagamento === "pix"
+                        ? "PIX"
+                        : rascunho.metodoPagamento === "cartao"
+                          ? "Cartão"
+                          : `Boleto — ${rascunho.prazoDiasEscolhido} dias`}
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    {rascunho.itens.map((item) => (
+                      <div
+                        key={item.produtoId}
+                        className="flex items-center justify-between text-sm font-sans"
+                      >
+                        <span className="text-foreground">{item.produtoNome}</span>
+                        <span className="text-muted-foreground">{item.quantidade}x</span>
+                      </div>
+                    ))}
+                  </div>
+                  {!podeConfirmar && (
+                    <p className="text-[10px] text-rose-500 leading-relaxed">
+                      Defina grupo de preço e região de entrega para este cliente antes de
+                      confirmar.
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 pt-1">
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={!podeConfirmar || confirmarRascunhoMutation.isPending}
+                      onClick={() => confirmarRascunhoMutation.mutate(rascunho.id)}
+                      className="flex-1 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest h-9"
+                    >
+                      {confirmarRascunhoMutation.isPending ? (
+                        <Loader2 className="animate-spin mr-2" size={14} />
+                      ) : null}
+                      Confirmar Pedido
+                    </Button>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      title="Excluir rascunho"
+                      onClick={() => setRascunhoPendingDelete(rascunho)}
+                      className="h-9 w-9 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all shrink-0"
+                    >
+                      <Trash2 size={14} />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={!!rascunhoPendingDelete}
+        onOpenChange={(open) => !open && setRascunhoPendingDelete(null)}
+      >
+        <AlertDialogContent className="rounded-[1.5rem] border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir rascunho</AlertDialogTitle>
+            <AlertDialogDescription>
+              Este rascunho de pedido será descartado permanentemente. Esta ação não pode ser
+              desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                rascunhoPendingDelete && excluirRascunhoMutation.mutate(rascunhoPendingDelete.id)
+              }
+            >
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

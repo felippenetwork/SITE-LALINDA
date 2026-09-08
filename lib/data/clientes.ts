@@ -4,6 +4,7 @@ import type { Database } from "@/lib/supabase/types";
 
 export type Cliente = Database["public"]["Tables"]["clientes"]["Row"];
 export type GrupoPreco = Database["public"]["Tables"]["grupos_preco"]["Row"];
+export type RegiaoEntrega = Database["public"]["Tables"]["regioes_entrega"]["Row"];
 
 async function requireClientesAccess() {
   const supabase = await createClient();
@@ -45,6 +46,21 @@ export async function getGruposPreco(): Promise<GrupoPreco[]> {
   const supabase = await requireClientesAccess();
 
   const { data, error } = await supabase.from("grupos_preco").select("*").order("nome");
+  if (error) throw error;
+  return data ?? [];
+}
+
+// Só regiões ativas — mesmo espírito de "Consulte Disponibilidade" já
+// usado alhures: uma região pausada não deveria aparecer como opção nova
+// pra atribuir a um cliente, mesmo que clientes antigos continuem com ela.
+export async function getRegioesEntrega(): Promise<RegiaoEntrega[]> {
+  const supabase = await requireClientesAccess();
+
+  const { data, error } = await supabase
+    .from("regioes_entrega")
+    .select("*")
+    .eq("ativa", true)
+    .order("nome");
   if (error) throw error;
   return data ?? [];
 }

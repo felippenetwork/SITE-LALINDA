@@ -19,6 +19,7 @@ import { useIsAdmin } from "@/components/providers/AdminRoleProvider";
 import {
   getClientesAction,
   getGruposPrecoAction,
+  getRegioesEntregaAction,
   saveCliente,
   approveCliente,
   suspendCliente,
@@ -123,6 +124,11 @@ export const ClientesManager = ({
   const { data: gruposPreco = [] } = useQuery({
     queryKey: ["grupos-preco"],
     queryFn: getGruposPrecoAction,
+  });
+
+  const { data: regioesEntrega = [] } = useQuery({
+    queryKey: ["regioes-entrega"],
+    queryFn: getRegioesEntregaAction,
   });
 
   // Rascunhos de qualquer vendedor, sem restrição — mesma tela serve pra
@@ -289,6 +295,7 @@ export const ClientesManager = ({
                 editingCliente={editingCliente}
                 prefillLead={prefillLead}
                 gruposPreco={gruposPreco}
+                regioesEntrega={regioesEntrega}
                 onSubmit={handleSave}
                 isPending={saveMutation.isPending}
               />

@@ -6,6 +6,7 @@ import {
   getClientes,
   getClienteById,
   getGruposPreco,
+  getRegioesEntrega,
   getConvertedLeadIds,
 } from "@/lib/data/clientes";
 import { clienteSchema } from "@/lib/validation/cliente";
@@ -20,6 +21,10 @@ export async function getClienteByIdAction(id: string) {
 
 export async function getGruposPrecoAction() {
   return getGruposPreco();
+}
+
+export async function getRegioesEntregaAction() {
+  return getRegioesEntrega();
 }
 
 export async function getConvertedLeadIdsAction() {
@@ -88,6 +93,7 @@ export async function saveCliente(input: unknown): Promise<{ success: true; id: 
     uf: data.uf,
     cep: data.cep,
     grupo_preco_id: data.grupo_preco_id || null,
+    regiao_entrega_id: data.regiao_entrega_id || null,
     boleto_liberado: data.boleto_liberado,
     boleto_prazos_dias: data.boleto_prazos_dias?.length ? data.boleto_prazos_dias : null,
   };

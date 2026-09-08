@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Cliente, GrupoPreco } from "@/lib/data/clientes";
+import type { Cliente, GrupoPreco, RegiaoEntrega } from "@/lib/data/clientes";
 import { clienteSchema, type ClienteInput, type ClienteValues } from "@/lib/validation/cliente";
 import { cn } from "@/lib/utils";
 
@@ -34,16 +34,19 @@ interface ClienteFormProps {
   editingCliente: Cliente | null;
   prefillLead: LeadPrefill | null;
   gruposPreco: GrupoPreco[];
+  regioesEntrega: RegiaoEntrega[];
   onSubmit: (data: ClienteValues) => void;
   isPending: boolean;
 }
 
 const SEM_GRUPO = "__sem_grupo__";
+const SEM_REGIAO = "__sem_regiao__";
 
 export const ClienteForm = ({
   editingCliente,
   prefillLead,
   gruposPreco,
+  regioesEntrega,
   onSubmit,
   isPending,
 }: ClienteFormProps) => {
@@ -73,6 +76,7 @@ export const ClienteForm = ({
       uf: editingCliente?.uf ?? "",
       cep: editingCliente?.cep ?? "",
       grupo_preco_id: editingCliente?.grupo_preco_id ?? null,
+      regiao_entrega_id: editingCliente?.regiao_entrega_id ?? null,
       boleto_liberado: editingCliente?.boleto_liberado ?? false,
       boleto_prazos_dias: editingCliente?.boleto_prazos_dias ?? [],
     },
@@ -318,6 +322,36 @@ export const ClienteForm = ({
         </Select>
         <p className="text-[10px] text-muted-foreground leading-relaxed">
           Obrigatório para aprovar o cliente — pode ficar em branco por enquanto.
+        </p>
+      </div>
+
+      <div className="border-t border-border pt-6 space-y-2">
+        <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
+          Região de Entrega
+        </Label>
+        <Select
+          value={watch("regiao_entrega_id") ?? SEM_REGIAO}
+          onValueChange={(value) =>
+            setValue("regiao_entrega_id", value === SEM_REGIAO ? null : value, {
+              shouldValidate: true,
+            })
+          }
+        >
+          <SelectTrigger className="rounded-xl border-border bg-background h-12">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={SEM_REGIAO}>Sem região definida</SelectItem>
+            {regioesEntrega.map((regiao) => (
+              <SelectItem key={regiao.id} value={regiao.id}>
+                {regiao.nome}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-[10px] text-muted-foreground leading-relaxed">
+          Necessária para calcular a data de entrega — sem ela, o cliente não consegue finalizar
+          pedidos mesmo já aprovado.
         </p>
       </div>
 

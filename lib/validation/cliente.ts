@@ -96,6 +96,7 @@ export const clienteSchema = z
       .refine((v) => /^\d{8}$/.test(v), "CEP precisa ter 8 dígitos"),
 
     grupo_preco_id: z.string().uuid().optional().nullable(),
+    regiao_entrega_id: z.string().uuid().optional().nullable(),
 
     boleto_liberado: z.boolean().default(false),
     boleto_prazos_dias: z.array(boletoPrazoDiasSchema).optional().nullable(),

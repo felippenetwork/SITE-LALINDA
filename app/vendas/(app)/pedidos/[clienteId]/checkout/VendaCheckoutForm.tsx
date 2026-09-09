@@ -39,7 +39,7 @@ interface VendaCheckoutFormProps {
   regiao: RegiaoEntrega | null;
 }
 
-type MetodoPagamento = "pix" | "cartao" | "boleto";
+type MetodoPagamento = "pix" | "boleto";
 
 function formatarDataExibicao(isoDate: string): string {
   const [ano, mes, dia] = isoDate.split("-").map(Number);
@@ -248,10 +248,10 @@ export function VendaCheckoutForm({
               <div
                 className={cn(
                   "grid gap-2 bg-background border border-border rounded-xl p-1 mt-2",
-                  boletoDisponivel ? "grid-cols-3" : "grid-cols-2",
+                  boletoDisponivel ? "grid-cols-2" : "grid-cols-1",
                 )}
               >
-                {(["pix", "cartao", "boleto"] as const)
+                {(["pix", "boleto"] as const)
                   .filter((m) => m !== "boleto" || boletoDisponivel)
                   .map((metodo) => (
                     <button
@@ -265,7 +265,7 @@ export function VendaCheckoutForm({
                           : "text-muted-foreground hover:text-foreground",
                       )}
                     >
-                      {metodo === "pix" ? "PIX" : metodo === "cartao" ? "Cartão" : "Boleto"}
+                      {metodo === "pix" ? "PIX" : "Boleto"}
                     </button>
                   ))}
               </div>

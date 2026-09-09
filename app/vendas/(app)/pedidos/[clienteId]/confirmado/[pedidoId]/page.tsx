@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 
 const METODO_LABEL: Record<string, string> = {
   pix: "PIX",
-  cartao: "Cartão",
   boleto: "Boleto",
 };
 

@@ -58,7 +58,7 @@ export const criarRascunhoSchema = z.object({
       }),
     )
     .min(1, "O carrinho está vazio"),
-  metodoPagamento: z.enum(["pix", "cartao", "boleto"]),
+  metodoPagamento: z.enum(["pix", "boleto"]),
   prazoDiasEscolhido: z.number().int().positive().optional().nullable(),
 });
 

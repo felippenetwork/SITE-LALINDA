@@ -508,9 +508,7 @@ export const ClientesManager = ({
                     <span>
                       {rascunho.metodoPagamento === "pix"
                         ? "PIX"
-                        : rascunho.metodoPagamento === "cartao"
-                          ? "Cartão"
-                          : `Boleto — ${rascunho.prazoDiasEscolhido} dias`}
+                        : `Boleto — ${rascunho.prazoDiasEscolhido} dias`}
                     </span>
                   </div>
                   <div className="space-y-1">

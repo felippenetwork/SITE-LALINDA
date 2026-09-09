@@ -228,7 +228,7 @@ export async function confirmarRascunhoAction(
   const resultado = await montarESalvarPedido({
     cliente: clienteParaPedido,
     itens: rascunho.itens.map((i) => ({ produtoId: i.produtoId, quantidade: i.quantidade })),
-    metodoPagamento: rascunho.metodoPagamento as "pix" | "cartao" | "boleto",
+    metodoPagamento: rascunho.metodoPagamento as "pix" | "boleto",
     prazoDiasEscolhido: rascunho.prazoDiasEscolhido,
     precos,
     produtos: produtos ?? [],

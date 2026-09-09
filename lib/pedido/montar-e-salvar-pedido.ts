@@ -36,7 +36,7 @@ interface ProdutoDisponivel {
 export async function montarESalvarPedido(input: {
   cliente: ClienteParaPedido;
   itens: { produtoId: string; quantidade: number }[];
-  metodoPagamento: "pix" | "cartao" | "boleto";
+  metodoPagamento: "pix" | "boleto";
   prazoDiasEscolhido: number | null | undefined;
   precos: Map<string, number>;
   produtos: ProdutoDisponivel[];

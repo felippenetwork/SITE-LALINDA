@@ -38,6 +38,54 @@ export type Database = {
         };
         Relationships: [];
       };
+      integracao_bradesco_pix: {
+        Row: {
+          id: string;
+          ativa: boolean;
+          client_id: string | null;
+          client_secret_cifrado: string | null;
+          client_secret_iv: string | null;
+          certificado_path: string | null;
+          certificado_iv: string | null;
+          certificado_nome_arquivo: string | null;
+          certificado_enviado_em: string | null;
+          certificado_senha_cifrada: string | null;
+          certificado_senha_iv: string | null;
+          updated_at: string;
+          updated_por: string | null;
+        };
+        Insert: {
+          id?: string;
+          ativa?: boolean;
+          client_id?: string | null;
+          client_secret_cifrado?: string | null;
+          client_secret_iv?: string | null;
+          certificado_path?: string | null;
+          certificado_iv?: string | null;
+          certificado_nome_arquivo?: string | null;
+          certificado_enviado_em?: string | null;
+          certificado_senha_cifrada?: string | null;
+          certificado_senha_iv?: string | null;
+          updated_at?: string;
+          updated_por?: string | null;
+        };
+        Update: {
+          id?: string;
+          ativa?: boolean;
+          client_id?: string | null;
+          client_secret_cifrado?: string | null;
+          client_secret_iv?: string | null;
+          certificado_path?: string | null;
+          certificado_iv?: string | null;
+          certificado_nome_arquivo?: string | null;
+          certificado_enviado_em?: string | null;
+          certificado_senha_cifrada?: string | null;
+          certificado_senha_iv?: string | null;
+          updated_at?: string;
+          updated_por?: string | null;
+        };
+        Relationships: [];
+      };
       clientes: {
         Row: {
           id: string;

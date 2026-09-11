@@ -46,12 +46,13 @@ export async function saveSiteSettings(input: unknown) {
     .eq("id", SITE_SETTINGS_ID);
   if (error) throw error;
 
-  await supabase.from("audit_logs").insert({
+  const { error: auditError } = await supabase.from("audit_logs").insert({
     user_id: userId,
     action: "UPDATE",
     target_table: "site_settings",
     target_id: SITE_SETTINGS_ID,
   });
+  if (auditError) throw auditError;
 
   revalidatePath("/admin/config");
   revalidatePath("/");
@@ -72,13 +73,14 @@ export async function savePixelSettings(input: unknown) {
     .eq("id", SITE_SETTINGS_ID);
   if (error) throw error;
 
-  await supabase.from("audit_logs").insert({
+  const { error: auditError } = await supabase.from("audit_logs").insert({
     user_id: userId,
     action: "UPDATE",
     target_table: "site_settings",
     target_id: SITE_SETTINGS_ID,
     details: { fields: ["gtm_id", "meta_pixel_id"] },
   });
+  if (auditError) throw auditError;
 
   // These render in the root layout, shared by every route — revalidate
   // the whole layout tree, not just "/".
@@ -107,13 +109,14 @@ export async function saveStatsSettings(input: unknown) {
     .eq("id", SITE_SETTINGS_ID);
   if (error) throw error;
 
-  await supabase.from("audit_logs").insert({
+  const { error: auditError } = await supabase.from("audit_logs").insert({
     user_id: userId,
     action: "UPDATE",
     target_table: "site_settings",
     target_id: SITE_SETTINGS_ID,
     details: { fields: ["stats"] },
   });
+  if (auditError) throw auditError;
 
   // StatsSection only renders on the home page, not the shared layout.
   revalidatePath("/admin/config");

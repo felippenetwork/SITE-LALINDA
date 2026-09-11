@@ -107,13 +107,14 @@ export async function createAdmin(input: unknown): Promise<{ granted: "created" 
     .upsert({ user_id: userId, role: data.role }, { onConflict: "user_id,role" });
   if (roleError) throw roleError;
 
-  await supabaseAdmin.from("audit_logs").insert({
+  const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
     user_id: currentUserId,
     action: granted === "created" ? "CREATE_USER" : "GRANT_ROLE",
     target_table: "user_roles",
     target_id: userId,
     details: { role: data.role },
   });
+  if (auditError) throw auditError;
 
   revalidatePath("/admin/config");
   return { granted };
@@ -137,13 +138,14 @@ export async function removeAdmin(userId: string, role: PanelRole) {
     throw error;
   }
 
-  await supabaseAdmin.from("audit_logs").insert({
+  const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
     user_id: currentUserId,
     action: "REMOVE_ROLE",
     target_table: "user_roles",
     target_id: userId,
     details: { role },
   });
+  if (auditError) throw auditError;
 
   revalidatePath("/admin/config");
   return { success: true };

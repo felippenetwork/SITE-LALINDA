@@ -9,6 +9,7 @@ import {
   getIntegracaoBradescoPix,
   INTEGRACAO_BRADESCO_PIX_ID,
 } from "@/lib/data/integracao-bradesco";
+import { autenticarBradescoPix } from "@/lib/bradesco/autenticar";
 import { integracaoBradescoPixSchema } from "@/lib/validation/integracao-bradesco";
 import type { Database } from "@/lib/supabase/types";
 
@@ -20,6 +21,20 @@ const MAX_CERT_BYTES = 1024 * 1024; // 1 MB — mesmo limite do bucket (migratio
 
 export async function getIntegracaoBradescoPixAction() {
   return getIntegracaoBradescoPix();
+}
+
+// Só prova que autentica — não gera cobrança nenhuma, não fala com
+// nenhum endpoint além do de token. Não grava em audit_logs: é uma
+// leitura/teste, não uma mutação de dado (mesmo raciocínio de não logar
+// toda vez que alguém abre uma tela).
+export async function testarConexaoBradescoPixAction() {
+  await requireAdmin();
+  const resultado = await autenticarBradescoPix();
+  if (!resultado.success) return resultado;
+  // Nunca devolve accessToken pro browser — só o suficiente pra UI
+  // confirmar sucesso (agora que autenticar() também serve
+  // gerar-cobranca-pix.ts, que precisa do token de verdade).
+  return { success: true as const, expiraEmSegundos: resultado.expiraEmSegundos };
 }
 
 // Preço e credencial de banco são as duas áreas do projeto que operador

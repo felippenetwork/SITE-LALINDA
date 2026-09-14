@@ -235,6 +235,9 @@ export type Database = {
           created_at: string;
           updated_at: string;
           deleted_at: string | null;
+          pix_txid: string | null;
+          pix_qrcode: string | null;
+          pix_expiracao: string | null;
         };
         Insert: {
           id?: string;
@@ -248,6 +251,9 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          pix_txid?: string | null;
+          pix_qrcode?: string | null;
+          pix_expiracao?: string | null;
         };
         Update: {
           id?: string;
@@ -261,6 +267,9 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string | null;
+          pix_txid?: string | null;
+          pix_qrcode?: string | null;
+          pix_expiracao?: string | null;
         };
         Relationships: [
           {

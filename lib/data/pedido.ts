@@ -18,6 +18,8 @@ export interface Pedido {
   dataEntregaPrevista: string;
   valorTotal: number;
   createdAt: string;
+  pixQrcode: string | null;
+  pixExpiracao: string | null;
   itens: PedidoItem[];
 }
 
@@ -60,7 +62,7 @@ export async function getMeuPedido(id: string): Promise<Pedido | null> {
   const { data: pedido } = await supabase
     .from("pedidos")
     .select(
-      "id, status, metodo_pagamento, prazo_dias_escolhido, status_pagamento, data_entrega_prevista, valor_total, created_at",
+      "id, status, metodo_pagamento, prazo_dias_escolhido, status_pagamento, data_entrega_prevista, valor_total, created_at, pix_qrcode, pix_expiracao",
     )
     .eq("id", id)
     .maybeSingle();
@@ -80,6 +82,8 @@ export async function getMeuPedido(id: string): Promise<Pedido | null> {
     dataEntregaPrevista: pedido.data_entrega_prevista,
     valorTotal: pedido.valor_total,
     createdAt: pedido.created_at,
+    pixQrcode: pedido.pix_qrcode,
+    pixExpiracao: pedido.pix_expiracao,
     itens: (itens ?? []).map((i) => ({
       id: i.id,
       produtoNome: i.produto_nome,

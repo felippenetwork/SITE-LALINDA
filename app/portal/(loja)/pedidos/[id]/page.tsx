@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, ArrowLeft, Receipt } from "lucide-react";
+import QRCode from "qrcode";
+import { CheckCircle2, ArrowLeft, Receipt, AlertTriangle, Clock } from "lucide-react";
 import { getPortalDestination } from "@/lib/data/portal";
 import { getMeuPedido } from "@/lib/data/pedido";
 import { PedidoStatusBadge } from "@/components/portal/PedidoStatusBadge";
+import { CopiarPixButton } from "@/components/portal/CopiarPixButton";
 import { formatBRL } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -47,6 +49,12 @@ export default async function PortalPedidoPage({
   const pedido = await getMeuPedido(id);
   if (!pedido) notFound();
 
+  const pixExpirado = pedido.pixExpiracao ? new Date(pedido.pixExpiracao) < new Date() : false;
+  const pixQrCodeDataUrl =
+    pedido.metodoPagamento === "pix" && pedido.pixQrcode && !pixExpirado
+      ? await QRCode.toDataURL(pedido.pixQrcode, { width: 240, margin: 1 })
+      : null;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-4 md:px-8 py-12 md:py-20">
@@ -82,6 +90,48 @@ export default async function PortalPedidoPage({
             </span>
           </p>
         </div>
+
+        {pedido.metodoPagamento === "pix" && (
+          <div className="bg-card border border-border rounded-[2rem] p-6 mb-6 text-center">
+            {pixQrCodeDataUrl && pedido.pixQrcode ? (
+              <>
+                <p className="text-xs uppercase tracking-widest font-black text-muted-foreground mb-4">
+                  Pague com PIX
+                </p>
+                {/* eslint-disable-next-line @next/next/no-img-element -- data: URL gerada no servidor, next/image não se aplica */}
+                <img
+                  src={pixQrCodeDataUrl}
+                  alt="QR Code para pagamento PIX"
+                  width={240}
+                  height={240}
+                  className="mx-auto rounded-xl border border-border"
+                />
+                <p className="text-[10px] text-muted-foreground mt-4 mb-3">
+                  Escaneie com o app do seu banco ou copie o código abaixo
+                </p>
+                <CopiarPixButton texto={pedido.pixQrcode} />
+              </>
+            ) : pedido.pixQrcode && pixExpirado ? (
+              <div className="flex flex-col items-center gap-2 text-rose-600">
+                <Clock size={28} />
+                <p className="text-sm font-sans font-semibold">Este código PIX expirou</p>
+                <p className="text-xs text-muted-foreground">
+                  Entre em contato com nosso time para gerar um novo código.
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                <AlertTriangle size={28} />
+                <p className="text-sm font-sans font-semibold text-foreground">
+                  Não foi possível gerar o código PIX
+                </p>
+                <p className="text-xs">
+                  Entre em contato com nosso time para finalizar o pagamento.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="bg-card border border-border rounded-[2rem] overflow-hidden">
           {pedido.itens.map((item) => (

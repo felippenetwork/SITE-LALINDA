@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { FileCheck2, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { FileCheck2, Loader2, Plug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { testarConexaoBradescoPixAction } from "@/lib/actions/integracao-bradesco";
 import type { IntegracaoBradescoPix } from "@/lib/data/integracao-bradesco";
 
 interface BradescoPixFormProps {
@@ -34,6 +36,23 @@ export function BradescoPixForm({ settings, onSubmit, isPending }: BradescoPixFo
   const [clientSecret, setClientSecret] = useState("");
   const [certificadoSenha, setCertificadoSenha] = useState("");
   const [certificadoFile, setCertificadoFile] = useState<File | null>(null);
+  const [testando, setTestando] = useState(false);
+
+  const handleTestarConexao = async () => {
+    setTestando(true);
+    try {
+      const resultado = await testarConexaoBradescoPixAction();
+      if (!resultado.success) {
+        toast.error(resultado.error);
+        return;
+      }
+      toast.success(`Conectado — token obtido, válido por ${resultado.expiraEmSegundos}s`);
+    } catch {
+      toast.error("Erro inesperado ao testar a conexão.");
+    } finally {
+      setTestando(false);
+    }
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -152,7 +171,17 @@ export function BradescoPixForm({ settings, onSubmit, isPending }: BradescoPixFo
         </div>
       </div>
 
-      <div className="flex justify-end pt-2">
+      <div className="flex justify-end gap-3 pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={testando}
+          onClick={handleTestarConexao}
+          className="rounded-full px-8 py-6 font-black text-[10px] uppercase tracking-widest border-border h-auto gap-2"
+        >
+          {testando ? <Loader2 className="animate-spin" size={16} /> : <Plug size={16} />}
+          Testar Conexão
+        </Button>
         <Button
           type="submit"
           disabled={isPending}

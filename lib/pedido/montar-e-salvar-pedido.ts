@@ -2,6 +2,8 @@ import "server-only";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getRegiaoEntrega } from "@/lib/data/portal";
 import { calcularProximaDataEntrega } from "@/lib/delivery/calcular-proxima-data-entrega";
+import { calcularExpiracaoPix } from "@/lib/pix/calcular-expiracao-pix";
+import { gerarCobrancaPix } from "@/lib/bradesco/gerar-cobranca-pix";
 
 export type ConfirmarPedidoResult =
   | { success: true; pedidoId: string; dataEntregaPrevista: string }
@@ -112,6 +114,39 @@ export async function montarESalvarPedido(input: {
     p_itens: itensParaGravar,
   });
   if (rpcError) throw rpcError;
+
+  // Cobrança PIX gerada DEPOIS do pedido já ter commitado — uma chamada
+  // HTTP externa não pode viver dentro da transação de criar_pedido().
+  // Falha aqui NÃO desfaz o pedido, que já existe de verdade nesse
+  // ponto: os 3 campos pix_* ficam null e a tela de confirmação mostra
+  // um aviso em vez do QR Code (nunca um erro que faça parecer que o
+  // pedido inteiro falhou).
+  if (metodoPagamento === "pix") {
+    const valorTotal = itensParaGravar.reduce((soma, item) => soma + item.subtotal, 0);
+    const expiracao = calcularExpiracaoPix(new Date(), dataEntregaPrevista, regiao.horarioCorte);
+
+    const cobrancaResult = await gerarCobrancaPix({
+      pedidoId: pedidoId as string,
+      valorTotal,
+      expiracao,
+    });
+    if (cobrancaResult.success) {
+      await supabaseAdmin
+        .from("pedidos")
+        .update({
+          pix_txid: cobrancaResult.txid,
+          pix_qrcode: cobrancaResult.qrcode,
+          pix_expiracao: expiracao.toISOString(),
+        })
+        .eq("id", pedidoId as string);
+    } else {
+      console.error(
+        "[bradesco-pix] pedido criado sem cobrança PIX:",
+        pedidoId,
+        cobrancaResult.error,
+      );
+    }
+  }
 
   return { success: true, pedidoId: pedidoId as string, dataEntregaPrevista };
 }

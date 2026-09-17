@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   getClientes,
   getClienteById,
@@ -75,7 +76,7 @@ function revalidateClientesPages() {
 
 export async function saveCliente(input: unknown): Promise<{ success: true; id: string }> {
   const data = clienteSchema.parse(input);
-  const { supabase } = await requireClientesWrite();
+  const { supabase, userId } = await requireClientesWrite();
 
   const payload = {
     origem_lead_id: data.origem_lead_id ?? null,
@@ -100,11 +101,45 @@ export async function saveCliente(input: unknown): Promise<{ success: true; id: 
 
   let id = data.id;
   if (id) {
+    // Buscado ANTES do update pra saber o que de fato mudou — auditoria
+    // (Sprint 6) só entra pra grupo_preco_id/boleto_liberado/
+    // boleto_prazos_dias, e só quando o valor realmente muda, nunca em
+    // toda edição de cadastro (editar telefone não deveria logar
+    // "alterou boleto").
+    const { data: antes, error: fetchError } = await supabase
+      .from("clientes")
+      .select("grupo_preco_id, boleto_liberado, boleto_prazos_dias")
+      .eq("id", id)
+      .single();
+    if (fetchError) throw fetchError;
+
     const { error } = await supabase
       .from("clientes")
       .update({ ...payload, updated_at: new Date().toISOString() })
       .eq("id", id);
     if (error) throw error;
+
+    const camposAlterados: string[] = [];
+    if (antes.grupo_preco_id !== payload.grupo_preco_id) camposAlterados.push("grupo_preco_id");
+    if (antes.boleto_liberado !== payload.boleto_liberado) camposAlterados.push("boleto_liberado");
+    if (JSON.stringify(antes.boleto_prazos_dias) !== JSON.stringify(payload.boleto_prazos_dias)) {
+      camposAlterados.push("boleto_prazos_dias");
+    }
+
+    if (camposAlterados.length > 0) {
+      // supabaseAdmin (não o client user-scoped) — mesmo padrão de
+      // lib/actions/integracao-bradesco.ts/admins.ts. Só os NOMES dos
+      // campos alterados, nunca o valor (CPF/CNPJ, endereço etc. nunca
+      // entram aqui de propósito).
+      const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
+        user_id: userId,
+        action: "UPDATE",
+        target_table: "clientes",
+        target_id: id,
+        details: { fields: camposAlterados },
+      });
+      if (auditError) throw auditError;
+    }
   } else {
     const { data: inserted, error } = await supabase
       .from("clientes")
@@ -150,12 +185,21 @@ export async function approveCliente(id: string) {
     .eq("id", id);
   if (error) throw error;
 
+  const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
+    user_id: userId,
+    action: "APPROVE",
+    target_table: "clientes",
+    target_id: id,
+    details: { status: "aprovado" },
+  });
+  if (auditError) throw auditError;
+
   revalidateClientesPages();
   return { success: true };
 }
 
 export async function suspendCliente(id: string) {
-  const { supabase } = await requireAdmin();
+  const { supabase, userId } = await requireAdmin();
 
   const { data: cliente, error: fetchError } = await supabase
     .from("clientes")
@@ -172,6 +216,15 @@ export async function suspendCliente(id: string) {
     .update({ status: "suspenso", updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw error;
+
+  const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
+    user_id: userId,
+    action: "SUSPEND",
+    target_table: "clientes",
+    target_id: id,
+    details: { status: "suspenso" },
+  });
+  if (auditError) throw auditError;
 
   revalidateClientesPages();
   return { success: true };

@@ -13,11 +13,13 @@ export interface AdminUser {
 }
 
 // Only Administrador manages panel users — Operador never reaches this,
-// regardless of URL. Defense in depth: RLS already allows any
-// `authenticated` user to read user_roles, so this explicit `has_role`
-// check is the real gate. Writes to user_roles go through `supabaseAdmin`
-// below — `authenticated` only has a `select` grant on that table (see
-// migration 002_user_roles.sql).
+// regardless of URL. RLS already restricts SELECT on user_roles to
+// admins (migration 003_security_hardening.sql) — this explicit
+// `has_role` check is a redundant, consistent defense-in-depth layer
+// (same pattern every other admin-gated action in the project follows),
+// not a compensating control for a permissive policy. Writes to
+// user_roles go through `supabaseAdmin` below — `authenticated` only
+// has a `select` grant on that table (see migration 002_user_roles.sql).
 async function requireAdmin() {
   const supabase = await createClient();
 

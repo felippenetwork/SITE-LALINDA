@@ -38,6 +38,16 @@ export function CartProvider({
 }) {
   const [itens, setItens] = useState<CartItem[]>([]);
 
+  // Guarda contra a corrida entre os dois efeitos abaixo: sem isso, o
+  // efeito de escrita roda no mount com itens=[] (valor inicial) ANTES
+  // da leitura terminar, e grava "[]" por cima de um carrinho salvo de
+  // verdade — bug real, achado ao vivo testando outra tarefa nesta
+  // sessão (só se manifesta em hard refresh/nova aba; navegação
+  // client-side normal nunca remonta este provider). O efeito de
+  // escrita só grava depois que hidratado vira true, o que só acontece
+  // depois que a leitura abaixo já rodou.
+  const [hidratado, setHidratado] = useState(false);
+
   // Hidrata do localStorage só depois do mount — bridging com sistema
   // externo. setState fica dentro do callback assíncrono (não direto no
   // corpo do efeito) pelo mesmo motivo do reset de Counter.tsx: o
@@ -50,17 +60,20 @@ export function CartProvider({
         if (raw) setItens(JSON.parse(raw));
       } catch {
         // localStorage indisponível (aba privada, etc.) — carrinho só não persiste.
+      } finally {
+        setHidratado(true);
       }
     });
   }, [storageKey]);
 
   useEffect(() => {
+    if (!hidratado) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify(itens));
     } catch {
       // idem acima — falha silenciosa, carrinho continua funcionando em memória.
     }
-  }, [storageKey, itens]);
+  }, [storageKey, itens, hidratado]);
 
   const adicionarItem = (produtoId: string, nome: string, quantidade: number) => {
     setItens((atual) => {

@@ -86,6 +86,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      integracao_whatsapp: {
+        Row: {
+          id: string;
+          instance_id: string | null;
+          instance_token_cifrado: string | null;
+          instance_token_iv: string | null;
+          conectado: boolean;
+          telefone_conectado: string | null;
+          updated_at: string;
+          updated_por: string | null;
+        };
+        Insert: {
+          id?: string;
+          instance_id?: string | null;
+          instance_token_cifrado?: string | null;
+          instance_token_iv?: string | null;
+          conectado?: boolean;
+          telefone_conectado?: string | null;
+          updated_at?: string;
+          updated_por?: string | null;
+        };
+        Update: {
+          id?: string;
+          instance_id?: string | null;
+          instance_token_cifrado?: string | null;
+          instance_token_iv?: string | null;
+          conectado?: boolean;
+          telefone_conectado?: string | null;
+          updated_at?: string;
+          updated_por?: string | null;
+        };
+        Relationships: [];
+      };
       clientes: {
         Row: {
           id: string;

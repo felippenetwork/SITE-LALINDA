@@ -13,11 +13,13 @@ import {
   getIntegracaoBradescoPixAction,
   saveIntegracaoBradescoPix,
 } from "@/lib/actions/integracao-bradesco";
+import { getIntegracaoWhatsAppAction } from "@/lib/actions/integracao-whatsapp";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SiteSettingsForm } from "@/components/forms/SiteSettingsForm";
 import { PixelSettingsForm } from "@/components/forms/PixelSettingsForm";
 import { StatsSettingsForm } from "@/components/forms/StatsSettingsForm";
 import { BradescoPixForm } from "@/components/forms/BradescoPixForm";
+import { ConectarWhatsAppForm } from "@/components/forms/ConectarWhatsAppForm";
 import { AdminsManager } from "@/components/sections/AdminsManager";
 import type { SiteSettingsValues } from "@/lib/validation/site-settings";
 import type { PixelSettingsValues } from "@/lib/validation/pixel-settings";
@@ -34,6 +36,11 @@ export default function AdminConfigPage() {
   const { data: bradescoSettings, isLoading: isLoadingBradesco } = useQuery({
     queryKey: ["integracao-bradesco-pix"],
     queryFn: getIntegracaoBradescoPixAction,
+  });
+
+  const { data: whatsappSettings, isLoading: isLoadingWhatsapp } = useQuery({
+    queryKey: ["integracao-whatsapp"],
+    queryFn: getIntegracaoWhatsAppAction,
   });
 
   const saveSettingsMutation = useMutation({
@@ -224,6 +231,27 @@ export default function AdminConfigPage() {
                 onSubmit={handleSaveBradesco}
                 isPending={saveBradescoMutation.isPending}
               />
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[1.5rem] md:rounded-[2rem] border-border shadow-sm overflow-hidden">
+          <CardHeader className="bg-background/50 border-b border-border p-6 flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-[10px] md:text-sm font-sans uppercase tracking-[0.2em] font-black text-muted-foreground">
+              Conectar WhatsApp
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 md:p-8">
+            <p className="text-xs text-muted-foreground mb-6">
+              Usado para avisar o cliente por WhatsApp assim que o pagamento PIX de um pedido é
+              confirmado. Conecte o número que a La Linda vai usar para essas notificações.
+            </p>
+            {isLoadingWhatsapp || !whatsappSettings ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="animate-spin text-primary" size={32} />
+              </div>
+            ) : (
+              <ConectarWhatsAppForm initial={whatsappSettings} />
             )}
           </CardContent>
         </Card>

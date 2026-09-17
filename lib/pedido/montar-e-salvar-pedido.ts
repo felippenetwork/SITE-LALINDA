@@ -2,8 +2,9 @@ import "server-only";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getRegiaoEntrega } from "@/lib/data/portal";
 import { calcularProximaDataEntrega } from "@/lib/delivery/calcular-proxima-data-entrega";
-import { calcularExpiracaoPix } from "@/lib/pix/calcular-expiracao-pix";
 import { gerarCobrancaPix } from "@/lib/bradesco/gerar-cobranca-pix";
+
+const PIX_EXPIRACAO_MS = 10 * 60 * 1000;
 
 export type ConfirmarPedidoResult =
   | { success: true; pedidoId: string; dataEntregaPrevista: string }
@@ -123,7 +124,11 @@ export async function montarESalvarPedido(input: {
   // pedido inteiro falhou).
   if (metodoPagamento === "pix") {
     const valorTotal = itensParaGravar.reduce((soma, item) => soma + item.subtotal, 0);
-    const expiracao = calcularExpiracaoPix(new Date(), dataEntregaPrevista, regiao.horarioCorte);
+    // Expiração fixa de 10 minutos — substitui a regra anterior baseada em
+    // data de entrega (véspera/corte). Decisão do dono do projeto,
+    // 2026-09-16: mesma janela curta independente de quando o pedido é
+    // feito, sem exceção.
+    const expiracao = new Date(Date.now() + PIX_EXPIRACAO_MS);
 
     const cobrancaResult = await gerarCobrancaPix({
       pedidoId: pedidoId as string,

@@ -13,6 +13,7 @@ import {
   LogOut,
   Menu,
   KeyRound,
+  ClipboardList,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -38,6 +39,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
 
   const navItems = [
     { label: "Catálogo", href: "/admin/catalogo", icon: LayoutDashboard },
+    { label: "Pedidos", href: "/admin/pedidos", icon: ClipboardList },
     { label: "Leads", href: "/admin/leads", icon: MessageSquare },
     { label: "Clientes", href: "/admin/clientes", icon: Building2 },
     ...(isAdmin ? [{ label: "Preços", href: "/admin/precos", icon: Tags }] : []),

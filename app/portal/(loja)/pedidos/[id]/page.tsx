@@ -6,7 +6,7 @@ import { CheckCircle2, ArrowLeft, Receipt, AlertTriangle, Clock } from "lucide-r
 import { getPortalDestination } from "@/lib/data/portal";
 import { getMeuPedido } from "@/lib/data/pedido";
 import { PedidoStatusBadge } from "@/components/portal/PedidoStatusBadge";
-import { CopiarPixButton } from "@/components/portal/CopiarPixButton";
+import { PixCountdown } from "@/components/portal/PixCountdown";
 import { formatBRL } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -93,24 +93,12 @@ export default async function PortalPedidoPage({
 
         {pedido.metodoPagamento === "pix" && (
           <div className="bg-card border border-border rounded-[2rem] p-6 mb-6 text-center">
-            {pixQrCodeDataUrl && pedido.pixQrcode ? (
-              <>
-                <p className="text-xs uppercase tracking-widest font-black text-muted-foreground mb-4">
-                  Pague com PIX
-                </p>
-                {/* eslint-disable-next-line @next/next/no-img-element -- data: URL gerada no servidor, next/image não se aplica */}
-                <img
-                  src={pixQrCodeDataUrl}
-                  alt="QR Code para pagamento PIX"
-                  width={240}
-                  height={240}
-                  className="mx-auto rounded-xl border border-border"
-                />
-                <p className="text-[10px] text-muted-foreground mt-4 mb-3">
-                  Escaneie com o app do seu banco ou copie o código abaixo
-                </p>
-                <CopiarPixButton texto={pedido.pixQrcode} />
-              </>
+            {pixQrCodeDataUrl && pedido.pixQrcode && pedido.pixExpiracao ? (
+              <PixCountdown
+                qrCodeDataUrl={pixQrCodeDataUrl}
+                texto={pedido.pixQrcode}
+                expiracaoIso={pedido.pixExpiracao}
+              />
             ) : pedido.pixQrcode && pixExpirado ? (
               <div className="flex flex-col items-center gap-2 text-rose-600">
                 <Clock size={28} />

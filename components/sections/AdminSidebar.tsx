@@ -14,6 +14,7 @@ import {
   Menu,
   KeyRound,
   ClipboardList,
+  Wallet,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -42,6 +43,7 @@ export const AdminSidebar = ({ isAdmin, userEmail }: AdminSidebarProps) => {
     { label: "Pedidos", href: "/admin/pedidos", icon: ClipboardList },
     { label: "Leads", href: "/admin/leads", icon: MessageSquare },
     { label: "Clientes", href: "/admin/clientes", icon: Building2 },
+    { label: "Financeiro", href: "/admin/financeiro", icon: Wallet },
     ...(isAdmin ? [{ label: "Preços", href: "/admin/precos", icon: Tags }] : []),
     ...(isAdmin ? [{ label: "Config", href: "/admin/config", icon: Settings }] : []),
   ];

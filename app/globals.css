@@ -41,9 +41,9 @@
 :root {
   --radius: 0.75rem;
 
-  /* Refined Palette: Artisan Boutique */
-  --background: oklch(0.985 0.005 60); /* #FCF9F7 - Soft Linen */
-  --foreground: oklch(0.2 0.02 40); /* #2D2621 - Deep Espresso */
+  /* Refined Palette: Dusty Rose */
+  --background: oklch(0.99 0.004 16); /* near-white, faint rosê whisper */
+  --foreground: oklch(0.2 0.02 40); /* #2D2621 - Deep Espresso (unchanged — dark sections stay dark) */
 
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2 0.02 40);
@@ -51,30 +51,47 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.02 40);
 
-  --primary: oklch(0.6 0.12 30); /* #A65D4A - Muted Terracotta */
+  --primary: oklch(0.64 0.09 16); /* dusty rose */
   --primary-foreground: oklch(0.99 0.005 60);
-  --primary-light: oklch(0.6 0.22 27); /* Bold saturated red, same hue family as --primary */
+  --primary-light: oklch(0.68 0.16 16); /* saturated rose, for text on dark (--foreground) surfaces */
 
-  --secondary: oklch(0.96 0.015 60); /* #F5F1EE - Oatmeal */
+  --secondary: oklch(0.96 0.015 16);
   --secondary-foreground: oklch(0.2 0.02 40);
 
-  --muted: oklch(0.96 0.015 60);
+  --muted: oklch(0.96 0.015 16);
   --muted-foreground: oklch(0.4 0.02 40);
 
-  --accent: oklch(0.92 0.03 60);
+  --accent: oklch(0.92 0.03 16);
   --accent-foreground: oklch(0.2 0.02 40);
 
   --destructive: oklch(0.5 0.18 25);
   --destructive-foreground: oklch(0.99 0.005 60);
 
-  --border: oklch(0.92 0.015 60);
-  --input: oklch(0.92 0.015 60);
-  --ring: oklch(0.6 0.12 30);
+  --border: oklch(0.92 0.015 16);
+  --input: oklch(0.92 0.015 16);
+  --ring: oklch(0.64 0.09 16);
 
   /* Muted text meant to sit on a dark (--foreground-toned) surface — e.g.
      input placeholders in ContactSection/LeadForm. --muted-foreground is
      tuned for light backgrounds and reads as near-invisible on dark ones. */
   --muted-foreground-on-dark: oklch(0.55 0.02 40);
+}
+
+/* Paleta "de staff" (admin/vendas/auth) — congela os valores antigos
+   (terracota) pra essas áreas ficarem intocadas pelo rebrand rosê do
+   site público/portal. Aplicada via classe wrapper em app/admin/layout.tsx,
+   app/vendas/layout.tsx e app/auth/layout.tsx — mesmo mecanismo de override
+   por custom property que .dark já usa abaixo. */
+.theme-staff {
+  --background: oklch(0.985 0.005 60);
+  --primary: oklch(0.6 0.12 30);
+  --primary-light: oklch(0.6 0.22 27);
+  --secondary: oklch(0.96 0.015 60);
+  --muted: oklch(0.96 0.015 60);
+  --accent: oklch(0.92 0.03 60);
+  --border: oklch(0.92 0.015 60);
+  --input: oklch(0.92 0.015 60);
+  --ring: oklch(0.6 0.12 30);
 }
 
 .dark {

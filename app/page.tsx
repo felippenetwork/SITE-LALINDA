@@ -37,7 +37,7 @@ export default async function HomePage() {
   const productLines = allProductLines.filter((line) => line.available);
 
   return (
-    <div className="min-h-screen bg-stone-50 font-serif text-foreground selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background font-serif text-foreground selection:bg-primary selection:text-white">
       <Navbar activeItem="Início" />
       <HeroCarousel />
       <ProductLinesBar lines={productLines} />

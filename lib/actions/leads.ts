@@ -6,7 +6,8 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getLeads, getLeadById } from "@/lib/data/leads";
 import { leadSchema } from "@/lib/validation/lead";
 import { isFormTokenValid } from "@/lib/security/lead-form-token";
-import { checkLeadRateLimit, getClientIp } from "@/lib/security/lead-rate-limit";
+import { checkLeadRateLimit } from "@/lib/security/lead-rate-limit";
+import { getClientIp } from "@/lib/security/get-client-ip";
 import { sendLeadNotificationEmail } from "@/lib/email/send-lead-notification";
 import { getSiteSettings } from "@/lib/data/site-settings";
 

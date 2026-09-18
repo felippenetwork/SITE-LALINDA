@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { confirmarPagamentoPix } from "@/lib/pedido/confirmar-pagamento-pix";
 import { enviarNotificacaoPagamentoConfirmado } from "@/lib/whatsapp/send-pedido-confirmado";
+import { checkBradescoWebhookRateLimit } from "@/lib/security/bradesco-webhook-rate-limit";
+import { getClientIp } from "@/lib/security/get-client-ip";
 
 // Primeira camada de defesa: token aleatório na própria URL, configurado
 // no cadastro do webhook no painel do Bradesco (quando essa opção
@@ -38,6 +40,17 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
   if (!tokenValido(token)) {
     console.error("[webhook/bradesco-pix] token invalido recebido");
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  // Só depois do token validar — um flood de token ERRADO não deveria
+  // consumir cota nenhuma (a checagem de token já é praticamente grátis
+  // sozinha), e assim um atacante sem o token nunca esgota a cota de
+  // quem tem o token de verdade.
+  const ip = await getClientIp();
+  const dentroDoLimite = await checkBradescoWebhookRateLimit(ip);
+  if (!dentroDoLimite) {
+    console.error("[webhook/bradesco-pix] rate limit excedido:", ip);
+    return NextResponse.json({ error: "too many requests" }, { status: 429 });
   }
 
   let body: unknown;

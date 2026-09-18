@@ -1,20 +1,8 @@
 import "server-only";
-import { headers } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 const WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const MAX_PER_WINDOW = 3;
-
-// Vercel overwrites x-forwarded-for at the edge and does not forward a
-// client-supplied value, so this header is trustworthy there. In local dev
-// (no proxy in front of `next dev`) it's absent — fall back to a fixed
-// marker so rate limiting is still exercisable locally instead of silently
-// no-op'ing.
-export async function getClientIp(): Promise<string> {
-  const forwardedFor = (await headers()).get("x-forwarded-for");
-  const ip = forwardedFor?.split(",")[0]?.trim();
-  return ip || "127.0.0.1";
-}
 
 // Returns true if this IP is still under the cap and the attempt was
 // recorded; false if it should be rejected. Never throws — a rate-limit
